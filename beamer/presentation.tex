@@ -34,10 +34,10 @@
 \begin{frame}{Outline}
 \begin{columns}[t]
 \column{0.5\textwidth}
-\tableofcontents[sections={1-4}]
+\tableofcontents[sections={1-3}]
 
 \column{0.5\textwidth}
-\tableofcontents[sections={5-7}]
+\tableofcontents[sections={4-7}]
 \end{columns}
 \end{frame}
 
@@ -80,98 +80,7 @@ Predict malware infections based on system properties using 100,000 samples with
 \end{itemize}
 \end{frame}
 
-% Section 2: Objectives
-\section{Objectives}
-
-\subsection{Project Goals}
-\begin{frame}{Project Objectives}
-\begin{enumerate}
-    \item \textbf{Data Preprocessing}: Implement comprehensive preprocessing techniques
-    \begin{itemize}
-        \item Missing value imputation
-        \item Feature encoding and normalization
-    \end{itemize}
-    
-    \item \textbf{Feature Engineering}: Develop strategies to enhance model performance
-    
-    \item \textbf{Model Development}: Train and evaluate multiple ML models
-    
-    \item \textbf{Performance Optimization}: Hyperparameter tuning and model selection
-    
-    \item \textbf{Model Comparison}: Systematic evaluation using standard metrics
-    
-    \item \textbf{Deployment Ready}: Create maintainable, production-ready codebase
-\end{enumerate}
-\end{frame}
-
-% Section 3: Methodology
-\section{Methodology}
-
-\subsection{Data Processing Pipeline}
-\begin{frame}{Data Processing Pipeline}
-\begin{center}
-\begin{tikzpicture}[node distance=1.5cm, auto]
-    \node (data) [rectangle, draw, fill=blue!20, text width=2.5cm, text centered, minimum height=1cm] {Raw Data};
-    \node (preprocess) [rectangle, draw, fill=green!20, text width=2.5cm, text centered, minimum height=1cm, below of=data] {Preprocessing};
-    \node (feature) [rectangle, draw, fill=yellow!20, text width=2.5cm, text centered, minimum height=1cm, below of=preprocess] {Feature Engineering};
-    \node (model) [rectangle, draw, fill=orange!20, text width=2.5cm, text centered, minimum height=1cm, below of=feature] {Model Training};
-    \node (evaluate) [rectangle, draw, fill=red!20, text width=2.5cm, text centered, minimum height=1cm, below of=model] {Evaluation};
-    
-    \draw[->, thick] (data) -- (preprocess);
-    \draw[->, thick] (preprocess) -- (feature);
-    \draw[->, thick] (feature) -- (model);
-    \draw[->, thick] (model) -- (evaluate);
-\end{tikzpicture}
-\end{center}
-\end{frame}
-
-\subsection{Preprocessing Pipeline}
-\begin{frame}{Preprocessing Pipeline}
-\begin{columns}[T]
-\column{0.5\textwidth}
-\textbf{Dataset Specifications:}
-\begin{itemize}
-    \item \textbf{Size:} 100,000 samples
-    \item \textbf{Features:} 76 total
-    \begin{itemize}
-        \item 48 numerical
-        \item 28 categorical
-    \end{itemize}
-    \item \textbf{Split:} 80\% train, 20\% validation
-    \item \textbf{Target:} Balanced (50.52\% / 49.48\%)
-\end{itemize}
-
-\column{0.5\textwidth}
-\textbf{Preprocessing Steps:}
-\begin{itemize}
-    \item Missing values:
-    \begin{itemize}
-        \item Mean for numerical
-        \item Most frequent for categorical
-    \end{itemize}
-    \item Label Encoding for categoricals
-    \item StandardScaler normalization
-    \item Stratified splitting
-\end{itemize}
-\end{columns}
-\end{frame}
-
-\subsection{Machine Learning Models}
-\begin{frame}{Machine Learning Models}
-\begin{block}{Seven Classification Algorithms Evaluated}
-\begin{enumerate}
-    \item \textbf{Decision Tree} - High interpretability
-    \item \textbf{Random Forest} - Ensemble method
-    \item \textbf{LightGBM} - Gradient boosting framework (Best performer)
-    \item \textbf{Naive Bayes} - Probabilistic classifier
-    \item \textbf{Logistic Regression} - Linear baseline
-    \item \textbf{AdaBoost} - Adaptive boosting
-    \item \textbf{SGD Classifier} - Stochastic optimization
-\end{enumerate}
-\end{block}
-\end{frame}
-
-% Section 4: Data Analysis
+% Section 2: Data Analysis
 \section{Data Analysis}
 
 \subsection{Dataset Overview}
@@ -238,7 +147,171 @@ Security configuration has the highest predictive power
 \end{center}
 \end{frame}
 
-% Section 5: Model Performance
+% Section 3: Objectives
+\section{Objectives}
+
+\subsection{Project Goals}
+\begin{frame}{Project Objectives}
+\begin{enumerate}
+    \item \textbf{Data Preprocessing}: Implement comprehensive preprocessing techniques
+    \begin{itemize}
+        \item Missing value imputation
+        \item Feature encoding and normalization
+    \end{itemize}
+    
+    \item \textbf{Feature Engineering}: Develop strategies to enhance model performance
+    
+    \item \textbf{Model Development}: Train and evaluate multiple ML models
+    
+    \item \textbf{Performance Optimization}: Hyperparameter tuning and model selection
+    
+    \item \textbf{Model Comparison}: Systematic evaluation using standard metrics
+    
+    \item \textbf{Deployment Ready}: Create maintainable, production-ready codebase
+\end{enumerate}
+\end{frame}
+
+% Section 4: Methodology
+\section{Methodology}
+
+\subsection{Data Processing Pipeline}
+\begin{frame}{Data Processing Pipeline}
+\begin{center}
+\begin{tikzpicture}[node distance=1.5cm, auto]
+    \node (data) [rectangle, draw, fill=blue!20, text width=2.5cm, text centered, minimum height=1cm] {Raw Data};
+    \node (preprocess) [rectangle, draw, fill=green!20, text width=2.5cm, text centered, minimum height=1cm, below of=data] {Preprocessing};
+    \node (feature) [rectangle, draw, fill=yellow!20, text width=2.5cm, text centered, minimum height=1cm, below of=preprocess] {Feature Engineering};
+    \node (model) [rectangle, draw, fill=orange!20, text width=2.5cm, text centered, minimum height=1cm, below of=feature] {Model Training};
+    \node (evaluate) [rectangle, draw, fill=red!20, text width=2.5cm, text centered, minimum height=1cm, below of=model] {Evaluation};
+    
+    \draw[->, thick] (data) -- (preprocess);
+    \draw[->, thick] (preprocess) -- (feature);
+    \draw[->, thick] (feature) -- (model);
+    \draw[->, thick] (model) -- (evaluate);
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\subsection{Preprocessing Pipeline}
+\begin{frame}{Preprocessing Pipeline}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Dataset Specifications:}
+\begin{itemize}
+    \item \textbf{Size:} 100,000 samples
+    \item \textbf{Features:} 76 total
+    \begin{itemize}
+        \item 48 numerical
+        \item 28 categorical
+    \end{itemize}
+    \item \textbf{Split:} 80\% train, 20\% validation
+    \item \textbf{Target:} Balanced (50.52\% / 49.48\%)
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Preprocessing Steps:}
+\begin{itemize}
+    \item Missing values:
+    \begin{itemize}
+        \item Mean for numerical
+        \item Most frequent for categorical
+    \end{itemize}
+    \item Label Encoding for categoricals
+    \item StandardScaler normalization
+    \item Stratified splitting
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\subsection{Machine Learning Models}
+\begin{frame}{Machine Learning Models}
+\begin{block}{Seven Classification Algorithms Evaluated}
+\begin{enumerate}
+    \item \textbf{Decision Tree} - High interpretability
+    \item \textbf{Random Forest} - Ensemble method
+    \item \textbf{LightGBM} - Gradient boosting framework (Best performer)
+    \item \textbf{Naive Bayes} - Probabilistic classifier
+    \item \textbf{Logistic Regression} - Linear baseline
+    \item \textbf{AdaBoost} - Adaptive boosting
+    \item \textbf{SGD Classifier} - Stochastic optimization
+\end{enumerate}
+\end{block}
+\end{frame}
+
+% Section 5: Implementation
+\section{Implementation}
+
+\subsection{System Architecture}
+\begin{frame}{System Architecture}
+\textbf{13-Module Pipeline Structure:}
+\begin{enumerate}
+    \item Environment Setup \& Configuration
+    \item Data Loading \& Utilities (save/load models)
+    \item Exploratory Data Analysis (EDA)
+    \item Data Preprocessing (imputation, encoding, scaling)
+    \item Feature Engineering (interactions, selection)
+    \item Model Training (7 algorithms with tuning)
+    \item Model Evaluation \& Comparison
+    \item Prediction \& Submission Generation
+\end{enumerate}
+
+\vspace{0.2cm}
+\textbf{Technology Stack:}
+\begin{itemize}
+    \item Python 3.x, scikit-learn 1.3+, LightGBM
+    \item pandas, numpy, matplotlib, seaborn, joblib
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Code Organization}
+\begin{block}{Configuration-Driven Design}
+Selective enabling/disabling of:
+\begin{itemize}
+    \item Preprocessing steps
+    \item Feature engineering techniques
+    \item Model selection
+    \item Hyperparameter tuning
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\textbf{Benefits:}
+\begin{itemize}
+    \item Easy experimentation
+    \item Maintainable codebase
+    \item Model persistence and logging
+    \item Reproducible results
+\end{itemize}
+\end{frame}
+
+\subsection{Implementation Highlights}
+\begin{frame}{Implementation Highlights}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Architecture Strengths:}
+\begin{itemize}
+    \item Configuration-driven pipeline
+    \item Modular design pattern
+    \item 7 ML models implemented
+    \item Automated hyperparameter tuning
+    \item Model persistence with joblib
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Pipeline Features:}
+\begin{itemize}
+    \item Robust preprocessing
+    \item Missing value handling
+    \item Feature engineering tools
+    \item Cross-validation support
+    \item Comprehensive logging
+    \item Results tracking
+\end{itemize}
+\end{columns}
+\end{frame}
+
+% Section 6: Model Performance
 \section{Model Performance}
 
 \subsection{Performance Comparison}
@@ -291,78 +364,6 @@ LightGBM achieved the highest accuracy at \textbf{63.0\%}, showing gradient boos
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Implementation Highlights}
-\begin{columns}[T]
-\column{0.5\textwidth}
-\textbf{Architecture Strengths:}
-\begin{itemize}
-    \item Configuration-driven pipeline
-    \item Modular design pattern
-    \item 7 ML models implemented
-    \item Automated hyperparameter tuning
-    \item Model persistence with joblib
-\end{itemize}
-
-\column{0.5\textwidth}
-\textbf{Pipeline Features:}
-\begin{itemize}
-    \item Robust preprocessing
-    \item Missing value handling
-    \item Feature engineering tools
-    \item Cross-validation support
-    \item Comprehensive logging
-    \item Results tracking
-\end{itemize}
-\end{columns}
-\end{frame}
-
-% Section 6: Implementation
-\section{Implementation}
-
-\subsection{System Architecture}
-\begin{frame}{System Architecture}
-\textbf{13-Module Pipeline Structure:}
-\begin{enumerate}
-    \item Environment Setup \& Configuration
-    \item Data Loading \& Utilities (save/load models)
-    \item Exploratory Data Analysis (EDA)
-    \item Data Preprocessing (imputation, encoding, scaling)
-    \item Feature Engineering (interactions, selection)
-    \item Model Training (7 algorithms with tuning)
-    \item Model Evaluation \& Comparison
-    \item Prediction \& Submission Generation
-\end{enumerate}
-
-\vspace{0.2cm}
-\textbf{Technology Stack:}
-\begin{itemize}
-    \item Python 3.x, scikit-learn 1.3+, LightGBM
-    \item pandas, numpy, matplotlib, seaborn, joblib
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Code Organization}
-\begin{block}{Configuration-Driven Design}
-Selective enabling/disabling of:
-\begin{itemize}
-    \item Preprocessing steps
-    \item Feature engineering techniques
-    \item Model selection
-    \item Hyperparameter tuning
-\end{itemize}
-\end{block}
-
-\vspace{0.3cm}
-
-\textbf{Benefits:}
-\begin{itemize}
-    \item Easy experimentation
-    \item Maintainable codebase
-    \item Model persistence and logging
-    \item Reproducible results
-\end{itemize}
-\end{frame}
-
 % Section 7: Conclusion
 \section{Conclusion}
 
@@ -393,7 +394,7 @@ Selective enabling/disabling of:
 \end{itemize}
 \end{frame}
 
-\subsection{Future Work}
+\subsection{Future Work \& Challenges}
 \begin{frame}{Future Work}
 \begin{columns}[T]
 \column{0.5\textwidth}
@@ -418,7 +419,6 @@ Selective enabling/disabling of:
 \end{columns}
 \end{frame}
 
-\subsection{Challenges \& Limitations}
 \begin{frame}{Challenges \& Limitations}
 \begin{alertblock}{Key Challenges Identified}
 \begin{itemize}
