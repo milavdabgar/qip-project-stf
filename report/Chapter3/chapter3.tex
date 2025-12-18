@@ -1,0 +1,69 @@
+% chapter3.tex 
+
+\chapter{Methodology-Name}
+
+Add contents, Block Diagram, then an explanation of blocks one by one
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\textwidth]{Figures/hc_vs_sc_MOSCOW.png}
+    \caption[Sample EEG signal from MHRC dataset]{Sample EEG signal from MHRC dataset}
+    \label{fig:moscow}
+\end{figure}
+
+\section{Block-1}
+Add contents
+
+\section{Block-2}
+Add contents
+
+\section{ML/DL Model}
+Add contents
+
+\subsection{Short-Time Fourier Transform (STFT)}
+The Short-Time Fourier Transform (STFT) is the most common tool for time-frequency analysis. It assumes local stationarity within a short analysis window \(w(t)\). The STFT of a signal \(x(t)\) is
+\begin{equation}
+    \mathrm{STFT}_x(t, f) = \int_{-\infty}^{\infty} x(\tau)\, w(\tau - t)\, e^{-j2\pi f \tau}\, d\tau,
+\end{equation}
+
+\subsection{Topic-1}
+Add contents
+
+\subsection{Topic-2}
+Add contents
+
+\section{Hardware Setup}
+All training was conducted on a workstation. Training and testing of the MLP architecture were performed on all three datasets, DS1, DS2, and DS3, using Python 3.11.2, which ran on an NVIDIA RTX A6000 with 48GB of RAM.
+
+\section{Evaluation Metrics}
+To quantitatively assess the performance of the developed classification model in distinguishing between individuals with schizophrenia and healthy controls, the following evaluation metrics were employed:
+
+\begin{itemize}
+    \item \textbf{Accuracy}: The proportion of correctly classified samples (both schizophrenia patients and healthy controls) out of the total number of samples. It is calculated as:
+    \begin{equation}
+        \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
+    \end{equation}
+    where $TP$ is the number of true positives, $TN$ is the number of true negatives, $FP$ is the number of false positives, and $FN$ is the number of false negatives.
+
+    \item \textbf{Sensitivity (Recall)}: The ability of the model to correctly identify individuals with schizophrenia. It is the proportion of actual schizophrenia patients who are correctly classified as such. It is calculated as:
+    \begin{equation}
+        \text{Sensitivity} = \frac{TP}{TP + FN}
+    \end{equation}
+
+    \item \textbf{Specificity}: The ability of the model to correctly identify healthy individuals. It is the proportion of actual healthy controls who are correctly classified as such. It is calculated as:
+    \begin{equation}
+        \text{Specificity} = \frac{TN}{TN + FP}
+    \end{equation}
+
+    \item \textbf{F1-Score}: The harmonic mean of precision and sensitivity. It provides a balanced measure of the model's performance, especially when the classes are imbalanced. Precision, which measures how many of the samples predicted as positive are actually positive, is calculated as:
+     \begin{equation}
+        \text{Precision} = \frac{TP}{TP + FP}
+    \end{equation}
+    The F1-score is then calculated as:
+    \begin{equation}
+        \text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Sensitivity}}{\text{Precision} + \text{Sensitivity}}
+    \end{equation}
+
+    \item \textbf{Confusion Matrix}: A table that visualizes the performance of a classification model by showing the counts of true positives (TP), true negatives (TN), false positives (FP), and false negatives (FN).  It provides a detailed breakdown of correct and incorrect classifications for each class (schizophrenia patients and healthy controls).
+\end{itemize}
+
+These metrics provide a comprehensive evaluation of the classification model's performance, considering both its ability to correctly identify individuals with schizophrenia and its ability to correctly identify healthy controls.

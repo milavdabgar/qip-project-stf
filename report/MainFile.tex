@@ -1,0 +1,137 @@
+% MainFile.tex
+
+%\documentclass[12pt,twoside,openright]{report}
+\documentclass[12pt,oneside,openright]{report}
+%\usepackage{svniteced_seminar}
+%\usepackage{svniteced_thesis}
+\usepackage{svniteced_D_prelims}
+
+%\usepackage{svniteced_thesis_rps}
+%\usepackage[caption=true,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+%\usepackage{graphics} 
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{epstopdf}
+\usepackage{multirow}
+%\usepackage{subfigure}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{verbatim}
+\usepackage{times}
+\usepackage{fancyhdr}
+\usepackage{rotating}
+%\usepackage{fancyheadings}
+\usepackage{footnote}
+\usepackage{morefloats}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{type1cm}
+\usepackage{eso-pic}
+\usepackage{fancybox}
+\usepackage{lipsum}
+\usepackage{geometry}
+\usepackage{makeidx}
+\usepackage[justification=centering]{caption}
+\usepackage{afterpage}
+\usepackage{lscape}
+\usepackage{longtable}
+\usepackage{cite}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage[numbers]{natbib}
+\usepackage{notoccite}
+\usepackage{adjustbox}
+%\usepackage{eps2pdf}
+\usepackage{caption}
+\usepackage{subcaption}
+%\bibliographystyle{IEEEtran.bst}
+
+\makeatletter
+\newcommand{\concvert}{\mathbin{\mathpalette\make@vert=}}
+\newcommand{\make@vert}[2]{%
+	\ooalign{$\m@th#1\smallbigvert{#1}$\cr\hidewidth$\m@th#1#2$\hidewidth\cr}%
+}
+\newcommand{\smallbigvert}[1]{%
+	\vcenter{\hbox{\scalebox{1}{$\m@th#1|$}}}%
+}
+\newcommand{\circvconc}{\mathbin{\mathpalette\make@circled\concvert}}
+\newcommand{\make@circled}[2]{%
+	\ooalign{$\m@th#1\smallbigcirc{#1}$\cr\hidewidth$\m@th#1#2$\hidewidth\cr}%
+}
+\newcommand{\smallbigcirc}[1]{%
+	\vcenter{\hbox{\scalebox{1.5}{$\m@th#1\bigcirc$}}}%
+}
+\makeatother
+
+
+\begin{document}
+
+ 
+\title{Project Title}
+
+\Degree{Deep Learning: Fundamentals and Applications}
+%\Specialization{}
+\AcadYear{2025-26}
+
+\author{Mr. Dayanand Dhongade}
+
+%For example
+\GuideName{Dr. Jignesh N. Sarvaiya, Dr. Kishor Upla, \\ Dr. Kamal Captain, Dr. Suman Deb }						%\GuideName{Mr. X Y Z}
+\GuidePos{Coordinators- AICTE QIP PG Certification Programme}
+\GuideAssociation{DECE}							%\GuideAssociation{ECED}
+
+% If there is Co-Guide, please enter the following fields.
+% If there is no Co-Guide, either comment the lines or delete them. Don't leave them blank.
+%\CoGuideName{Enter your Co-Guide's name}
+%\CoGuidePosn{Assistant Professor / Associate Professor}
+%\CoGuideAssociation{Co-Guide's Dept}
+\date{December-2025}
+
+\MakeTitlePage
+\afterpage{\null\newpage}
+\include{declaration}
+\MakeCerti
+\Acknowledgement{acknowl}
+\Abstract{abstract}
+
+\TableOfContents
+\ListOfFigures
+\ListOfTables
+\Abbreviations{abbreviations}
+\StartBody
+\Chapter{Chapter1/chapter1}
+\Chapter{Chapter2/chapter2}
+\Chapter{Chapter3/chapter3}
+\Chapter{Chapter4/chapter4}
+%\Chapter{Chapter5/chapter5}
+%\Chapter{Chapter6/chapter6}
+\include{conclusion}
+
+%\include{publications}
+%\StartRef
+%\bibliographystyle{IEEEtran}
+%\include{mybib}
+%\bibliography{mybib}
+
+\StartRef
+\include{mybibfile}
+\bibliographystyle{IEEEtran}
+\bibliography{./IEEEabrv,mybibfile}
+
+
+%\include{mybibfile}
+%
+%\bibliography{IEEEabrv,mybibfile}
+% If you have more than one Appendices use
+% '\StartAppendices' instead of '\StartAppendix'
+%\StartAppendix			% 'Appendix' will be printed in Table of Contents
+%\StartAppendices		% 'Appendices' will be printed in Table of Contents
+%\StartAppendix
+%\Appendix{AD/A1}
+\end{document}

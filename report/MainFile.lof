@@ -1,0 +1,15 @@
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces A downlink NOMA system\relax }}{2}{figure.caption.17}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Classification of AMC methods\relax }}{7}{figure.caption.18}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces : (a) Residual block in adapted ResNet \cite {o2018over}, (b) m-block MCNet \cite {huynh2020mcnet}, (c) Chain-block in ChainNet \cite {huynh2020chain}, (d) Deep feature extraction and processing module in SCGNet \cite {tunze2020sparsely}\relax }}{7}{figure.caption.19}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Overall processing flow of constellation image-based AMC approaches\relax }}{10}{figure.caption.20}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Proposed Model: MR-CNN.\relax }}{12}{figure.caption.21}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Modified Residual Block.\relax }}{12}{figure.caption.22}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Classification performance of proposed method and its comparison with cumulant based method for $P_f/P_n = 4$.\relax }}{15}{figure.caption.23}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Classification performance of the proposed method at different power ratios and $N = 800$.\relax }}{15}{figure.caption.24}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Confusion matrices for the proposed model with $N=200$, $P_f/P_n =4$ and (a) All SNRs, (b) $0$ dB SNR and (c) $10$ dB SNR.\relax }}{17}{figure.caption.25}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Classification performance of proposed method and its comparison with cumulant based method for $P_f/P_n = 2$.\relax }}{18}{figure.caption.26}%
+\addvspace {10\p@ }

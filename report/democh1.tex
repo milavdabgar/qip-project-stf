@@ -1,0 +1,81 @@
+\chapter{Latex Examples}
+
+\section{Simple Text}          % This command makes a section title.
+
+Words are separated by one or more spaces.  Paragraphs are separated by
+one or more blank lines.  The output is not affected by adding extra
+spaces or extra blank lines to the input file.
+
+Double quotes are typed like this: ``quoted text''.
+Single quotes are typed like this: `single-quoted text'.
+
+Long dashes are typed as three dash characters---like this.
+
+Emphasized text is typed like this: \emph{this is emphasized}.
+Bold       text is typed like this: \textbf{this is bold}.
+
+\subsection{A Warning or Two}  % This command makes a subsection title.
+
+If you get too much space after a mid-sentence period---abbreviations
+like etc.\ are the common culprits)---then type a backslash followed by
+a space after the period, as in this sentence.
+
+Remember, don't type the 10 special characters (such as dollar sign and
+backslash) except as directed!  The following seven are printed by
+typing a backslash in front of them:  \$  \&  \#  \%  \_  \{  and  \}.  
+The manual tells how to make other symbols.
+
+\section{Figures}
+
+include figure in the report.
+\begin{figure}[h]\label{fig1}
+\includegraphics[scale=0.5]{ltex.png}
+\centering
+\caption[Latex logo]{Latex logo\cite{url1}}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\subfigure[First.]{\includegraphics[scale=0.5]{ltex}}\qquad
+\subfigure[Second figure.]{\includegraphics[scale=0.5]{ltex}}\\
+\subfigure[Third.]{\includegraphics[scale=0.5]{ltex}}%
+\caption{Three subfigures.}
+\label{3figs}
+\end{figure}
+
+
+
+\begin{figure}[h]
+\centering
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \includegraphics[width=0.4\linewidth]{ltex}
+  \captionof{figure}{A figure}
+  \label{fig:test1}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \includegraphics[width=0.4\linewidth]{ltex}
+  \captionof{figure}{Another figure}
+  \label{fig:test2}
+\end{minipage}
+\caption{side by side figure}
+\end{figure}
+
+\newpage
+
+\section{Table}
+Example 1.
+\begin{table}[h]
+\centering
+\caption{Number of Adders and Shifters required for 4-Point DCT.}
+\resizebox{4.5in}{!}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{} & \textbf{\begin{tabular}[c]{@{}c@{}}Proposed 1\\ 4-Point DCT\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Proposed 2\\ 4-Point DCT\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Meher \\ \textit{et al.} in\cite{PK}\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Optimization \\ of Meher \textit{et al.} in\cite{PK}\end{tabular}} \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}No. Of\\ Adders\end{tabular}} & 16 & 12 & 14 & 11 \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}No. Of\\ Shifters\end{tabular}} & 10 & 5 & 10 & 5 \\ \hline
+\end{tabular}}
+\end{table}
+
+\end{document}                 % The input file ends with this command.
