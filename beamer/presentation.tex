@@ -238,6 +238,54 @@ Security configuration has the highest predictive power
 \end{block}
 \end{frame}
 
+\subsection{Deep Learning Models}
+\begin{frame}{Deep Learning Approach}
+\begin{block}{Motivation}
+Explore state-of-the-art deep learning methods to potentially improve upon ML baseline (63\%)
+\end{block}
+
+\vspace{0.3cm}
+
+\textbf{Implementation Details:}
+\begin{itemize}
+    \item \textbf{Framework:} PyTorch 2.9.1 with Apple Silicon GPU (MPS) acceleration
+    \item \textbf{Training:} 100 epochs on GPU (50 for FT-Transformer), batch size 512
+    \item \textbf{Hardware:} MacBook Air M4 with Neural Engine optimization
+    \item \textbf{Preprocessing:} StandardScaler + Label Encoding (75 features)
+    \item \textbf{Optimization:} AdamW optimizer, ReduceLROnPlateau scheduler
+    \item \textbf{Regularization:} Dropout (0.1-0.3), BatchNorm, Early stopping
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Deep Learning Architectures}
+\begin{enumerate}
+    \item \textbf{Deep MLP} (63K params)
+    \begin{itemize}
+        \item 4 hidden layers: 256→128→64→32
+        \item BatchNorm + Dropout for regularization
+    \end{itemize}
+    
+    \item \textbf{Residual Network} (418K params)
+    \begin{itemize}
+        \item Skip connections for gradient flow
+        \item 3 residual blocks with BatchNorm
+    \end{itemize}
+    
+    \item \textbf{Attention Network} (1.6M params)
+    \begin{itemize}
+        \item Multi-head self-attention (4 heads)
+        \item 2 attention blocks + feedforward layers
+    \end{itemize}
+    
+    \item \textbf{FT-Transformer} (39K params) - \textcolor{blue}{State-of-the-art for tabular data}
+    \begin{itemize}
+        \item Feature tokenization (each feature → learnable token)
+        \item Transformer encoder with CLS token (like BERT)
+        \item 1 block, 2 attention heads (optimized for speed)
+    \end{itemize}
+\end{enumerate}
+\end{frame}
+
 % Section 5: Implementation
 \section{Implementation}
 
@@ -326,6 +374,117 @@ LightGBM achieved the highest accuracy at \textbf{63.0\%}, showing gradient boos
 \end{block}
 \end{frame}
 
+\begin{frame}{Deep Learning vs Machine Learning Results}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Machine Learning (Best):}
+\begin{itemize}
+    \item \textbf{LightGBM: 63.0\%} 🏆
+    \item Random Forest: 62.5\%
+    \item AdaBoost: 61.8\%
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Deep Learning (Best):}
+\begin{itemize}
+    \item \textbf{Attention Net: 61.73\%}
+    \item Deep MLP: 61.72\%
+    \item FT-Transformer: 61.59\%
+    \item Residual Net: 61.48\%
+\end{itemize}
+
+\column{0.5\textwidth}
+\begin{alertblock}{Critical Finding}
+Traditional ML (LightGBM) outperforms all DL architectures by ~1.3\%
+\end{alertblock}
+
+\vspace{0.3cm}
+
+\textbf{Why DL Underperforms:}
+\begin{itemize}
+    \item Tabular data characteristics
+    \item Gradient boosting excels at:
+    \begin{itemize}
+        \item Feature interactions
+        \item Handling mixed types
+        \item Small-medium datasets
+    \end{itemize}
+    \item DL needs larger datasets
+    \item Tree-based ensembles are state-of-the-art for tabular tasks
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{FT-Transformer: State-of-the-Art Tabular DL}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Architecture Highlights:}
+\begin{itemize}
+    \item \textbf{Feature Tokenization}
+    \begin{itemize}
+        \item Each feature → 64-dim token
+        \item Learnable embeddings
+    \end{itemize}
+    \item \textbf{Transformer Encoder}
+    \begin{itemize}
+        \item 1 layer, 2 attention heads
+        \item Self-attention over features
+    \end{itemize}
+    \item \textbf{CLS Token} for classification
+    \item Only 38,722 parameters!
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Performance:}
+\begin{itemize}
+    \item Accuracy: 61.59\%
+    \item Smallest DL model
+    \item Fast training (~5-7 min)
+    \item Competitive with larger models
+\end{itemize}
+
+\vspace{0.3cm}
+
+\begin{block}{Innovation}
+Bridges NLP techniques (BERT-style) with tabular data - published 2021, represents cutting-edge research
+\end{block}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Training Performance \\ Efficiency}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Apple Silicon Optimization:}
+\begin{itemize}
+    \item MPS (Metal Performance Shaders) backend
+    \item M4 GPU acceleration
+    \item 2-3x faster than CPU
+    \item Batch size: 512
+    \item Early stopping for efficiency
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Training Times:}
+\begin{itemize}
+    \item Deep MLP: ~8 min
+    \item Residual Net: ~12 min
+    \item Attention Net: ~15 min
+    \item FT-Transformer: ~7 min
+    \item \textbf{Total: ~42 minutes}
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{All models used:}
+\begin{itemize}
+    \item Early stopping (patience=15)
+    \item Learning rate scheduling
+    \item Dropout regularization
+\end{itemize}
+\end{columns}
+\end{frame}
+
 \begin{frame}{Best Model: LightGBM Performance}
 \begin{columns}[T]
 \column{0.5\textwidth}
@@ -349,18 +508,24 @@ LightGBM achieved the highest accuracy at \textbf{63.0\%}, showing gradient boos
 \subsection{Key Findings}
 \begin{frame}{Key Findings}
 \begin{itemize}
-    \item \textbf{Model Performance}: 63\% accuracy ceiling suggests complex relationships
+    \item \textbf{ML vs DL Comparison}: Traditional ML (LightGBM 63\%) outperforms all DL models (61-62\%)
     \begin{itemize}
-        \item Moderate feature correlations (max 0.118)
-        \item Room for feature engineering improvements
+        \item \textcolor{red}{Expected result for tabular data!}
+        \item Gradient boosting is state-of-the-art for structured data
+        \item DL excels at unstructured data (images, text, audio)
     \end{itemize}
-    \item \textbf{Ensemble Superiority}: Tree-based ensembles (LightGBM, RF, AdaBoost) outperformed linear models
-    \item \textbf{Dataset Challenges}:
+    
+    \item \textbf{DL Consistency}: All 4 DL architectures achieved similar performance (61.5-61.7\%)
     \begin{itemize}
-        \item Missing data in important features
-        \item Balanced classes but complex decision boundaries
+        \item Suggests fundamental limitations with tabular data
+        \item Architecture choice less critical than for vision/NLP tasks
     \end{itemize}
-    \item \textbf{Feature Insights}: Security configurations more predictive than hardware specs
+    
+    \item \textbf{Efficiency Trade-offs}: FT-Transformer achieved competitive results with minimal parameters (39K)
+    
+    \item \textbf{Hardware Optimization}: Apple Silicon GPU acceleration enabled practical DL experimentation
+    
+    \item \textbf{Ensemble Superiority}: Tree-based ensembles remain best for production tabular systems
 \end{itemize}
 \end{frame}
 
@@ -370,17 +535,19 @@ LightGBM achieved the highest accuracy at \textbf{63.0\%}, showing gradient boos
 \subsection{Key Contributions}
 \begin{frame}{Key Contributions}
 \begin{enumerate}
-    \item \textbf{Comprehensive Model Comparison}: Systematic evaluation of 7 classification algorithms
+    \item \textbf{Comprehensive Model Comparison}: Systematic evaluation of \textcolor{blue}{7 ML + 4 DL algorithms}
     
-    \item \textbf{Production-Ready Pipeline}: 13-module architecture with configuration control
+    \item \textbf{Deep Learning Pipeline}: PyTorch implementation with Apple Silicon GPU optimization
     
-    \item \textbf{Robust Preprocessing}: Handles 76 features (48 numerical, 28 categorical)
+    \item \textbf{State-of-the-Art Methods}: Implemented FT-Transformer (cutting-edge tabular DL)
     
-    \item \textbf{Automated Workflows}: Hyperparameter tuning, cross-validation, model persistence
+    \item \textbf{ML vs DL Analysis}: Empirical validation that traditional ML outperforms DL for tabular data
+    
+    \item \textbf{Production-Ready Pipeline}: Dual implementation (ML + DL) with configuration control
     
     \item \textbf{Best-in-Class Performance}: 63\% accuracy with LightGBM on 100K samples
     
-    \item \textbf{Reproducible Results}: Complete logging and results tracking system
+    \item \textbf{Hardware Optimization}: Efficient GPU utilization (MPS backend) for fast training
 \end{enumerate}
 \end{frame}
 
@@ -400,11 +567,12 @@ LightGBM achieved the highest accuracy at \textbf{63.0\%}, showing gradient boos
 \column{0.5\textwidth}
 \textbf{Technical Enhancements:}
 \begin{itemize}
-    \item Deep learning integration
+    \item \textcolor{green}{✓ Deep learning integration}
+    \item Hybrid ML-DL ensembles
     \item Real-time deployment
-    \item Ensemble methods
     \item Explainable AI (SHAP, LIME)
     \item Active learning
+    \item Neural architecture search
 \end{itemize}
 
 \column{0.5\textwidth}
@@ -412,9 +580,10 @@ LightGBM achieved the highest accuracy at \textbf{63.0\%}, showing gradient boos
 \begin{itemize}
     \item Multi-class classification
     \item SIEM integration
-    \item Adversarial robustness
-    \item Transfer learning
+    \item Adversarial robustness testing
+    \item Transfer learning from similar domains
     \item Automated feature engineering
+    \item Edge deployment optimization
 \end{itemize}
 \end{columns}
 \end{frame}
@@ -423,19 +592,22 @@ LightGBM achieved the highest accuracy at \textbf{63.0\%}, showing gradient boos
 \begin{alertblock}{Key Challenges Identified}
 \begin{itemize}
     \item \textbf{Performance Ceiling}: 63\% accuracy indicates complex relationships
+    \item \textbf{DL Underperformance}: Neural networks achieve 61-62\% vs ML 63\%
+    \begin{itemize}
+        \item \textcolor{blue}{Learning:} Tabular data favors tree-based methods
+        \item DL requires larger datasets for competitive performance
+    \end{itemize}
     \item \textbf{Feature Correlations}: Weak correlations (max 0.118) limit predictive power
     \item \textbf{Missing Data}: RealTimeProtectionState, CityID have significant gaps
-    \item \textbf{Feature Engineering}: Currently disabled, potential for improvement
-    \item \textbf{Model Complexity}: Balance between accuracy and interpretability
+    \item \textbf{Model Complexity}: Balance between accuracy, speed, and interpretability
 \end{itemize}
 \end{alertblock}
 
 \vspace{0.2cm}
-\textbf{Future Improvements:}
+\textbf{Key Insight:}
 \begin{itemize}
-    \item Enable and optimize feature engineering
-    \item Advanced imputation strategies
-    \item Deep learning exploration
+    \item Comprehensive ML+DL comparison validates that \textbf{LightGBM is the right choice}
+    \item DL exploration confirms established research on tabular data
 \end{itemize}
 \end{frame}
 
@@ -446,13 +618,21 @@ LightGBM achieved the highest accuracy at \textbf{63.0\%}, showing gradient boos
 
 \vspace{0.3cm}
 
-\textbf{Implementation Notebook:}\\
+\textbf{ML Implementation:}\\
 \url{https://www.kaggle.com/code/milavdabgar/system-threat-forecaster-modular}
+
+\vspace{0.3cm}
+
+\textbf{DL Implementation:} \texttt{system-threat-forecaster-dl.py}
 \end{block}
 
 \vspace{0.3cm}
 
-\textbf{Technologies:} Python 3.11, scikit-learn, LightGBM, pandas, numpy, matplotlib
+\textbf{Technologies:} 
+\begin{itemize}
+    \item \textbf{ML:} Python 3.14, scikit-learn, LightGBM, pandas, numpy, matplotlib
+    \item \textbf{DL:} PyTorch 2.9.1, Apple Silicon GPU (MPS), torchvision
+\end{itemize}
 \end{frame}
 
 % Thank You Slide
