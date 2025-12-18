@@ -21,10 +21,11 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{who_schizophrenia}
+\bibitem{kaggle_stf_competition}
 \BIBentryALTinterwordspacing
-{World Health Organization}, ``Schizophrenia.'' [Online]. Available:
-  \url{https://www.who.int/news-room/fact-sheets/detail/schizophrenia}
+{Kaggle}, ``System threat forecaster - kaggle competition,'' 2025, accessed:
+  December 2025. [Online]. Available:
+  \url{https://www.kaggle.com/competitions/System-Threat-Forecaster/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{ieee2025signaltoimage}
@@ -42,5 +43,13 @@ M.~Rahman and S.~Ahmed, ``Dual tree complex wavelet transform with support
 W.~Chen, X.~Liu, and M.~Zhang, ``Automated diagnosis of schizophrenia using
   markov transition fields and deep learning,'' \emph{Diagnostics}, vol.~14,
   no.~2, p. 234, 2024.
+
+\bibitem{kaggle_stf_notebook}
+\BIBentryALTinterwordspacing
+M.~J. Dabgar, ``System threat forecaster modular - kaggle notebook,'' 2025,
+  implementation notebook for the System Threat Forecaster project. [Online].
+  Available:
+  \url{https://www.kaggle.com/code/milavdabgar/system-threat-forecaster-modular}
+\BIBentrySTDinterwordspacing
 
 \end{thebibliography}
