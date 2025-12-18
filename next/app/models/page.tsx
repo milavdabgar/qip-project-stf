@@ -7,39 +7,39 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Brain, Cpu, TrendingUp, Layers } from 'lucide-react'
 
 const mlModels = [
-  { name: 'LightGBM', accuracy: '63.0%', type: 'Gradient Boosting', features: 'Handles categorical data, fast training', rank: 1 },
-  { name: 'XGBoost', accuracy: '62.8%', type: 'Gradient Boosting', features: 'Regularization, parallel processing', rank: 2 },
-  { name: 'Random Forest', accuracy: '62.5%', type: 'Ensemble', features: 'Robust to overfitting, feature importance', rank: 3 },
-  { name: 'Extra Trees', accuracy: '62.3%', type: 'Ensemble', features: 'More randomization, faster training', rank: 4 },
-  { name: 'CatBoost', accuracy: '62.1%', type: 'Gradient Boosting', features: 'Categorical feature handling, GPU support', rank: 5 },
-  { name: 'AdaBoost', accuracy: '59.5%', type: 'Boosting', features: 'Adaptive boosting, combines weak learners', rank: 6 },
-  { name: 'Gradient Boosting', accuracy: '58.2%', type: 'Boosting', features: 'Sequential model building, loss optimization', rank: 7 },
+  { name: 'LightGBM', accuracy: '62.94%', type: 'Gradient Boosting', features: 'Handles categorical data, fast training, L1/L2 regularization', rank: 1 },
+  { name: 'Random Forest', accuracy: '62.09%', type: 'Ensemble', features: 'Bagging with decision trees, robust to overfitting', rank: 2 },
+  { name: 'AdaBoost', accuracy: '61.26%', type: 'Boosting', features: 'Adaptive boosting, combines weak learners sequentially', rank: 3 },
+  { name: 'Decision Tree', accuracy: '60.10%', type: 'Tree-based', features: 'Single tree with depth 10, class balancing', rank: 4 },
+  { name: 'Logistic Regression', accuracy: '60.07%', type: 'Linear', features: 'L2 regularization, class balancing, liblinear solver', rank: 5 },
+  { name: 'Naive Bayes', accuracy: '55.06%', type: 'Probabilistic', features: 'Gaussian distribution assumption, fast inference', rank: 6 },
+  { name: 'SGD Classifier', accuracy: '49.46%', type: 'Linear', features: 'Stochastic gradient descent, online learning', rank: 7 },
 ]
 
 const dlModels = [
   { 
-    name: 'Attention Network', 
-    accuracy: '61.73%', 
-    architecture: 'Transformer-based', 
-    features: 'Self-attention mechanism, contextual feature learning',
-    parameters: '~2.5M',
-    layers: 'Multi-head attention, feed-forward networks',
+    name: 'Deep MLP', 
+    accuracy: '61.79%', 
+    architecture: 'Feed-forward', 
+    features: 'Multiple hidden layers with batch normalization',
+    parameters: '~2.2M',
+    layers: '5 hidden layers (512, 256, 128, 64, 32)',
     rank: 1
   },
   { 
-    name: 'Deep MLP', 
-    accuracy: '61.72%', 
-    architecture: 'Feed-forward', 
-    features: 'Multiple hidden layers, dropout regularization',
-    parameters: '~2.2M',
-    layers: '5 hidden layers (512, 256, 128, 64, 32)',
+    name: 'Attention Network', 
+    accuracy: '~61.7%', 
+    architecture: 'Transformer-based', 
+    features: 'Multi-head self-attention, contextual feature learning',
+    parameters: '~2.5M',
+    layers: 'Multi-head attention blocks, feed-forward networks',
     rank: 2
   },
   { 
     name: 'Residual Network', 
-    accuracy: '61.48%', 
+    accuracy: '~61.5%', 
     architecture: 'ResNet-style', 
-    features: 'Skip connections, gradient flow optimization',
+    features: 'Skip connections for gradient flow optimization',
     parameters: '~2.8M',
     layers: 'Residual blocks with batch normalization',
     rank: 3
@@ -48,16 +48,16 @@ const dlModels = [
     name: 'FT-Transformer', 
     accuracy: '~61.0%', 
     architecture: 'Feature Tokenizer + Transformer', 
-    features: 'Tabular data transformer, feature embedding',
+    features: 'Feature embeddings + transformer encoder',
     parameters: '~3.1M',
-    layers: 'Feature tokenization + multi-layer transformer',
+    layers: 'Feature tokenization + 3-layer transformer',
     rank: 4
   },
   { 
     name: 'Simple MLP', 
     accuracy: '~60.5%', 
     architecture: 'Feed-forward', 
-    features: 'Basic neural network, 3 hidden layers',
+    features: 'Basic neural network with dropout',
     parameters: '~1.8M',
     layers: '3 hidden layers (256, 128, 64)',
     rank: 5
@@ -66,9 +66,9 @@ const dlModels = [
     name: 'Wide & Deep', 
     accuracy: '~60.2%', 
     architecture: 'Hybrid', 
-    features: 'Combines linear and deep components',
+    features: 'Combines linear (wide) and deep components',
     parameters: '~2.4M',
-    layers: 'Wide (linear) + Deep (multi-layer) paths',
+    layers: 'Linear path + deep multi-layer path',
     rank: 6
   },
 ]
@@ -123,7 +123,7 @@ export default function ModelsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">63.0%</div>
+              <div className="text-2xl font-bold">62.94%</div>
               <p className="text-xs text-gray-500">LightGBM</p>
             </CardContent>
           </Card>
