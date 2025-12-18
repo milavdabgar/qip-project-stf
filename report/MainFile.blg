@@ -20,53 +20,49 @@ Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: ./IEEEabrv.bib
 Database file #2: mybibfile.bib
-Warning--I didn't find a database entry for "ieee2025signaltoimage"
-Warning--I didn't find a database entry for "banglajol2025dualtree"
-Warning--I didn't find a database entry for "mdpi2025diagnosis"
 -- IEEEtran.bst version 1.13 (2008/09/30) by Michael Shell.
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 
 Done.
-You've used 1 entry,
+You've used 4 entries,
             4039 wiz_defined-function locations,
-            1224 strings with 15255 characters,
-and the built_in function-call counts, 433 in all, are:
-= -- 22
-> -- 4
-< -- 0
-+ -- 2
-- -- 1
-* -- 30
-:= -- 89
-add.period$ -- 2
-call.type$ -- 1
-change.case$ -- 1
-chr.to.int$ -- 0
-cite$ -- 1
-duplicate$ -- 29
-empty$ -- 36
-format.name$ -- 1
-if$ -- 71
+            1242 strings with 15767 characters,
+and the built_in function-call counts, 2908 in all, are:
+= -- 245
+> -- 53
+< -- 26
++ -- 30
+- -- 8
+* -- 149
+:= -- 464
+add.period$ -- 8
+call.type$ -- 4
+change.case$ -- 4
+chr.to.int$ -- 54
+cite$ -- 4
+duplicate$ -- 208
+empty$ -- 210
+format.name$ -- 11
+if$ -- 643
 int.to.chr$ -- 0
-int.to.str$ -- 1
-missing$ -- 7
-newline$ -- 28
-num.names$ -- 1
-pop$ -- 24
+int.to.str$ -- 4
+missing$ -- 34
+newline$ -- 37
+num.names$ -- 4
+pop$ -- 74
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 24
+skip$ -- 224
 stack$ -- 0
-substring$ -- 1
-swap$ -- 14
-text.length$ -- 0
+substring$ -- 136
+swap$ -- 173
+text.length$ -- 8
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 1
+type$ -- 4
 warning$ -- 0
-while$ -- 1
-width$ -- 2
-write$ -- 31
-(There were 3 warnings)
+while$ -- 13
+width$ -- 5
+write$ -- 63

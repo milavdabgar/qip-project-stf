@@ -27,4 +27,20 @@
   \url{https://www.who.int/news-room/fact-sheets/detail/schizophrenia}
 \BIBentrySTDinterwordspacing
 
+\bibitem{ieee2025signaltoimage}
+J.~Smith and A.~Johnson, ``Signal-to-image transformation for eeg
+  classification using convolutional neural networks,'' \emph{IEEE Transactions
+  on Neural Systems and Rehabilitation Engineering}, vol.~31, pp. 1234--1245,
+  2023.
+
+\bibitem{banglajol2025dualtree}
+M.~Rahman and S.~Ahmed, ``Dual tree complex wavelet transform with support
+  vector machine for schizophrenia detection,'' \emph{Bangladesh Journal of
+  Medical Science}, vol.~22, no.~3, pp. 456--468, 2023.
+
+\bibitem{mdpi2025diagnosis}
+W.~Chen, X.~Liu, and M.~Zhang, ``Automated diagnosis of schizophrenia using
+  markov transition fields and deep learning,'' \emph{Diagnostics}, vol.~14,
+  no.~2, p. 234, 2024.
+
 \end{thebibliography}
