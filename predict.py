@@ -43,6 +43,28 @@ class DeepMLP(nn.Module):
     def forward(self, x):
         return self.network(x)
 
+class SimpleMLP(nn.Module):
+    """Simple Multi-Layer Perceptron."""
+    
+    def __init__(self, input_dim, hidden_dims=[256, 128, 64], dropout_rate=0.3):
+        super(SimpleMLP, self).__init__()
+        
+        layers = []
+        prev_dim = input_dim
+        
+        for hidden_dim in hidden_dims:
+            layers.append(nn.Linear(prev_dim, hidden_dim))
+            layers.append(nn.ReLU())
+            layers.append(nn.Dropout(dropout_rate))
+            prev_dim = hidden_dim
+        
+        layers.append(nn.Linear(prev_dim, 2))  # Binary classification
+        
+        self.network = nn.Sequential(*layers)
+    
+    def forward(self, x):
+        return self.network(x)
+
 class ResidualBlock(nn.Module):
     """Residual block with skip connection."""
     
@@ -164,6 +186,34 @@ class AttentionNet(nn.Module):
         x = self.output_layer(x)
         return x
 
+class WideAndDeep(nn.Module):
+    """Wide & Deep Network combining linear and deep components."""
+    
+    def __init__(self, input_dim, hidden_dims=[256, 128, 64], dropout_rate=0.3):
+        super(WideAndDeep, self).__init__()
+        
+        # Wide component (linear)
+        self.wide = nn.Linear(input_dim, 2)
+        
+        # Deep component
+        deep_layers = []
+        prev_dim = input_dim
+        for hidden_dim in hidden_dims:
+            deep_layers.extend([
+                nn.Linear(prev_dim, hidden_dim),
+                nn.ReLU(),
+                nn.Dropout(dropout_rate)
+            ])
+            prev_dim = hidden_dim
+        deep_layers.append(nn.Linear(prev_dim, 2))
+        
+        self.deep = nn.Sequential(*deep_layers)
+    
+    def forward(self, x):
+        wide_out = self.wide(x)
+        deep_out = self.deep(x)
+        return wide_out + deep_out  # Combine outputs
+
 class FTTransformer(nn.Module):
     """Feature Tokenizer Transformer for tabular data."""
     
@@ -174,37 +224,54 @@ class FTTransformer(nn.Module):
         self.input_dim = input_dim
         self.d_token = d_token
         
+        # Feature tokenization: project each feature to d_token dimension
         self.feature_tokenizer = nn.Linear(1, d_token)
-        self.cls_token = nn.Parameter(torch.randn(1, 1, d_token))
-        self.positional_embeddings = nn.Parameter(torch.randn(1, input_dim + 1, d_token))
         
+        # CLS token (for classification)
+        self.cls_token = nn.Parameter(torch.randn(1, 1, d_token))
+        
+        # Feature embeddings for each feature
+        self.feature_embeddings = nn.Parameter(torch.randn(input_dim, d_token))
+        
+        # Transformer encoder blocks
         encoder_layer = nn.TransformerEncoderLayer(
             d_model=d_token,
             nhead=attention_heads,
             dim_feedforward=d_token * ffn_factor,
             dropout=dropout_rate,
-            batch_first=True
+            activation='gelu',
+            batch_first=True,
+            norm_first=True
         )
-        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=n_blocks)
+        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=n_blocks)
         
-        self.output_layer = nn.Linear(d_token, 2)
+        # Output layer
+        self.layer_norm = nn.LayerNorm(d_token)
+        self.output = nn.Linear(d_token, 2)
     
     def forward(self, x):
-        batch_size = x.size(0)
+        batch_size = x.shape[0]
         
-        x = x.unsqueeze(-1)
-        x = self.feature_tokenizer(x)
+        # Feature tokenization: (batch, features) -> (batch, features, d_token)
+        x = x.unsqueeze(-1)  # (batch, features, 1)
+        feature_tokens = self.feature_tokenizer(x)  # (batch, features, d_token)
         
+        # Add feature embeddings
+        feature_tokens = feature_tokens + self.feature_embeddings.unsqueeze(0)
+        
+        # Add CLS token
         cls_tokens = self.cls_token.expand(batch_size, -1, -1)
-        x = torch.cat([cls_tokens, x], dim=1)
+        tokens = torch.cat([cls_tokens, feature_tokens], dim=1)  # (batch, 1+features, d_token)
         
-        x = x + self.positional_embeddings
+        # Transformer encoding
+        tokens = self.transformer(tokens)
         
-        x = self.transformer_encoder(x)
+        # Use CLS token for classification
+        cls_output = tokens[:, 0]  # (batch, d_token)
+        cls_output = self.layer_norm(cls_output)
         
-        cls_output = x[:, 0, :]
-        
-        output = self.output_layer(cls_output)
+        # Final prediction
+        output = self.output(cls_output)
         return output
 
 # Get the script's directory and project root

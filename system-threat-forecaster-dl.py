@@ -119,11 +119,11 @@ CONFIG = {
     
     # Models to train
     'models_to_train': {
-        'simple_mlp': False,
+        'simple_mlp': True,
         'deep_mlp': True,
         'residual_net': True,
         'attention_net': True,
-        'wide_deep': False,
+        'wide_deep': True,
         'ft_transformer': True,  # State-of-the-art for tabular data
     },
     
