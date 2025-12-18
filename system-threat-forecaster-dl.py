@@ -1086,6 +1086,62 @@ def run_dl_pipeline():
         print(f"\n6. Generating submission with best model: {best_model_name}")
         submission = generate_submission(best_model, X_test)
     
+    # Step 7: Save models for web app deployment
+    print("\n7. Saving Models for Web App")
+    print("="*80)
+    
+    os.makedirs('saved_models', exist_ok=True)
+    
+    # Save all DL models in PyTorch standard format (.pth)
+    if trained_models:
+        # Create a checkpoint with all models and metadata
+        dl_checkpoint = {
+            'models': {},
+            'metadata': {
+                'best_model': best_model_name,
+                'best_accuracy': best_acc,
+                'input_dim': X_train.shape[1],
+                'num_classes': 2,
+                'device': str(device)
+            }
+        }
+        
+        for model_name, (model, metrics) in trained_models.items():
+            dl_checkpoint['models'][model_name] = {
+                'model': model,
+                'state_dict': model.state_dict(),
+                'best_val_acc': metrics['best_val_acc'],
+                'architecture': model.__class__.__name__
+            }
+        
+        # Save with torch.save() - industry standard for PyTorch
+        torch.save(dl_checkpoint, 'saved_models/dl_models.pth')
+        print(f"✓ Saved {len(trained_models)} DL models to saved_models/dl_models.pth")
+        
+        # Calculate size
+        size_mb = os.path.getsize('saved_models/dl_models.pth') / (1024 * 1024)
+        print(f"  Model file size: {size_mb:.2f} MB")
+        print(f"  Best model: {best_model_name} ({best_acc:.2f}% accuracy)")
+    
+    # Save preprocessors if not already saved by ML script
+    preprocessors_path = 'saved_models/preprocessors.pkl'
+    if not os.path.exists(preprocessors_path):
+        joblib.dump(preprocessors, preprocessors_path)
+        print(f"✓ Saved preprocessors to {preprocessors_path}")
+    else:
+        print(f"ℹ Preprocessors already exist at {preprocessors_path}")
+    
+    print("\nAll models saved successfully!")
+    print("\nDeployment files ready:")
+    for file in os.listdir('saved_models'):
+        size = os.path.getsize(f'saved_models/{file}') / (1024 * 1024)
+        print(f"  ✓ {file} ({size:.2f} MB)")
+    
+    print("\nNext steps:")
+    print("  1. Test predictions: python predict.py")
+    print("  2. Run web app: cd next && npm run dev")
+    print("  3. Visit: http://localhost:3000/predict")
+    
     print("\n" + "="*80)
     print("PIPELINE COMPLETED")
     print(f"Best Model: {best_model_name} with {best_acc:.2f}% validation accuracy")

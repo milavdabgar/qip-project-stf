@@ -1315,7 +1315,30 @@ def run_pipeline():
     else:
         print("No best model found. Cannot generate submission.")
     
-    print("=== Pipeline Completed ===\n")
+    # Step 11: Save models for web app deployment
+    print("\n=== Saving Models for Web App ===")
+    os.makedirs('saved_models', exist_ok=True)
+    
+    # Save all trained ML models in a single file (industry standard: joblib for sklearn)
+    if trained_models:
+        ml_models_dict = {name: model for name, model in trained_models.items()}
+        joblib.dump(ml_models_dict, 'saved_models/ml_models.pkl')
+        print(f"✓ Saved {len(ml_models_dict)} ML models to saved_models/ml_models.pkl")
+        
+        # Calculate total size
+        size_mb = os.path.getsize('saved_models/ml_models.pkl') / (1024 * 1024)
+        print(f"  Model file size: {size_mb:.2f} MB")
+    
+    # Save preprocessors (scalers, encoders) - essential for inference
+    joblib.dump(preprocessors, 'saved_models/preprocessors.pkl')
+    print("✓ Saved preprocessors to saved_models/preprocessors.pkl")
+    
+    print("\nModels are ready for deployment!")
+    print("Next steps:")
+    print("  1. Train DL models: python system-threat-forecaster-dl.py")
+    print("  2. Test web app: cd next && npm run dev")
+    
+    print("\n=== Pipeline Completed ===\n")
     
     return train_data, X_train, y_train, X_val, y_val, best_model_name, best_model, trained_models
 

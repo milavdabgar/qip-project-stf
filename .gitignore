@@ -69,3 +69,15 @@ advanced_processed_data/
 # OS-specific
 .DS_Store
 Thumbs.db
+
+# Node.js / Next.js
+node_modules/
+.next/
+out/
+.vercel
+next-env.d.ts
+
+# Saved models for web app (keep these tracked or deploy separately)
+# saved_models/
+*.pth
+*.pt
