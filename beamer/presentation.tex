@@ -35,6 +35,18 @@
 \tableofcontents
 \end{frame}
 
+\begin{frame}{Presentation Overview}
+\begin{enumerate}
+    \item \textbf{Introduction}: Background, Problem Statement, Dataset Overview
+    \item \textbf{Objectives}: Project goals and expected outcomes
+    \item \textbf{Methodology}: Data pipeline, preprocessing, and model selection
+    \item \textbf{Data Analysis}: Characteristics, quality, and feature insights
+    \item \textbf{Results}: Model performance and key findings
+    \item \textbf{Implementation}: System architecture and technical stack
+    \item \textbf{Conclusion}: Contributions, implications, and future work
+\end{enumerate}
+\end{frame}
+
 % Section 1: Introduction
 \section{Introduction}
 
@@ -121,10 +133,10 @@ Predict malware infections based on system properties using 100,000 samples with
 \end{center}
 \end{frame}
 
-\begin{frame}{Dataset Characteristics}
+\begin{frame}{Preprocessing Pipeline}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\textbf{Dataset Overview:}
+\textbf{Dataset Specifications:}
 \begin{itemize}
     \item \textbf{Size:} 100,000 samples
     \item \textbf{Features:} 76 total
@@ -133,10 +145,11 @@ Predict malware infections based on system properties using 100,000 samples with
         \item 28 categorical
     \end{itemize}
     \item \textbf{Split:} 80\% train, 20\% validation
+    \item \textbf{Target:} Balanced (50.52\% / 49.48\%)
 \end{itemize}
 
 \column{0.5\textwidth}
-\textbf{Preprocessing Pipeline:}
+\textbf{Preprocessing Steps:}
 \begin{itemize}
     \item Missing values:
     \begin{itemize}
@@ -150,7 +163,24 @@ Predict malware infections based on system properties using 100,000 samples with
 \end{columns}
 \end{frame}
 
-\begin{frame}{Target Distribution \& Feature Types}
+\begin{frame}{Machine Learning Models}
+\begin{block}{Seven Classification Algorithms Evaluated}
+\begin{enumerate}
+    \item \textbf{Decision Tree} - High interpretability
+    \item \textbf{Random Forest} - Ensemble method
+    \item \textbf{LightGBM} - Gradient boosting framework (Best performer)
+    \item \textbf{Naive Bayes} - Probabilistic classifier
+    \item \textbf{Logistic Regression} - Linear baseline
+    \item \textbf{AdaBoost} - Adaptive boosting
+    \item \textbf{SGD Classifier} - Stochastic optimization
+\end{enumerate}
+\end{block}
+\end{frame}
+
+% Section 4: Data Analysis
+\section{Data Analysis}
+
+\begin{frame}{Dataset Characteristics}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \includegraphics[width=\textwidth]{figures/target_distribution.png}
@@ -166,24 +196,10 @@ Predict malware infections based on system properties using 100,000 samples with
 \end{center}
 \end{frame}
 
-\begin{frame}{Data Quality: Missing Values}
+\begin{frame}{Missing Values Analysis}
 \begin{center}
 \includegraphics[width=0.85\textwidth]{figures/missing_values.png}
 \end{center}
-\end{frame}
-
-\begin{frame}{Machine Learning Models}
-\begin{block}{Seven Classification Algorithms Evaluated}
-\begin{enumerate}
-    \item \textbf{Decision Tree} - High interpretability
-    \item \textbf{Random Forest} - Ensemble method
-    \item \textbf{LightGBM} - Gradient boosting framework
-    \item \textbf{Naive Bayes} - Probabilistic classifier
-    \item \textbf{Logistic Regression} - Linear baseline
-    \item \textbf{AdaBoost} - Adaptive boosting
-    \item \textbf{SGD Classifier} - Stochastic optimization
-\end{enumerate}
-\end{block}
 \end{frame}
 
 \begin{frame}{Key Features Analysis}
@@ -219,8 +235,8 @@ Security configuration has the highest predictive power
 \end{center}
 \end{frame}
 
-% Section 4: Results
-\section{Results}
+% Section 5: Model Performance
+\section{Model Performance}
 
 \begin{frame}{Model Performance Comparison}
 \begin{center}
@@ -295,7 +311,7 @@ LightGBM achieved the highest accuracy at \textbf{63.0\%}, showing gradient boos
 \end{columns}
 \end{frame}
 
-% Section 5: Implementation
+% Section 6: Implementation
 \section{Implementation}
 
 \begin{frame}{System Architecture}
@@ -341,7 +357,7 @@ Selective enabling/disabling of:
 \end{itemize}
 \end{frame}
 
-% Section 6: Conclusion
+% Section 7: Conclusion
 \section{Conclusion}
 
 \begin{frame}{Key Contributions}
