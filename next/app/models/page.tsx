@@ -5,75 +5,84 @@ import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Brain, Cpu, TrendingUp, Layers } from 'lucide-react'
-
-const mlModels = [
-  { name: 'LightGBM', accuracy: '62.94%', type: 'Gradient Boosting', features: 'Handles categorical data, fast training, L1/L2 regularization', rank: 1 },
-  { name: 'Random Forest', accuracy: '62.09%', type: 'Ensemble', features: 'Bagging with decision trees, robust to overfitting', rank: 2 },
-  { name: 'AdaBoost', accuracy: '61.26%', type: 'Boosting', features: 'Adaptive boosting, combines weak learners sequentially', rank: 3 },
-  { name: 'Decision Tree', accuracy: '60.10%', type: 'Tree-based', features: 'Single tree with depth 10, class balancing', rank: 4 },
-  { name: 'Logistic Regression', accuracy: '60.07%', type: 'Linear', features: 'L2 regularization, class balancing, liblinear solver', rank: 5 },
-  { name: 'Naive Bayes', accuracy: '55.06%', type: 'Probabilistic', features: 'Gaussian distribution assumption, fast inference', rank: 6 },
-  { name: 'SGD Classifier', accuracy: '49.46%', type: 'Linear', features: 'Stochastic gradient descent, online learning', rank: 7 },
-]
-
-const dlModels = [
-  { 
-    name: 'Deep MLP', 
-    accuracy: '61.79%', 
-    architecture: 'Feed-forward', 
-    features: 'Multiple hidden layers with batch normalization',
-    parameters: '~2.2M',
-    layers: '5 hidden layers (512, 256, 128, 64, 32)',
-    rank: 1
-  },
-  { 
-    name: 'Attention Network', 
-    accuracy: '~61.7%', 
-    architecture: 'Transformer-based', 
-    features: 'Multi-head self-attention, contextual feature learning',
-    parameters: '~2.5M',
-    layers: 'Multi-head attention blocks, feed-forward networks',
-    rank: 2
-  },
-  { 
-    name: 'Residual Network', 
-    accuracy: '~61.5%', 
-    architecture: 'ResNet-style', 
-    features: 'Skip connections for gradient flow optimization',
-    parameters: '~2.8M',
-    layers: 'Residual blocks with batch normalization',
-    rank: 3
-  },
-  { 
-    name: 'FT-Transformer', 
-    accuracy: '~61.0%', 
-    architecture: 'Feature Tokenizer + Transformer', 
-    features: 'Feature embeddings + transformer encoder',
-    parameters: '~3.1M',
-    layers: 'Feature tokenization + 3-layer transformer',
-    rank: 4
-  },
-  { 
-    name: 'Simple MLP', 
-    accuracy: '~60.5%', 
-    architecture: 'Feed-forward', 
-    features: 'Basic neural network with dropout',
-    parameters: '~1.8M',
-    layers: '3 hidden layers (256, 128, 64)',
-    rank: 5
-  },
-  { 
-    name: 'Wide & Deep', 
-    accuracy: '~60.2%', 
-    architecture: 'Hybrid', 
-    features: 'Combines linear (wide) and deep components',
-    parameters: '~2.4M',
-    layers: 'Linear path + deep multi-layer path',
-    rank: 6
-  },
-]
+import { useEffect, useState } from 'react'
 
 export default function ModelsPage() {
+  const [modelPerformance, setModelPerformance] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/model_performance.json')
+      .then(res => res.json())
+      .then(data => {
+        setModelPerformance(data)
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error('Failed to load model performance data:', err)
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading || !modelPerformance) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading model data...</p>
+        </div>
+      </div>
+    )
+  }
+  
+  // Transform ML models data
+  const mlModelsData = Object.entries(modelPerformance.ml_models).map(([key, data]: [string, any]) => ({
+    key,
+    name: key.split('_').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+    accuracy: (data.validation_accuracy * 100).toFixed(2) + '%',
+    type: key === 'lightgbm' ? 'Gradient Boosting' :
+          key === 'random_forest' ? 'Ensemble' :
+          key === 'ada_boost' ? 'Boosting' :
+          key === 'decision_tree' ? 'Tree-based' :
+          key === 'logistic_regression' ? 'Linear' :
+          key === 'naive_bayes' ? 'Probabilistic' :
+          key === 'sgd' ? 'Linear' : 'Other',
+    f1Score: data.f1_score.toFixed(4),
+    precision: data.precision.toFixed(4),
+    hyperparameters: data.hyperparameters
+  })).sort((a: any, b: any) => parseFloat(b.accuracy) - parseFloat(a.accuracy))
+
+  const mlModels = mlModelsData.map((model: any, index: number) => ({
+    ...model,
+    rank: index + 1
+  }))
+
+  // Transform DL models data
+  const dlModelsData = Object.entries(modelPerformance.dl_models).map(([key, data]: [string, any]) => ({
+    key,
+    name: key.split('_').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+    accuracy: (data.validation_accuracy * 100).toFixed(2) + '%',
+    architecture: data.architecture,
+    parameters: data.total_parameters.toLocaleString(),
+    trainableParams: data.trainable_parameters.toLocaleString(),
+    f1Score: data.final_val_f1.toFixed(4),
+    loss: data.best_val_loss.toFixed(4),
+    hyperparameters: data.hyperparameters,
+    training: data.training
+  })).sort((a: any, b: any) => parseFloat(b.accuracy) - parseFloat(a.accuracy))
+
+  const dlModels = dlModelsData.map((model: any, index: number) => ({
+    ...model,
+    rank: index + 1
+  }))
+
+  // Calculate total parameters
+  const totalDLParams = dlModelsData.reduce((sum: number, model: any) => 
+    sum + parseInt(model.parameters.replace(/,/g, '')), 0
+  )
+
+  const bestModel = modelPerformance.best_overall
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 py-8">
@@ -83,7 +92,7 @@ export default function ModelsPage() {
             Model Architecture
           </h1>
           <p className="text-lg text-gray-600">
-            Comprehensive analysis of 13 models (7 ML + 6 DL) trained on 76-feature malware dataset
+            Comprehensive analysis of {mlModels.length + dlModels.length} models ({mlModels.length} ML + {dlModels.length} DL) trained on {modelPerformance.metadata.features}-feature malware dataset
           </p>
         </div>
 
@@ -97,7 +106,7 @@ export default function ModelsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">7</div>
+              <div className="text-2xl font-bold">{mlModels.length}</div>
               <p className="text-xs text-gray-500">Traditional algorithms</p>
             </CardContent>
           </Card>
@@ -110,7 +119,7 @@ export default function ModelsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">6</div>
+              <div className="text-2xl font-bold">{dlModels.length}</div>
               <p className="text-xs text-gray-500">Neural networks</p>
             </CardContent>
           </Card>
@@ -123,8 +132,8 @@ export default function ModelsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">62.94%</div>
-              <p className="text-xs text-gray-500">LightGBM</p>
+              <div className="text-2xl font-bold">{(bestModel.accuracy * 100).toFixed(2)}%</div>
+              <p className="text-xs text-gray-500">{bestModel.model.split('_').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} ({bestModel.type})</p>
             </CardContent>
           </Card>
           
@@ -136,7 +145,7 @@ export default function ModelsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">~14.8M</div>
+              <div className="text-2xl font-bold">{(totalDLParams / 1000000).toFixed(1)}M</div>
               <p className="text-xs text-gray-500">DL models combined</p>
             </CardContent>
           </Card>
@@ -165,12 +174,13 @@ export default function ModelsPage() {
                       <TableHead>Model</TableHead>
                       <TableHead>Type</TableHead>
                       <TableHead>Accuracy</TableHead>
-                      <TableHead>Key Features</TableHead>
+                      <TableHead>F1 Score</TableHead>
+                      <TableHead>Precision</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {mlModels.map((model) => (
-                      <TableRow key={model.name}>
+                      <TableRow key={model.key}>
                         <TableCell className="font-medium">{model.rank}</TableCell>
                         <TableCell className="font-medium">{model.name}</TableCell>
                         <TableCell>
@@ -185,11 +195,39 @@ export default function ModelsPage() {
                             {model.accuracy}
                           </span>
                         </TableCell>
-                        <TableCell className="text-sm text-gray-600">{model.features}</TableCell>
+                        <TableCell className="text-sm">{model.f1Score}</TableCell>
+                        <TableCell className="text-sm">{model.precision}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Hyperparameters</CardTitle>
+                <CardDescription>Detailed configuration for each ML model</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {mlModels.map((model) => (
+                    <div key={model.key} className="border-b pb-4 last:border-0">
+                      <h4 className="font-semibold mb-2 flex items-center gap-2">
+                        {model.name}
+                        {model.rank === 1 && <Badge className="bg-green-600">Best ML</Badge>}
+                      </h4>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                        {Object.entries(model.hyperparameters).map(([key, value]) => (
+                          <div key={key} className="bg-gray-50 p-2 rounded">
+                            <span className="text-gray-600 block text-xs">{key}</span>
+                            <span className="font-medium">{String(value)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
 
@@ -200,20 +238,20 @@ export default function ModelsPage() {
               <CardContent className="space-y-2">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Dataset Size</p>
-                    <p className="text-lg font-semibold">2,000 samples</p>
+                    <p className="text-sm font-medium text-gray-500">Training Samples</p>
+                    <p className="text-lg font-semibold">{modelPerformance.metadata.training_samples.toLocaleString()}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Validation Samples</p>
+                    <p className="text-lg font-semibold">{modelPerformance.metadata.validation_samples.toLocaleString()}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Features</p>
-                    <p className="text-lg font-semibold">76 dimensions</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Cross-validation</p>
-                    <p className="text-lg font-semibold">5-fold CV</p>
+                    <p className="text-lg font-semibold">{modelPerformance.metadata.features} dimensions</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Preprocessing</p>
-                    <p className="text-lg font-semibold">StandardScaler</p>
+                    <p className="text-lg font-semibold">{modelPerformance.preprocessing.scaling}</p>
                   </div>
                 </div>
               </CardContent>
@@ -236,13 +274,13 @@ export default function ModelsPage() {
                       <TableHead>Model</TableHead>
                       <TableHead>Architecture</TableHead>
                       <TableHead>Accuracy</TableHead>
+                      <TableHead>F1 Score</TableHead>
                       <TableHead>Parameters</TableHead>
-                      <TableHead>Key Components</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {dlModels.map((model) => (
-                      <TableRow key={model.name}>
+                      <TableRow key={model.key}>
                         <TableCell className="font-medium">{model.rank}</TableCell>
                         <TableCell className="font-medium">{model.name}</TableCell>
                         <TableCell>
@@ -257,12 +295,54 @@ export default function ModelsPage() {
                             {model.accuracy}
                           </span>
                         </TableCell>
+                        <TableCell className="text-sm">{model.f1Score}</TableCell>
                         <TableCell className="text-sm font-mono">{model.parameters}</TableCell>
-                        <TableCell className="text-sm text-gray-600">{model.layers}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Hyperparameters & Architecture</CardTitle>
+                <CardDescription>Detailed configuration for each DL model</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {dlModels.map((model) => (
+                    <div key={model.key} className="border-b pb-4 last:border-0">
+                      <h4 className="font-semibold mb-2 flex items-center gap-2">
+                        {model.name}
+                        {model.rank === 1 && <Badge className="bg-green-600">Best DL</Badge>}
+                        <Badge variant="outline" className="ml-auto">{model.parameters} params</Badge>
+                      </h4>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm mb-2">
+                        {Object.entries(model.hyperparameters).map(([key, value]) => (
+                          <div key={key} className="bg-gray-50 p-2 rounded">
+                            <span className="text-gray-600 block text-xs">{key}</span>
+                            <span className="font-medium">{typeof value === 'object' ? JSON.stringify(value) : String(value)}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 text-sm">
+                        <div className="bg-blue-50 p-2 rounded">
+                          <span className="text-gray-600 block text-xs">Device</span>
+                          <span className="font-medium">{model.training.device}</span>
+                        </div>
+                        <div className="bg-blue-50 p-2 rounded">
+                          <span className="text-gray-600 block text-xs">Scheduler</span>
+                          <span className="font-medium">{model.training.scheduler}</span>
+                        </div>
+                        <div className="bg-blue-50 p-2 rounded">
+                          <span className="text-gray-600 block text-xs">Early Stopping</span>
+                          <span className="font-medium">{model.training.early_stopping_patience} epochs</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
 
@@ -274,27 +354,27 @@ export default function ModelsPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm font-medium text-gray-500">Epochs</p>
-                    <p className="text-lg font-semibold">50 epochs</p>
+                    <p className="text-lg font-semibold">{dlModels[0]?.hyperparameters.epochs} epochs</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Batch Size</p>
-                    <p className="text-lg font-semibold">64</p>
+                    <p className="text-lg font-semibold">{dlModels[0]?.hyperparameters.batch_size}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Optimizer</p>
-                    <p className="text-lg font-semibold">Adam</p>
+                    <p className="text-lg font-semibold">{dlModels[0]?.hyperparameters.optimizer.toUpperCase()}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Loss Function</p>
-                    <p className="text-lg font-semibold">Cross Entropy</p>
+                    <p className="text-sm font-medium text-gray-500">Learning Rate</p>
+                    <p className="text-lg font-semibold">{dlModels[0]?.hyperparameters.learning_rate}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Hardware</p>
-                    <p className="text-lg font-semibold">Apple M3 MPS</p>
+                    <p className="text-lg font-semibold">{dlModels[0]?.training.device.toUpperCase()}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Training Time</p>
-                    <p className="text-lg font-semibold">~30 min/model</p>
+                    <p className="text-sm font-medium text-gray-500">Dropout Rate</p>
+                    <p className="text-lg font-semibold">{dlModels[0]?.hyperparameters.dropout_rate}</p>
                   </div>
                 </div>
               </CardContent>
@@ -312,29 +392,33 @@ export default function ModelsPage() {
             <div>
               <h3 className="font-semibold mb-2">🏆 Top Performers</h3>
               <p className="text-sm text-gray-600">
-                LightGBM achieves the highest accuracy (63.0%) among all models, followed closely by XGBoost (62.8%). 
-                Gradient boosting algorithms dominate the top positions due to their ability to handle complex feature interactions.
+                {mlModels[0].name} achieves the highest accuracy ({mlModels[0].accuracy}) among all models, 
+                followed by {mlModels[1].name} ({mlModels[1].accuracy}). Gradient boosting algorithms dominate 
+                the top positions due to their ability to handle complex feature interactions in tabular data.
               </p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">🧠 Deep Learning Performance</h3>
               <p className="text-sm text-gray-600">
-                Attention Network (61.73%) and Deep MLP (61.72%) show competitive performance, demonstrating that neural networks 
-                can effectively learn patterns in tabular data when properly architected.
+                {dlModels[0].name} ({dlModels[0].accuracy}) leads the neural network models with {dlModels[0].parameters} parameters, 
+                demonstrating that deep learning can effectively learn patterns in tabular malware data. The attention-based 
+                architectures show competitive performance while maintaining interpretability.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-2">⚡ Ensemble Methods Advantage</h3>
+              <h3 className="font-semibold mb-2">⚡ Model Efficiency</h3>
               <p className="text-sm text-gray-600">
-                Ensemble methods (Random Forest, Extra Trees) provide robust predictions with lower variance, making them reliable 
-                choices for production deployment despite slightly lower accuracy than boosting methods.
+                Traditional ML models train in seconds while achieving top accuracy, making them ideal for rapid iteration. 
+                Deep learning models require ~15-30 minutes per model on Apple Silicon MPS but offer potential for 
+                improvement with architectural innovations and larger datasets.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-2">🔄 Model Diversity</h3>
+              <h3 className="font-semibold mb-2">🔄 Dataset Insights</h3>
               <p className="text-sm text-gray-600">
-                Combining predictions from multiple models with different learning paradigms (boosting, bagging, neural networks) 
-                can potentially improve overall system accuracy through ensemble voting.
+                Training on {modelPerformance.metadata.training_samples.toLocaleString()} samples with {modelPerformance.metadata.features} features, 
+                models achieve ~{mlModels[0].accuracy} accuracy. The {modelPerformance.preprocessing.numeric_features} numeric and {modelPerformance.preprocessing.categorical_features} categorical 
+                features capture device characteristics, security settings, and behavioral patterns for malware detection.
               </p>
             </div>
           </CardContent>
