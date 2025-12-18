@@ -124,7 +124,7 @@ CONFIG = {
         'residual_net': True,
         'attention_net': True,
         'wide_deep': True,
-        'ft_transformer': True,  # State-of-the-art for tabular data
+        'ft_transformer': True,
     },
     
     # Optimization
@@ -1159,18 +1159,20 @@ def run_dl_pipeline():
     perf_data["metadata"]["last_updated"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     # Extract and save DL model performance
-    for model_name, metrics in trained_models.items():
-        model_config = CONFIG['model_configs'].get(model_name, {})
-        
+    for model_name, (model, metrics) in trained_models.items():
         # Count parameters
-        model = metrics['model']
         total_params = sum(p.numel() for p in model.parameters())
         trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        
+        # Get best validation loss from history
+        best_val_loss = min(metrics['history']['val_loss']) if metrics['history']['val_loss'] else 0.0
         
         perf_data["dl_models"][model_name] = {
             "architecture": model.__class__.__name__,
             "validation_accuracy": round(metrics['best_val_acc'] / 100, 4),
-            "best_val_loss": round(metrics['best_val_loss'], 4),
+            "best_val_loss": round(best_val_loss, 4),
+            "final_val_accuracy": round(metrics['final_val_acc'] / 100, 4),
+            "final_val_f1": round(metrics['final_val_f1'], 4),
             "total_parameters": total_params,
             "trainable_parameters": trainable_params,
             "hyperparameters": {
@@ -1178,8 +1180,8 @@ def run_dl_pipeline():
                 "batch_size": CONFIG['batch_size'],
                 "epochs": CONFIG['epochs'],
                 "optimizer": CONFIG['optimizer'],
-                "dropout": model_config.get('dropout_rate', 0.3),
-                "hidden_dims": model_config.get('hidden_dims', [])
+                "dropout_rate": CONFIG['dropout_rate'],
+                "hidden_dims": CONFIG['hidden_dims']
             },
             "training": {
                 "device": str(device),
