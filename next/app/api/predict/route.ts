@@ -6,11 +6,12 @@ export async function POST(request: Request) {
   try {
     const { features } = await request.json()
 
-    // Path to Python script
+    // Path to Python script and venv
     const pythonScript = path.join(process.cwd(), '..', 'predict.py')
+    const venvPython = path.join(process.cwd(), '..', 'venv', 'bin', 'python')
     
-    // Spawn Python process
-    const python = spawn('python3', [pythonScript])
+    // Spawn Python process using venv
+    const python = spawn(venvPython, [pythonScript])
     
     let output = ''
     let errorOutput = ''
