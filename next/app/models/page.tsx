@@ -53,6 +53,24 @@ const dlModels = [
     layers: 'Feature tokenization + multi-layer transformer',
     rank: 4
   },
+  { 
+    name: 'Simple MLP', 
+    accuracy: '~60.5%', 
+    architecture: 'Feed-forward', 
+    features: 'Basic neural network, 3 hidden layers',
+    parameters: '~1.8M',
+    layers: '3 hidden layers (256, 128, 64)',
+    rank: 5
+  },
+  { 
+    name: 'Wide & Deep', 
+    accuracy: '~60.2%', 
+    architecture: 'Hybrid', 
+    features: 'Combines linear and deep components',
+    parameters: '~2.4M',
+    layers: 'Wide (linear) + Deep (multi-layer) paths',
+    rank: 6
+  },
 ]
 
 export default function ModelsPage() {
@@ -92,7 +110,7 @@ export default function ModelsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">4</div>
+              <div className="text-2xl font-bold">6</div>
               <p className="text-xs text-gray-500">Neural networks</p>
             </CardContent>
           </Card>
@@ -118,7 +136,7 @@ export default function ModelsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">~10.6M</div>
+              <div className="text-2xl font-bold">~14.8M</div>
               <p className="text-xs text-gray-500">DL models combined</p>
             </CardContent>
           </Card>
