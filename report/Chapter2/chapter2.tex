@@ -1,3 +1,59 @@
-% chapter1.tex { Comments of Chapter Heads}
+% chapter2.tex
 \chapter{Literature Review}
-Add contents
+
+\section{Machine Learning in Cybersecurity}
+
+Machine learning has revolutionized the field of cybersecurity by enabling automated detection and classification of threats that would be impractical to identify through manual analysis. Unlike traditional signature-based detection methods that rely on known patterns, machine learning models can identify anomalies and detect previously unseen threats by learning from historical data patterns.
+
+The application of machine learning in malware detection leverages various supervised learning algorithms that learn from labeled datasets containing both benign and malicious samples. These algorithms can capture complex relationships between system features and malware presence, providing probabilistic predictions of threat likelihood.
+
+\section{Classification Algorithms}
+
+\subsection{Decision Trees}
+Decision Trees are intuitive, interpretable models that make predictions by learning simple decision rules from data features. They partition the feature space recursively, creating a tree-like structure where each internal node represents a test on a feature, each branch represents the outcome of the test, and each leaf node represents a class label. While prone to overfitting, decision trees provide excellent interpretability and serve as building blocks for ensemble methods.
+
+\subsection{Random Forest}
+Random Forest is an ensemble learning method that constructs multiple decision trees during training and outputs the mode of classes for classification tasks. By introducing randomness in feature selection and bootstrap sampling, Random Forest reduces overfitting and improves generalization. It is particularly effective for high-dimensional data and provides feature importance metrics.
+
+\subsection{LightGBM}
+Light Gradient Boosting Machine (LightGBM) is a gradient boosting framework that uses tree-based learning algorithms. It is designed for distributed and efficient training, particularly with large datasets. LightGBM uses histogram-based algorithms and leaf-wise tree growth, resulting in faster training speed and lower memory usage compared to traditional gradient boosting methods. It has shown excellent performance in various machine learning competitions and real-world applications.
+
+\subsection{Naive Bayes}
+Naive Bayes classifiers are probabilistic models based on Bayes' theorem with strong independence assumptions between features. Despite the naive assumption, these classifiers often perform surprisingly well in practice, particularly for text classification and spam filtering. The Gaussian Naive Bayes variant assumes that continuous features follow a normal distribution.
+
+\subsection{Logistic Regression}
+Logistic Regression is a linear model for binary classification that estimates the probability of an instance belonging to a particular class. Despite its name, it is a classification rather than regression algorithm. It is computationally efficient, provides probabilistic interpretations, and works well when the relationship between features and the log-odds of the outcome is approximately linear.
+
+\subsection{AdaBoost}
+Adaptive Boosting (AdaBoost) is an ensemble meta-algorithm that combines multiple weak classifiers to create a strong classifier. It works by iteratively training weak learners on weighted versions of the data, with weights adjusted to focus on misclassified instances. AdaBoost is particularly effective when combined with decision tree stumps.
+
+\subsection{Stochastic Gradient Descent (SGD)}
+SGD is an optimization algorithm commonly used for training linear models with large datasets. The SGD classifier implements regularized linear models with SGD learning, supporting various loss functions and penalties. It is particularly efficient for large-scale machine learning problems where the dataset may not fit in memory.
+
+\section{Data Preprocessing Techniques}
+
+\subsection{Missing Value Imputation}
+Missing values are common in real-world datasets and can significantly impact model performance. Imputation strategies include mean/median imputation for numerical features and mode imputation for categorical features. The choice of strategy depends on the nature and proportion of missing data.
+
+\subsection{Feature Encoding}
+Categorical features must be converted to numerical representations for use in machine learning models. Label encoding assigns integer values to categories, while one-hot encoding creates binary columns for each category. The choice depends on whether the categorical variable is ordinal or nominal.
+
+\subsection{Feature Scaling}
+Feature scaling normalizes the range of independent variables, preventing features with larger scales from dominating the learning process. Common techniques include standardization (StandardScaler) which transforms features to have zero mean and unit variance, and normalization (MinMaxScaler) which scales features to a specific range.
+
+\section{Model Evaluation and Selection}
+
+\subsection{Cross-Validation}
+Cross-validation is a resampling technique used to evaluate machine learning models on limited data samples. K-fold cross-validation divides the dataset into k subsets, trains the model k times (each time using k-1 subsets for training and the remaining subset for validation), and averages the results.
+
+\subsection{Hyperparameter Tuning}
+Hyperparameters are configuration settings that control the learning process and cannot be learned from data. Grid search exhaustively tries all combinations of hyperparameters, while randomized search samples a fixed number of combinations. RandomizedSearchCV is often more efficient for high-dimensional hyperparameter spaces.
+
+\subsection{Feature Selection}
+Feature selection reduces dimensionality by identifying the most relevant features for the prediction task. Methods include filter methods (SelectKBest), wrapper methods (recursive feature elimination), and embedded methods (L1 regularization). Reducing features can improve model performance, reduce overfitting, and decrease training time.
+
+\section{Related Work in Malware Detection}
+
+Recent advances in malware detection have leveraged various machine learning approaches. Signal-to-image transformation combined with CNNs \cite{ieee2025signaltoimage} achieved 97.70\% accuracy by converting system signals to images. Dual Tree Complex Wavelet Transform with SVM \cite{banglajol2025dualtree} demonstrated approximately 95\% accuracy using advanced signal processing techniques. Markov Transition Fields \cite{mdpi2025diagnosis} reached 98.51\% accuracy with 100\% sensitivity by representing time series as transition probability matrices.
+
+These studies demonstrate the effectiveness of machine learning in malware detection, though they often focus on specific feature extraction techniques or single model types. Our work contributes by providing a comprehensive comparison of multiple algorithms with a modular, extensible pipeline suitable for production deployment.

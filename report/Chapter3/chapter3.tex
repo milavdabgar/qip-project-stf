@@ -1,55 +1,145 @@
 % chapter3.tex 
 
-\chapter{Methodology-Name}
+\chapter{Proposed Methodology}
 
-Add contents, Block Diagram, then an explanation of blocks one by one
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1.0\textwidth]{Figures/hc_vs_sc_MOSCOW.png}
-    \caption[Sample EEG signal from MHRC dataset]{Sample EEG signal from MHRC dataset}
-    \label{fig:moscow}
-\end{figure}
+The System Threat Forecaster employs a comprehensive machine learning pipeline designed for malware threat prediction. The methodology consists of several interconnected stages, each contributing to the overall effectiveness of the system.
 
-\section{Block-1}
-Add contents
+\section{System Architecture}
 
-\section{Block-2}
-Add contents
+The proposed system follows a modular architecture comprising the following major components:
+\begin{enumerate}
+    \item Data Loading and Exploration
+    \item Data Preprocessing and Cleaning
+    \item Feature Engineering and Selection
+    \item Model Training and Optimization
+    \item Model Evaluation and Comparison
+    \item Prediction and Deployment
+\end{enumerate}
 
-\section{ML/DL Model}
-Add contents
+\section{Data Loading and Exploratory Data Analysis}
 
-\subsection{Short-Time Fourier Transform (STFT)}
-The Short-Time Fourier Transform (STFT) is the most common tool for time-frequency analysis. It assumes local stationarity within a short analysis window \(w(t)\). The STFT of a signal \(x(t)\) is
+The pipeline begins by loading training and test datasets from CSV files. The exploratory data analysis (EDA) phase examines:
+\begin{itemize}
+    \item Dataset dimensions and structure
+    \item Missing value patterns and distributions
+    \item Target variable distribution (malware vs. non-malware)
+    \item Statistical summaries of numerical features
+    \item Correlation analysis between features
+    \item Identification of numerical and categorical features
+\end{itemize}
+
+Visualization techniques including histograms, count plots, correlation heatmaps, and bar charts help identify data characteristics and potential issues requiring attention during preprocessing.
+
+\section{Data Preprocessing}
+
+Data preprocessing transforms raw data into a format suitable for machine learning algorithms. The preprocessing pipeline includes:
+
+\subsection{Missing Value Handling}
+Missing values are handled using SimpleImputer with configurable strategies:
+\begin{itemize}
+    \item Numerical features: Mean imputation (filling missing values with column mean)
+    \item Categorical features: Mode imputation (filling with most frequent value)
+\end{itemize}
+
+\subsection{Categorical Feature Encoding}
+Categorical features are converted to numerical representations using LabelEncoder, which assigns integer values to each unique category. Unknown categories in test data are mapped to the most frequent training category to prevent encoding errors.
+
+\subsection{Feature Scaling}
+Numerical features are standardized using StandardScaler, transforming them to have zero mean and unit variance:
 \begin{equation}
-    \mathrm{STFT}_x(t, f) = \int_{-\infty}^{\infty} x(\tau)\, w(\tau - t)\, e^{-j2\pi f \tau}\, d\tau,
+    z = \frac{x - \mu}{\sigma}
+\end{equation}
+where $x$ is the original value, $\mu$ is the mean, $\sigma$ is the standard deviation, and $z$ is the standardized value.
+
+This normalization ensures that features with different scales contribute equally to model training and prevents features with larger magnitudes from dominating the learning process.
+
+\section{Feature Engineering and Selection}
+
+\subsection{Feature Engineering}
+Feature engineering creates new features from existing ones to improve model performance. The system implements interaction features by multiplying pairs of highly correlated features with the target variable. Top correlated features are identified through correlation analysis, and their pairwise products create new features capturing interaction effects.
+
+\subsection{Feature Selection}
+Feature selection reduces dimensionality by identifying the most informative features. The SelectKBest method with f\_classif scoring function selects the top k features based on ANOVA F-value:
+\begin{equation}
+    F = \frac{\text{Between-group variability}}{\text{Within-group variability}}
 \end{equation}
 
-\subsection{Topic-1}
-Add contents
+This reduces computational complexity, mitigates overfitting, and can improve model generalization.
 
-\subsection{Topic-2}
-Add contents
+\subsection{Dimensionality Reduction}
+Principal Component Analysis (PCA) optionally reduces feature space dimensionality while retaining 95\% of variance. PCA transforms features into uncorrelated principal components ordered by explained variance:
+\begin{equation}
+    \mathbf{X}_{\text{PCA}} = \mathbf{X} \mathbf{W}
+\end{equation}
+where $\mathbf{W}$ contains eigenvectors of the covariance matrix.
 
-\section{Hardware Setup}
-All training was conducted on a workstation. Training and testing of the MLP architecture were performed on all three datasets, DS1, DS2, and DS3, using Python 3.11.2, which ran on an NVIDIA RTX A6000 with 48GB of RAM.
+\section{Machine Learning Models}
 
-\section{Evaluation Metrics}
-To quantitatively assess the performance of the developed classification model in distinguishing between individuals with schizophrenia and healthy controls, the following evaluation metrics were employed:
+The system implements seven classification algorithms, each with distinct characteristics:
+
+\subsection{Decision Tree Classifier}
+Builds a tree structure by recursively partitioning feature space based on information gain or Gini impurity. Provides interpretability through tree visualization and feature importance.
+
+\subsection{Random Forest Classifier}
+Ensemble of decision trees trained on bootstrap samples with random feature subsets. Reduces overfitting through averaging and provides robust predictions.
+
+\subsection{LightGBM}
+Gradient boosting framework using histogram-based algorithms and leaf-wise tree growth. Optimized for speed and memory efficiency with large datasets.
+
+\subsection{Naive Bayes}
+Probabilistic classifier based on Bayes' theorem with feature independence assumption. Computationally efficient and effective for high-dimensional data.
+
+\subsection{Logistic Regression}
+Linear model estimating class probabilities through logistic function. Provides probabilistic outputs and coefficients indicating feature importance.
+
+\subsection{AdaBoost}
+Ensemble method combining weak learners (decision stumps) with adaptive weighting. Focuses on misclassified instances in successive iterations.
+
+\subsection{SGD Classifier}
+Linear classifier trained with stochastic gradient descent. Efficient for large-scale learning with various loss functions and regularization options.
+
+\section{Hyperparameter Tuning}
+
+Hyperparameter optimization is performed using RandomizedSearchCV, which samples parameter combinations from specified distributions. This approach is more efficient than exhaustive grid search for high-dimensional parameter spaces. Key hyperparameters tuned include:
+\begin{itemize}
+    \item Tree depth and leaf parameters for tree-based models
+    \item Learning rate and number of estimators for boosting algorithms
+    \item Regularization parameters (C, alpha, lambda)
+    \item Subsample ratios for stochastic methods
+\end{itemize}
+
+The search uses 3-fold cross-validation to estimate generalization performance and selects parameters maximizing validation accuracy.
+
+\section{Implementation Details}
+
+The system is implemented in Python 3.11 using scikit-learn, LightGBM, pandas, numpy, and matplotlib libraries. The modular design allows:
+\begin{itemize}
+    \item Configuration-based control of pipeline stages
+    \item Individual model training and evaluation
+    \item Model persistence using joblib
+    \item Automated logging of experiments and results
+    \item Generation of visualizations and reports
+\end{itemize}
+
+The configuration dictionary enables users to selectively enable/disable pipeline stages (EDA, feature engineering, hyperparameter tuning) and choose which models to train, facilitating experimentation and customization.
+
+\section{Model Evaluation Metrics}
+
+To quantitatively assess the performance of the malware detection models, the following evaluation metrics are employed:
 
 \begin{itemize}
-    \item \textbf{Accuracy}: The proportion of correctly classified samples (both schizophrenia patients and healthy controls) out of the total number of samples. It is calculated as:
+    \item \textbf{Accuracy}: The proportion of correctly classified samples (both malware-infected and clean systems) out of the total number of samples. It is calculated as:
     \begin{equation}
         \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
     \end{equation}
     where $TP$ is the number of true positives, $TN$ is the number of true negatives, $FP$ is the number of false positives, and $FN$ is the number of false negatives.
 
-    \item \textbf{Sensitivity (Recall)}: The ability of the model to correctly identify individuals with schizophrenia. It is the proportion of actual schizophrenia patients who are correctly classified as such. It is calculated as:
+    \item \textbf{Sensitivity (Recall)}: The ability of the model to correctly identify malware-infected systems. It is the proportion of actual infected systems that are correctly classified as such. It is calculated as:
     \begin{equation}
         \text{Sensitivity} = \frac{TP}{TP + FN}
     \end{equation}
 
-    \item \textbf{Specificity}: The ability of the model to correctly identify healthy individuals. It is the proportion of actual healthy controls who are correctly classified as such. It is calculated as:
+    \item \textbf{Specificity}: The ability of the model to correctly identify clean systems. It is the proportion of actual clean systems that are correctly classified as such. It is calculated as:
     \begin{equation}
         \text{Specificity} = \frac{TN}{TN + FP}
     \end{equation}
@@ -63,7 +153,7 @@ To quantitatively assess the performance of the developed classification model i
         \text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Sensitivity}}{\text{Precision} + \text{Sensitivity}}
     \end{equation}
 
-    \item \textbf{Confusion Matrix}: A table that visualizes the performance of a classification model by showing the counts of true positives (TP), true negatives (TN), false positives (FP), and false negatives (FN).  It provides a detailed breakdown of correct and incorrect classifications for each class (schizophrenia patients and healthy controls).
+    \item \textbf{Confusion Matrix}: A table that visualizes the performance of a classification model by showing the counts of true positives (TP), true negatives (TN), false positives (FP), and false negatives (FN). It provides a detailed breakdown of correct and incorrect classifications for each class (infected and clean systems).
 \end{itemize}
 
-These metrics provide a comprehensive evaluation of the classification model's performance, considering both its ability to correctly identify individuals with schizophrenia and its ability to correctly identify healthy controls.
+These metrics provide a comprehensive evaluation of the classification model's performance, considering both its ability to correctly identify malware-infected systems and its ability to correctly identify clean systems. The evaluation includes both training and validation performance to assess overfitting, with cross-validation used during hyperparameter tuning for robust performance estimation.

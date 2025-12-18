@@ -2,4 +2,10 @@
 
 \chapter*{Abstract}
 
-Add contents
+Cybersecurity threats continue to pose significant risks to computer systems worldwide, with malware infections causing substantial financial and operational damage to organizations. This project presents a comprehensive machine learning-based system for predicting malware threats in computer systems. The System Threat Forecaster employs multiple classification algorithms including Decision Trees, Random Forest, LightGBM, Naive Bayes, Logistic Regression, AdaBoost, and Stochastic Gradient Descent (SGD) to analyze system properties and predict potential malware infections.
+
+The methodology includes a complete data science pipeline encompassing data preprocessing, feature engineering, feature selection, and dimensionality reduction using Principal Component Analysis (PCA). The system handles missing values through imputation strategies, encodes categorical features using label encoding, and normalizes numerical features using StandardScaler. Multiple models are trained and evaluated using cross-validation techniques, with hyperparameter tuning performed using RandomizedSearchCV for optimal performance.
+
+Experimental results demonstrate that the LightGBM classifier achieves the highest accuracy among all tested models, providing robust predictions for system threat detection. The implementation includes modular functions for individual model training, comparison of model performance using various metrics including accuracy, precision, recall, and F1-score, and automated generation of prediction submissions. The system provides comprehensive visualizations including confusion matrices, feature importance plots, and model comparison charts.
+
+This work contributes to the field of cybersecurity by providing an automated, scalable solution for early threat detection, enabling organizations to proactively identify and mitigate potential malware infections before they cause significant damage.
