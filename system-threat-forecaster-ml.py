@@ -113,13 +113,13 @@ CONFIG = {
     
     # Model selection flags (set the one you want to use for prediction to True)
     'models_to_train': {
-        'decision_tree': False,
-        'random_forest': False,
+        'decision_tree': True,
+        'random_forest': True,
         'lightgbm': True,            # Our best performing model
-        'naive_bayes': False,
-        'logistic_regression': False,
-        'ada_boost': False,
-        'sgd': False
+        'naive_bayes': True,
+        'logistic_regression': True,
+        'ada_boost': True,
+        'sgd': True
     },
     
     # Hyperparameter tuning settings
