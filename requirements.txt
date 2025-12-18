@@ -8,11 +8,6 @@ seaborn
 xgboost
 tqdm
 psutil
-mlflow
-catboost
-optuna
-great-expectations
-shap
-streamlit
-pytest
-imblearn
+torch
+torchvision
+torchaudio
