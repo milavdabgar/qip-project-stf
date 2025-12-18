@@ -77,74 +77,88 @@ Predict malware infections and compare ML vs DL performance on tabular data
 \end{columns}
 \end{frame}
 
-% Section 2: Experimental Setup
-\section{Experimental Methodology}
+% Section 2: Data & Methodology
+\section{Data \& Methodology}
 
-\subsection{Data Exploration}
-\begin{frame}{Data Understanding \& Analysis}
+\subsection{Dataset Overview}
+\begin{frame}{Dataset: Microsoft Malware Prediction}
 \begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Data Characteristics:}
+\begin{itemize}
+    \item \textbf{Size:} 100,000 samples
+    \item \textbf{Features:} 75 total
+    \begin{itemize}
+        \item 47 numerical
+        \item 28 categorical
+    \end{itemize}
+    \item \textbf{Target:} Binary (malware: yes/no)
+    \item \textbf{Balance:} 50.52\% / 49.48\%
+    \item \textbf{Split:} 80/20 train-validation (stratified)
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Critical Insight:}
+\begin{alertblock}{Data Quality}
+\textbf{Weak correlations} (max 0.118) + High noise = Performance ceiling ~63\%
+\end{alertblock}
+
 \column{0.5\textwidth}
 \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{figures/target_distribution.png}
 
 \vspace{0.2cm}
-\textbf{Dataset Characteristics:}
-\begin{itemize}
-    \item Balanced: Perfect for learning
-    \item 80/20 train-val split (stratified)
-    \item Missing values: Imputation strategies tested
-\end{itemize}
-
-\column{0.5\textwidth}
 \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{figures/feature_correlation.png}
-
-\vspace{0.2cm}
-\textbf{Key Insights Learned:}
-\begin{itemize}
-    \item \textbf{Weak correlations} (max 0.118)
-    \item AntivirusConfigID most predictive
-    \item Feature engineering limited impact
-    \item \textcolor{red}{Learning:} Not all problems are solvable with just algorithms
-\end{itemize}
 \end{columns}
 \end{frame}
 
-\subsection{Preprocessing Pipeline}
-\begin{frame}{Data Processing \& Preprocessing}
+\subsection{Methodology}
+\begin{frame}{Experimental Methodology \& Pipeline}
 \begin{columns}[T]
-\column{0.45\textwidth}
-\begin{tikzpicture}[node distance=1.2cm, auto, scale=0.85, every node/.style={scale=0.85}]
-    \node (data) [rectangle, draw, fill=blue!20, text width=2.2cm, text centered, minimum height=0.8cm] {Raw Data};
-    \node (preprocess) [rectangle, draw, fill=green!20, text width=2.2cm, text centered, minimum height=0.8cm, below of=data] {Preprocessing};
-    \node (feature) [rectangle, draw, fill=yellow!20, text width=2.2cm, text centered, minimum height=0.8cm, below of=preprocess] {Feature Eng.};
-    \node (model) [rectangle, draw, fill=orange!20, text width=2.2cm, text centered, minimum height=0.8cm, below of=feature] {Training};
-    \node (evaluate) [rectangle, draw, fill=red!20, text width=2.2cm, text centered, minimum height=0.8cm, below of=model] {Evaluation};
-    
-    \draw[->, thick] (data) -- (preprocess);
-    \draw[->, thick] (preprocess) -- (feature);
-    \draw[->, thick] (feature) -- (model);
-    \draw[->, thick] (model) -- (evaluate);
-\end{tikzpicture}
-
-\column{0.55\textwidth}
-\textbf{Implemented \& Learned:}
-\begin{itemize}
-    \item \textbf{Imputation strategies:}
+\column{0.5\textwidth}
+\textbf{Preprocessing Steps:}
+\begin{enumerate}
+    \item \textbf{Missing Values:}
     \begin{itemize}
-        \item Mean (numerical)
-        \item Mode (categorical)
+        \item Mean imputation (numerical)
+        \item Mode imputation (categorical)
     \end{itemize}
-    \item \textbf{Encoding:} LabelEncoder
-    \item \textbf{Scaling:} StandardScaler
-    \item \textbf{Splitting:} Stratified (importance of this!)
+    \item \textbf{Encoding:} LabelEncoder for categorical
+    \item \textbf{Scaling:} StandardScaler for numerical
+    \item \textbf{Validation:} Stratified K-Fold
+\end{enumerate}
+
+\vspace{0.3cm}
+
+\textbf{Evaluation Metrics:}
+\begin{itemize}
+    \item Accuracy
+    \item F1 Score (primary)
+    \item Precision \& Recall
+    \item Confusion Matrix
 \end{itemize}
 
-\vspace{0.2cm}
-\textbf{Configuration Management:}
-\begin{itemize}
-    \item Random state: 42 (reproducibility)
-    \item Version-controlled configs
-    \item Modular, reusable code
-\end{itemize}
+\column{0.5\textwidth}
+\textbf{Model Development:}
+\begin{enumerate}
+    \item \textbf{Traditional ML:} 7 algorithms
+    \begin{itemize}
+        \item scikit-learn implementations
+        \item Hyperparameter tuning
+    \end{itemize}
+    \item \textbf{Deep Learning:} 6 architectures
+    \begin{itemize}
+        \item PyTorch from scratch
+        \item GPU optimization (Apple MPS)
+    \end{itemize}
+    \item \textbf{Comparison:} ML vs DL on tabular data
+\end{enumerate}
+
+\vspace{0.3cm}
+
+\begin{block}{Reproducibility}
+Random seed: 42 | Version control: Git | Config management
+\end{block}
 \end{columns}
 \end{frame}
 
