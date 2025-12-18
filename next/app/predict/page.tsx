@@ -65,7 +65,7 @@ export default function PredictPage() {
         <div className="space-y-2">
           <h1 className="text-4xl font-bold tracking-tight">Live Prediction</h1>
           <p className="text-muted-foreground">
-            Load a random sample and get predictions from all 11 models
+            Load a random sample and get predictions from all 13 models
           </p>
         </div>
 
@@ -153,7 +153,7 @@ export default function PredictPage() {
                 {predicting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Predicting with 11 models...
+                    Predicting with 13 models...
                   </>
                 ) : (
                   <>

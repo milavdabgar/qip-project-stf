@@ -190,7 +190,7 @@ export default function Home() {
                 Ready to test the system?
               </h2>
               <p className="mx-auto max-w-[600px] text-muted-foreground md:text-lg">
-                Load a random sample and see predictions from all 11 models in real-time
+                Load a random sample and see predictions from all 13 models in real-time
               </p>
             </div>
             <Link href="/predict">

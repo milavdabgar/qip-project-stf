@@ -65,7 +65,7 @@ export default function ModelsPage() {
             Model Architecture
           </h1>
           <p className="text-lg text-gray-600">
-            Comprehensive analysis of 11 models (7 ML + 4 DL) trained on 76-feature malware dataset
+            Comprehensive analysis of 13 models (7 ML + 6 DL) trained on 76-feature malware dataset
           </p>
         </div>
 
