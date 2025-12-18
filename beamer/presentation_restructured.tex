@@ -44,67 +44,43 @@
 % Section 1: Project Context
 \section{Project Context \& Learning Objectives}
 
-\subsection{Motivation}
-\begin{frame}{Project Motivation \& Context}
-\begin{block}{Primary Learning Objective}
-Master end-to-end ML/DL workflow for real-world problems in preparation for PhD research
-\end{block}
+\subsection{Project Overview}
+\begin{frame}{Project Overview \& Objectives}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Context:}
+\begin{itemize}
+    \item \textbf{AICTE QIP PG Certification} in Deep Learning
+    \item Comprehensive ML/DL comparative study
+    \item Intentionally challenging dataset (Kaggle top: 69.6\%)
+    \item Focus: ML vs DL on tabular data
+\end{itemize}
 
 \vspace{0.3cm}
 
-\begin{columns}[T]
-\column{0.5\textwidth}
-\textbf{Why This Project:}
+\textbf{Dataset Challenges:}
 \begin{itemize}
-    \item \textbf{AICTE QIP PG Certification} in Deep Learning
-    \item Hands-on learning before PhD enrollment (2025)
-    \item Intentionally chose \textbf{challenging dataset} to explore model behaviors
-    \item Focus: Understanding, not just performance
-\end{itemize}
-
-\column{0.5\textwidth}
-\textbf{What Makes It Challenging:}
-\begin{itemize}
-    \item Kaggle top score: 69.6\%
-    \item High irreducible error in data
+    \item High irreducible error
     \item Weak feature correlations (max 0.118)
-    \item Perfect for learning \textbf{what works \& why}
+    \item Real-world complexity
 \end{itemize}
-\end{columns}
-\end{frame}
 
-\subsection{Learning Goals}
-\begin{frame}{Learning Objectives}
+\column{0.5\textwidth}
+\textbf{Key Objectives:}
 \begin{enumerate}
-    \item \textbf{ML Pipeline Mastery}
-    \begin{itemize}
-        \item Data preprocessing, feature engineering, model selection
-        \item Hyperparameter tuning and impact analysis
-    \end{itemize}
-    
-    \item \textbf{Deep Learning Implementation}
-    \begin{itemize}
-        \item PyTorch from scratch, GPU optimization
-        \item 6 different architectures: MLP, ResNet, Attention, Transformers
-    \end{itemize}
-    
-    \item \textbf{Comparative Analysis}
-    \begin{itemize}
-        \item When to use ML vs DL? Why tree ensembles beat neural nets on tabular data?
-    \end{itemize}
-    
-    \item \textbf{Full-Stack Deployment}
-    \begin{itemize}
-        \item Build production-ready web application
-        \item Next.js, REST API, live predictions
-    \end{itemize}
-    
-    \item \textbf{Research Readiness}
-    \begin{itemize}
-        \item Reproducible experiments, version control, documentation
-        \item Prepare for PhD-level research methodology
-    \end{itemize}
+    \item Implement 7 ML algorithms
+    \item Build 6 DL architectures from scratch
+    \item Comparative performance analysis
+    \item Full-stack deployment
+    \item Production-ready web application
 \end{enumerate}
+
+\vspace{0.3cm}
+
+\begin{block}{Scope}
+End-to-end pipeline: Data processing → Model training → Evaluation → Deployment
+\end{block}
+\end{columns}
 \end{frame}
 
 \subsection{Problem Statement}
@@ -255,6 +231,35 @@ Predict malware infections based on system properties, understanding both model 
 \end{columns}
 \end{frame}
 
+\begin{frame}{Best ML Model: LightGBM Performance}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Confusion Matrix:}
+\includegraphics[width=\textwidth]{figures/confusion_matrix_lightgbm.png}
+
+\column{0.5\textwidth}
+\textbf{Performance Metrics:}
+\begin{itemize}
+    \item \textbf{Accuracy:} 62.94\%
+    \item \textbf{F1 Score:} 0.6286
+    \item \textbf{Precision:} 0.6299
+    \item \textbf{Recall:} 0.6294
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Model Characteristics:}
+\begin{itemize}
+    \item Training: 80,000 samples
+    \item Validation: 20,000 samples
+    \item True Positives: 9,700
+    \item True Negatives: 9,900
+    \item False Positives: 2,100
+    \item False Negatives: 2,300
+\end{itemize}
+\end{columns}
+\end{frame}
+
 \subsection{Deep Learning}
 \begin{frame}{Deep Learning: 6 Architectures Explored}
 \begin{columns}[T]
@@ -307,7 +312,47 @@ Confirmed research: Tree ensembles beat neural nets on structured data
 \end{columns}
 \end{frame}
 
+\begin{frame}{Best DL Model: Deep MLP Performance}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Architecture:}
+\begin{itemize}
+    \item \textbf{Type:} Deep Multi-Layer Perceptron
+    \item \textbf{Layers:} 4 hidden layers
+    \begin{itemize}
+        \item 256 → 128 → 64 → 32 neurons
+    \end{itemize}
+    \item \textbf{Parameters:} 63,714
+    \item \textbf{Regularization:}
+    \begin{itemize}
+        \item BatchNorm after each layer
+        \item Dropout: 0.3
+    \end{itemize}
+    \item \textbf{Optimizer:} Adam
+    \item \textbf{Learning Rate:} 0.001
+\end{itemize}
 
+\column{0.5\textwidth}
+\textbf{Performance Metrics:}
+\begin{itemize}
+    \item \textbf{Accuracy:} 61.79\%
+    \item \textbf{F1 Score:} 0.6130
+    \item \textbf{Best Val Loss:} 0.6623
+    \item \textbf{Training Time:} ~8 minutes
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Key Insights:}
+\begin{itemize}
+    \item Best among 6 DL architectures
+    \item 1.15\% below LightGBM
+    \item Architecture depth matters
+    \item Regularization essential
+    \item Tree ensembles still superior for tabular data
+\end{itemize}
+\end{columns}
+\end{frame}
 
 \subsection{Results}
 \begin{frame}{Model Performance Comparison}
@@ -366,77 +411,6 @@ Confirmed research: Tree ensembles beat neural nets on structured data
     \item Access source code
 \end{itemize}
 \end{block}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Best ML Model: LightGBM Performance}
-\begin{columns}[T]
-\column{0.5\textwidth}
-\textbf{Confusion Matrix:}
-\includegraphics[width=\textwidth]{figures/confusion_matrix_lightgbm.png}
-
-\column{0.5\textwidth}
-\textbf{Performance Metrics:}
-\begin{itemize}
-    \item \textbf{Accuracy:} 62.94\%
-    \item \textbf{F1 Score:} 0.6286
-    \item \textbf{Precision:} 0.6299
-    \item \textbf{Recall:} 0.6294
-\end{itemize}
-
-\vspace{0.3cm}
-
-\textbf{Model Characteristics:}
-\begin{itemize}
-    \item Training: 80,000 samples
-    \item Validation: 20,000 samples
-    \item True Positives: 9,700
-    \item True Negatives: 9,900
-    \item False Positives: 2,100
-    \item False Negatives: 2,300
-\end{itemize}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Best DL Model: Deep MLP Performance}
-\begin{columns}[T]
-\column{0.5\textwidth}
-\textbf{Architecture:}
-\begin{itemize}
-    \item \textbf{Type:} Deep Multi-Layer Perceptron
-    \item \textbf{Layers:} 4 hidden layers
-    \begin{itemize}
-        \item 256 → 128 → 64 → 32 neurons
-    \end{itemize}
-    \item \textbf{Parameters:} 63,714
-    \item \textbf{Regularization:}
-    \begin{itemize}
-        \item BatchNorm after each layer
-        \item Dropout: 0.3
-    \end{itemize}
-    \item \textbf{Optimizer:} Adam
-    \item \textbf{Learning Rate:} 0.001
-\end{itemize}
-
-\column{0.5\textwidth}
-\textbf{Performance Metrics:}
-\begin{itemize}
-    \item \textbf{Accuracy:} 61.79\%
-    \item \textbf{F1 Score:} 0.6130
-    \item \textbf{Best Val Loss:} 0.6623
-    \item \textbf{Training Time:} ~8 minutes
-\end{itemize}
-
-\vspace{0.3cm}
-
-\textbf{Key Insights:}
-\begin{itemize}
-    \item Best among 6 DL architectures
-    \item 1.15\% below LightGBM
-    \item Architecture depth matters
-    \item Regularization essential
-    \item Tree ensembles still superior for tabular data
-\end{itemize}
 \end{columns}
 \end{frame}
 
