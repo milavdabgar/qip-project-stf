@@ -56,12 +56,12 @@ Predict malware infections and compare ML vs DL performance on tabular data
 \column{0.5\textwidth}
 \textbf{Key Objectives:}
 \begin{enumerate}
-    \item \textbf{Kaggle:} System Threat Forecaster Challenge
+    \item Kaggle System Threat Forecaster
     \item Implement 7 ML algorithms
-    \item Build 6 DL architectures from scratch
-    \item Comparative ML vs DL analysis
-    \item Full-stack web deployment
-    \item Production-ready application
+    \item Build 6 DL architectures
+    \item ML vs DL comparison
+    \item Full-stack deployment
+    \item Production web app
 \end{enumerate}
 
 \column{0.5\textwidth}
@@ -138,17 +138,11 @@ Predict malware infections and compare ML vs DL performance on tabular data
 \column{0.5\textwidth}
 \textbf{Model Development:}
 \begin{enumerate}
-    \item \textbf{Traditional ML:} 7 algorithms
-    \begin{itemize}
-        \item scikit-learn implementations
-        \item Hyperparameter tuning
-    \end{itemize}
-    \item \textbf{Deep Learning:} 6 architectures
-    \begin{itemize}
-        \item PyTorch from scratch
-        \item GPU optimization (Apple MPS)
-    \end{itemize}
-    \item \textbf{Comparison:} ML vs DL on tabular data
+    \item \textbf{ML:} 7 algorithms (scikit-learn)
+    \item \textbf{DL:} 6 architectures (PyTorch)
+    \item \textbf{GPU:} Apple MPS optimization
+    \item \textbf{Tuning:} Grid search + validation
+    \item \textbf{Goal:} ML vs DL comparison
 \end{enumerate}
 
 \vspace{0.3cm}
@@ -266,24 +260,23 @@ Random seed: 42 | Version control: Git | Config management
 \column{0.5\textwidth}
 \textbf{Critical Learnings:}
 \begin{itemize}
-    \item \textbf{PyTorch implementation} from ground up
-    \item \textbf{GPU optimization:} Apple M4 MPS
-    \item \textbf{All DL models converged ~61.5\%}
+    \item \textbf{PyTorch} from scratch
+    \item \textbf{GPU:} Apple M4 MPS
+    \item \textbf{All DL models: ~61.5\%}
     \begin{itemize}
-        \item Architecture matters less for tabular
-        \item Dataset-limited, not model-limited
+        \item Architecture matters less
+        \item Dataset-limited
     \end{itemize}
-    \item \textbf{Hyperparameters tested:}
+    \item \textbf{Best Hyperparameters:}
     \begin{itemize}
-        \item Batch size: 512 optimal
-        \item Dropout: 0.3 prevents overfitting
-        \item Learning rate: 0.001 with scheduling
-        \item Early stopping crucial
+        \item Batch: 512, Dropout: 0.3
+        \item LR: 0.001 + scheduling
+        \item Early stopping essential
     \end{itemize}
 \end{itemize}
 
 \begin{alertblock}{Big Learning}
-\textbf{ML > DL for tabular by 1.15\%}\\
+\textbf{ML $>$ DL for tabular by 1.15\%}\\
 Confirmed research: Tree ensembles beat neural nets on structured data
 \end{alertblock}
 \end{columns}
@@ -297,7 +290,7 @@ Confirmed research: Tree ensembles beat neural nets on structured data
     \item \textbf{Type:} Deep Multi-Layer Perceptron
     \item \textbf{Layers:} 4 hidden layers
     \begin{itemize}
-        \item 256 → 128 → 64 → 32 neurons
+        \item 256 $\rightarrow$ 128 $\rightarrow$ 64 $\rightarrow$ 32
     \end{itemize}
     \item \textbf{Parameters:} 63,714
     \item \textbf{Regularization:}
@@ -426,12 +419,12 @@ Confirmed research: Tree ensembles beat neural nets on structured data
 
 \vspace{0.3cm}
 
-\textbf{Project Contributions:}
+\textbf{Contributions:}
 \begin{itemize}
-    \item 13 models comprehensively evaluated
-    \item State-of-the-art DL (FT-Transformer)
-    \item Full-stack implementation
-    \item Reproducible research pipeline
+    \item 13 models evaluated
+    \item FT-Transformer implemented
+    \item Full-stack deployment
+    \item Reproducible pipeline
 \end{itemize}
 \end{columns}
 \end{frame}
