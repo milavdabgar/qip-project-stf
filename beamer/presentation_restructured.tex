@@ -197,6 +197,17 @@ Random seed: 42 | Version control: Git | Config management
 \end{columns}
 \end{frame}
 
+\begin{frame}{ML Model Performance Comparison}
+\begin{center}
+\includegraphics[width=0.85\textwidth]{figures/model_comparison.png}
+\end{center}
+
+\vspace{0.2cm}
+\begin{block}{Key Results}
+\textbf{Best ML:} LightGBM 62.94\% (F1: 0.6286) | \textbf{Best DL:} Deep MLP 61.79\% (F1: 0.6130) | \textbf{Kaggle Top:} 69.6\%
+\end{block}
+\end{frame}
+
 \begin{frame}{Best ML Model: LightGBM Performance}
 \begin{columns}[T]
 \column{0.5\textwidth}
@@ -318,18 +329,6 @@ Confirmed research: Tree ensembles beat neural nets on structured data
     \item Tree ensembles still superior for tabular data
 \end{itemize}
 \end{columns}
-\end{frame}
-
-\subsection{Results}
-\begin{frame}{Model Performance Comparison}
-\begin{center}
-\includegraphics[width=0.85\textwidth]{figures/model_comparison.png}
-\end{center}
-
-\vspace{0.2cm}
-\begin{block}{Key Results}
-\textbf{Best ML:} LightGBM 62.94\% (F1: 0.6286) | \textbf{Best DL:} Deep MLP 61.79\% (F1: 0.6130) | \textbf{Kaggle Top:} 69.6\%
-\end{block}
 \end{frame}
 
 % Section 4: Implementation & Deployment
