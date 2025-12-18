@@ -44,25 +44,28 @@
 % Section 1: Project Context
 \section{Project Context \& Learning Objectives}
 
-\subsection{Project Overview}
-\begin{frame}{Project Overview \& Objectives}
+\subsection{Problem Statement}
+\begin{frame}{Problem Statement: Objectives \& Challenges}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\textbf{Context:}
+\textbf{Dataset:}
 \begin{itemize}
-    \item \textbf{AICTE QIP PG Certification} in Deep Learning
-    \item Comprehensive ML/DL comparative study
-    \item Intentionally challenging dataset (Kaggle top: 69.6\%)
-    \item Focus: ML vs DL on tabular data
+    \item \textbf{Kaggle:} Microsoft Malware Prediction
+    \item 100K samples, 75 features
+    \item Balanced classes (50.52\% / 49.48\%)
+    \item Top leaderboard: 69.6\%
+    \item AICTE QIP PG Certification project
 \end{itemize}
 
 \vspace{0.3cm}
 
-\textbf{Dataset Challenges:}
+\textbf{Key Challenges:}
 \begin{itemize}
-    \item High irreducible error
-    \item Weak feature correlations (max 0.118)
-    \item Real-world complexity
+    \item High dimensionality (75 features)
+    \item Weak correlations (max 0.118)
+    \item High irreducible error (30\%+)
+    \item Missing values in critical features
+    \item Limited predictive ceiling
 \end{itemize}
 
 \column{0.5\textwidth}
@@ -70,54 +73,15 @@
 \begin{enumerate}
     \item Implement 7 ML algorithms
     \item Build 6 DL architectures from scratch
-    \item Comparative performance analysis
-    \item Full-stack deployment
-    \item Production-ready web application
+    \item Comparative ML vs DL analysis
+    \item Full-stack web deployment
+    \item Production-ready application
 \end{enumerate}
 
 \vspace{0.3cm}
 
-\begin{block}{Scope}
-End-to-end pipeline: Data processing → Model training → Evaluation → Deployment
-\end{block}
-\end{columns}
-\end{frame}
-
-\subsection{Problem Statement}
-\begin{frame}{Problem Statement: Malware Detection}
-\begin{columns}[T]
-\column{0.5\textwidth}
-\textbf{Background:}
-\begin{itemize}
-    \item Cybersecurity threats evolving rapidly
-    \item Traditional signature-based detection insufficient
-    \item ML/DL enables behavior-based detection
-\end{itemize}
-
-\vspace{0.3cm}
-
-\textbf{Dataset:}
-\begin{itemize}
-    \item \textbf{Kaggle:} Microsoft Malware Prediction
-    \item 100K samples, 75 features (47 num + 28 cat)
-    \item Balanced classes: 50.52\% / 49.48\%
-    \item Top leaderboard: 69.6\%
-\end{itemize}
-
-\column{0.5\textwidth}
-\textbf{Key Challenges:}
-\begin{itemize}
-    \item High dimensionality (75 features)
-    \item Missing values in critical features
-    \item Weak correlations (max 0.118)
-    \item High irreducible error (30\%+)
-    \item Limited predictive ceiling
-\end{itemize}
-
-\vspace{0.3cm}
-
-\begin{alertblock}{Objective}
-Predict malware infections based on system properties, understanding both model capabilities and limitations
+\begin{alertblock}{Goal}
+Predict malware infections and compare ML vs DL performance on tabular data
 \end{alertblock}
 \end{columns}
 \end{frame}
