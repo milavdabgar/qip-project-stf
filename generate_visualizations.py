@@ -222,6 +222,131 @@ plt.savefig('beamer/figures/dataset_overview.png', dpi=300, bbox_inches='tight')
 plt.close()
 print("✓ Saved dataset_overview.png")
 
+# 9. Generate correlation heatmap of all numerical features (from EDA)
+print("Generating full correlation heatmap...")
+plt.figure(figsize=(16, 14))
+corr_matrix = train_data.select_dtypes(include=['float64', 'int64']).corr()
+sns.heatmap(corr_matrix, annot=False, cmap='coolwarm', cbar=True, square=True, linewidths=0.5)
+plt.title('Complete Feature Correlation Matrix', fontsize=16, fontweight='bold', pad=20)
+plt.tight_layout()
+plt.savefig('beamer/figures/full_correlation_heatmap.png', dpi=300, bbox_inches='tight')
+plt.close()
+print("✓ Saved full_correlation_heatmap.png")
+
+# 10. Generate feature importance visualization (using actual model if available, or mock data)
+print("Generating feature importance...")
+# Using top correlated features as proxy for importance
+if 'target' in train_data.columns:
+    numeric_cols = train_data.select_dtypes(include=['float64', 'int64']).columns
+    corr_with_target = train_data[numeric_cols].corr()['target'].sort_values(ascending=False)
+    # Remove target itself and get top 15
+    feature_importance = corr_with_target.drop('target').head(15)
+    
+    plt.figure(figsize=(12, 8))
+    colors = plt.cm.RdYlGn(np.linspace(0.3, 0.9, len(feature_importance)))
+    bars = plt.barh(range(len(feature_importance)), feature_importance.values, color=colors)
+    plt.yticks(range(len(feature_importance)), feature_importance.index, fontsize=11)
+    plt.xlabel('Correlation with Target', fontsize=12, fontweight='bold')
+    plt.title('Top 15 Most Important Features (by Correlation)', fontsize=14, fontweight='bold')
+    plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
+    plt.grid(axis='x', alpha=0.3)
+    plt.tight_layout()
+    plt.savefig('beamer/figures/feature_importance_detailed.png', dpi=300, bbox_inches='tight')
+    plt.close()
+    print("✓ Saved feature_importance_detailed.png")
+
+# 11. Generate target distribution with percentages (enhanced version from EDA)
+print("Generating enhanced target distribution...")
+plt.figure(figsize=(10, 7))
+target_counts = train_data['target'].value_counts()
+colors_target = ['#2ecc71', '#e74c3c']
+bars = plt.bar(['No Malware (0)', 'Malware Detected (1)'], target_counts.values, color=colors_target, alpha=0.8, edgecolor='black', linewidth=2)
+plt.ylabel('Count', fontsize=12, fontweight='bold')
+plt.xlabel('Target Class', fontsize=12, fontweight='bold')
+plt.title('Target Variable Distribution', fontsize=14, fontweight='bold')
+plt.ylim(0, max(target_counts.values) * 1.15)
+
+# Add count and percentage labels
+for i, (bar, count) in enumerate(zip(bars, target_counts.values)):
+    percentage = (count / len(train_data)) * 100
+    plt.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 500, 
+             f'{count:,}\n({percentage:.2f}%)', 
+             ha='center', va='bottom', fontsize=12, fontweight='bold')
+
+plt.grid(axis='y', alpha=0.3)
+plt.tight_layout()
+plt.savefig('beamer/figures/target_distribution_enhanced.png', dpi=300, bbox_inches='tight')
+plt.close()
+print("✓ Saved target_distribution_enhanced.png")
+
+# 12. Generate data quality overview
+print("Generating data quality overview...")
+fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+
+# Subplot 1: Missing values summary
+missing_pct = (train_data.isnull().sum() / len(train_data) * 100).sort_values(ascending=False)
+features_with_missing = missing_pct[missing_pct > 0]
+ax1 = axes[0, 0]
+if len(features_with_missing) > 0:
+    colors_missing = plt.cm.YlOrRd(np.linspace(0.3, 0.9, min(15, len(features_with_missing))))
+    features_with_missing.head(15).plot(kind='barh', ax=ax1, color=colors_missing)
+    ax1.set_xlabel('Missing Percentage (%)', fontsize=11, fontweight='bold')
+    ax1.set_title('Top 15 Features with Missing Values', fontsize=12, fontweight='bold')
+else:
+    ax1.text(0.5, 0.5, 'No Missing Values', ha='center', va='center', fontsize=14)
+    ax1.set_title('Missing Values', fontsize=12, fontweight='bold')
+
+# Subplot 2: Feature types
+ax2 = axes[0, 1]
+numeric_count = len(train_data.select_dtypes(include=['int64', 'float64']).columns)
+categorical_count = len(train_data.select_dtypes(include=['object']).columns)
+bars = ax2.bar(['Numerical', 'Categorical'], [numeric_count, categorical_count], 
+               color=['#3498db', '#e67e22'], alpha=0.8, edgecolor='black', linewidth=2)
+ax2.set_ylabel('Count', fontsize=11, fontweight='bold')
+ax2.set_title('Feature Type Distribution', fontsize=12, fontweight='bold')
+for bar in bars:
+    height = bar.get_height()
+    ax2.text(bar.get_x() + bar.get_width()/2., height,
+            f'{int(height)}', ha='center', va='bottom', fontsize=12, fontweight='bold')
+
+# Subplot 3: Dataset size info
+ax3 = axes[1, 0]
+ax3.axis('off')
+info_text = f"""
+Dataset Statistics:
+━━━━━━━━━━━━━━━━━━
+• Total Samples: {len(train_data):,}
+• Total Features: {len(train_data.columns) - 1:,}
+• Numerical Features: {numeric_count}
+• Categorical Features: {categorical_count}
+• Memory Usage: {train_data.memory_usage(deep=True).sum() / 1024**2:.2f} MB
+• Duplicate Rows: {train_data.duplicated().sum()}
+"""
+ax3.text(0.1, 0.5, info_text, fontsize=11, family='monospace', 
+         verticalalignment='center', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.3))
+
+# Subplot 4: Class balance
+ax4 = axes[1, 1]
+if 'target' in train_data.columns:
+    target_dist = train_data['target'].value_counts(normalize=True) * 100
+    wedges, texts, autotexts = ax4.pie(target_dist.values, 
+                                         labels=['No Malware', 'Malware'], 
+                                         autopct='%1.2f%%',
+                                         colors=['#2ecc71', '#e74c3c'],
+                                         startangle=90,
+                                         explode=(0.05, 0.05))
+    for autotext in autotexts:
+        autotext.set_color('white')
+        autotext.set_fontsize(11)
+        autotext.set_fontweight('bold')
+    ax4.set_title('Class Balance', fontsize=12, fontweight='bold')
+
+plt.suptitle('Data Quality and Characteristics Overview', fontsize=16, fontweight='bold', y=0.98)
+plt.tight_layout()
+plt.savefig('beamer/figures/data_quality_overview.png', dpi=300, bbox_inches='tight')
+plt.close()
+print("✓ Saved data_quality_overview.png")
+
 print("\n✅ All visualizations generated successfully!")
 print(f"   Location: beamer/figures/")
-print(f"   Total: 8 figures created")
+print(f"   Total: 12 figures created")
