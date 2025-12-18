@@ -124,6 +124,7 @@ CONFIG = {
         'residual_net': True,
         'attention_net': True,
         'wide_deep': False,
+        'ft_transformer': True,  # State-of-the-art for tabular data
     },
     
     # Optimization
@@ -522,6 +523,74 @@ class WideAndDeep(nn.Module):
         deep_out = self.deep(x)
         return wide_out + deep_out  # Combine outputs
 
+class FTTransformer(nn.Module):
+    """
+    Feature Tokenizer Transformer for tabular data.
+    State-of-the-art architecture from "Revisiting Deep Learning Models for Tabular Data" (2021).
+    
+    Key innovations:
+    - Feature tokenization: each feature becomes a learnable token
+    - Transformer encoder for feature interactions
+    - CLS token for final prediction
+    """
+    
+    def __init__(self, input_dim, d_token=192, n_blocks=3, attention_heads=8, 
+                 ffn_factor=4, dropout_rate=0.1):
+        super(FTTransformer, self).__init__()
+        
+        self.input_dim = input_dim
+        self.d_token = d_token
+        
+        # Feature tokenization: project each feature to d_token dimension
+        self.feature_tokenizer = nn.Linear(1, d_token)
+        
+        # CLS token (for classification)
+        self.cls_token = nn.Parameter(torch.randn(1, 1, d_token))
+        
+        # Positional embeddings for each feature
+        self.feature_embeddings = nn.Parameter(torch.randn(input_dim, d_token))
+        
+        # Transformer encoder blocks
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=d_token,
+            nhead=attention_heads,
+            dim_feedforward=d_token * ffn_factor,
+            dropout=dropout_rate,
+            activation='gelu',
+            batch_first=True,
+            norm_first=True
+        )
+        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=n_blocks)
+        
+        # Output layer
+        self.layer_norm = nn.LayerNorm(d_token)
+        self.output = nn.Linear(d_token, 2)
+        
+    def forward(self, x):
+        batch_size = x.shape[0]
+        
+        # Feature tokenization: (batch, features) -> (batch, features, d_token)
+        x = x.unsqueeze(-1)  # (batch, features, 1)
+        feature_tokens = self.feature_tokenizer(x)  # (batch, features, d_token)
+        
+        # Add feature embeddings
+        feature_tokens = feature_tokens + self.feature_embeddings.unsqueeze(0)
+        
+        # Add CLS token
+        cls_tokens = self.cls_token.expand(batch_size, -1, -1)
+        tokens = torch.cat([cls_tokens, feature_tokens], dim=1)  # (batch, 1+features, d_token)
+        
+        # Transformer encoding
+        tokens = self.transformer(tokens)
+        
+        # Use CLS token for classification
+        cls_output = tokens[:, 0]  # (batch, d_token)
+        cls_output = self.layer_norm(cls_output)
+        
+        # Final prediction
+        output = self.output(cls_output)
+        return output
+
 # %% [markdown]
 """
 ## 5. Training Functions
@@ -600,6 +669,16 @@ def get_model(model_name, input_dim):
             input_dim,
             hidden_dims=[256, 128, 64],
             dropout_rate=CONFIG['dropout_rate']
+        )
+    
+    elif model_name == 'ft_transformer':
+        return FTTransformer(
+            input_dim,
+            d_token=64,          # Further reduced for speed
+            n_blocks=1,          # Minimal transformer (single block)
+            attention_heads=2,   # Minimal attention heads
+            ffn_factor=2,        # Keep feedforward efficient
+            dropout_rate=0.1
         )
     
     else:
@@ -704,6 +783,9 @@ def train_model(model_name, X_train, y_train, X_val, y_val):
     input_dim = X_train.shape[1]
     model = get_model(model_name, input_dim).to(device)
     
+    # Use fewer epochs for transformer to speed up training
+    max_epochs = 50 if model_name == 'ft_transformer' else CONFIG['epochs']
+    
     print(f"Model architecture:")
     print(model)
     print(f"\nTotal parameters: {sum(p.numel() for p in model.parameters()):,}")
@@ -759,7 +841,7 @@ def train_model(model_name, X_train, y_train, X_val, y_val):
         'val_f1': []
     }
     
-    for epoch in range(CONFIG['epochs']):
+    for epoch in range(max_epochs):
         # Train
         train_loss, train_acc = train_epoch(model, train_loader, criterion, optimizer, device, scaler)
         
