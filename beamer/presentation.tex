@@ -43,33 +43,32 @@
     \item Cybersecurity threats are increasingly sophisticated
     \item Malware poses significant risks:
     \begin{itemize}
-        \item Data breaches
-        \item Financial losses
+        \item Data breaches and financial losses
+        \item System compromise and data theft
         \item Operational disruptions
-        \item Reputational damage
     \end{itemize}
     \item Traditional signature-based antivirus solutions struggle with:
     \begin{itemize}
-        \item Zero-day attacks
-        \item Polymorphic malware
+        \item Zero-day attacks and polymorphic malware
+        \item Evolving threat landscapes
     \end{itemize}
-    \item \textbf{Machine Learning} offers proactive threat detection
+    \item \textbf{Machine Learning} offers proactive, behavior-based threat detection
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Problem Statement}
 \begin{block}{Primary Challenge}
-Develop an accurate and reliable system for predicting malware infections based on system properties and characteristics
+Predict malware infections based on system properties using 100,000 samples with 76 diverse features
 \end{block}
 
 \vspace{0.3cm}
 
 \textbf{Specific Challenges:}
 \begin{itemize}
-    \item High dimensionality of system data
-    \item Presence of missing values
-    \item Need for real-time prediction
-    \item Handling categorical features effectively
+    \item High dimensionality: 48 numerical + 28 categorical features
+    \item Missing values in critical features (RealTimeProtectionState, CityID)
+    \item Balanced but complex dataset (50.52\% positive, 49.48\% negative)
+    \item Need for efficient and accurate classification
 \end{itemize}
 \end{frame}
 
@@ -116,27 +115,31 @@ Develop an accurate and reliable system for predicting malware infections based 
 \end{center}
 \end{frame}
 
-\begin{frame}{Preprocessing Techniques}
+\begin{frame}{Dataset Characteristics}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\textbf{Data Cleaning:}
+\textbf{Dataset Overview:}
 \begin{itemize}
-    \item Missing value imputation
+    \item \textbf{Size:} 100,000 samples
+    \item \textbf{Features:} 76 total
     \begin{itemize}
-        \item Median for numerical
-        \item Mode for categorical
+        \item 48 numerical
+        \item 28 categorical
     \end{itemize}
-    \item Duplicate removal
-    \item Outlier detection
+    \item \textbf{Split:} 80\% train, 20\% validation
 \end{itemize}
 
 \column{0.5\textwidth}
-\textbf{Feature Transformation:}
+\textbf{Preprocessing Pipeline:}
 \begin{itemize}
-    \item Label Encoding for categorical features
+    \item Missing values:
+    \begin{itemize}
+        \item Mean for numerical
+        \item Most frequent for categorical
+    \end{itemize}
+    \item Label Encoding for categoricals
     \item StandardScaler normalization
-    \item Feature scaling
-    \item Optional PCA for dimensionality reduction
+    \item Stratified splitting
 \end{itemize}
 \end{columns}
 \end{frame}
@@ -155,23 +158,26 @@ Develop an accurate and reliable system for predicting malware infections based 
 \end{block}
 \end{frame}
 
-\begin{frame}{Feature Engineering}
-\textbf{Strategies Implemented:}
-\begin{itemize}
-    \item \textbf{Interaction Terms}: Capture feature combinations
-    \item \textbf{Polynomial Features}: Non-linear relationships
-    \item \textbf{Domain-Specific Features}:
-    \begin{itemize}
-        \item Process information
-        \item Network activity patterns
-        \item File system characteristics
-    \end{itemize}
-    \item \textbf{Feature Selection}: Remove redundant features
-\end{itemize}
+\begin{frame}{Key Features Analysis}
+\textbf{Most Predictive Features (Correlation with Target):}
+\begin{enumerate}
+    \item \textbf{AntivirusConfigID} -- Correlation: 0.118
+    \item \textbf{TotalPhysicalRAMMB} -- Correlation: 0.066
+    \item \textbf{IsSystemProtected} -- Correlation: 0.062
+    \item \textbf{IsGamer} -- Correlation: 0.061
+\end{enumerate}
 
 \vspace{0.3cm}
+\textbf{Feature Engineering Configuration:}
+\begin{itemize}
+    \item Interaction terms available (currently disabled)
+    \item SelectKBest with f\_classif (top 30 features)
+    \item Optional PCA for dimensionality reduction
+\end{itemize}
+
+\vspace{0.2cm}
 \begin{alertblock}{Key Insight}
-System properties like process info and network activity were most indicative of malware presence
+Security configuration and system specifications show moderate but consistent predictive power
 \end{alertblock}
 \end{frame}
 
@@ -182,55 +188,68 @@ System properties like process info and network activity were most indicative of
 \begin{table}
 \centering
 \small
-\begin{tabular}{@{}llccc@{}}
+\begin{tabular}{@{}lcc@{}}
 \toprule
-\textbf{Model} & \textbf{Algorithm} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} \\
+\textbf{Model} & \textbf{Accuracy} & \textbf{Rank} \\
 \midrule
-Model 1 & Decision Tree & 85.20\% & 84.50\% & 86.10\% \\
-Model 2 & Random Forest & 88.45\% & 87.80\% & 89.20\% \\
-\textbf{Model 3} & \textbf{LightGBM} & \textbf{91.30\%} & \textbf{90.50\%} & \textbf{92.10\%} \\
-Model 4 & Naive Bayes & 79.60\% & 78.90\% & 80.30\% \\
-Model 5 & Logistic Reg. & 83.70\% & 83.20\% & 84.50\% \\
-Model 6 & AdaBoost & 86.90\% & 86.30\% & 87.60\% \\
-Model 7 & SGD Classifier & 82.40\% & 81.80\% & 83.20\% \\
+\textbf{LightGBM} & \textbf{63.0\%} & \textbf{1st} \\
+Random Forest & 62.4\% & 2nd \\
+AdaBoost & 62.0\% & 3rd \\
+Logistic Regression & $\sim$60\% & 4th \\
+Decision Tree & $\sim$60\% & 5th \\
+SGD Classifier & $\sim$60\% & 6th \\
+Naive Bayes & <60\% & 7th \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \vspace{0.2cm}
-\begin{block}{Best Performer}
-\textbf{LightGBM} achieved the highest accuracy at \textbf{91.30\%}
+\begin{block}{Key Observation}
+LightGBM achieved the highest accuracy at \textbf{63.0\%}, showing gradient boosting's superiority for this complex classification task
 \end{block}
+
+\vspace{0.1cm}
+\footnotesize{Note: Ensemble methods (Random Forest, AdaBoost) outperformed traditional classifiers}
 \end{frame}
 
 \begin{frame}{Key Findings}
 \begin{itemize}
-    \item \textbf{LightGBM Performance}: Superior accuracy with efficient training
-    \item \textbf{Ensemble Methods}: Random Forest and AdaBoost showed strong performance
-    \item \textbf{Hyperparameter Tuning}: Improved performance by 2-5\% across models
-    \item \textbf{Cross-Validation}: Consistent performance across folds indicates good generalization
-    \item \textbf{Feature Importance}: Network activity and process information most significant
+    \item \textbf{Model Performance}: 63\% accuracy ceiling suggests complex relationships
+    \begin{itemize}
+        \item Moderate feature correlations (max 0.118)
+        \item Room for feature engineering improvements
+    \end{itemize}
+    \item \textbf{Ensemble Superiority}: Tree-based ensembles (LightGBM, RF, AdaBoost) outperformed linear models
+    \item \textbf{Dataset Challenges}:
+    \begin{itemize}
+        \item Missing data in important features
+        \item Balanced classes but complex decision boundaries
+    \end{itemize}
+    \item \textbf{Feature Insights}: Security configurations more predictive than hardware specs
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Performance Insights}
+\begin{frame}{Implementation Highlights}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\textbf{Strengths:}
+\textbf{Architecture Strengths:}
 \begin{itemize}
-    \item High accuracy on test data
-    \item Good balance between precision and recall
-    \item Robust to overfitting
-    \item Efficient training time
+    \item Configuration-driven pipeline
+    \item Modular design pattern
+    \item 7 ML models implemented
+    \item Automated hyperparameter tuning
+    \item Model persistence with joblib
 \end{itemize}
 
 \column{0.5\textwidth}
-\textbf{Advantages:}
+\textbf{Pipeline Features:}
 \begin{itemize}
-    \item Modular architecture
-    \item Production-ready code
-    \item Comprehensive evaluation
-    \item Interpretable results
+    \item Robust preprocessing
+    \item Missing value handling
+    \item Feature engineering tools
+    \item Cross-validation support
+    \item Comprehensive logging
+    \item Results tracking
 \end{itemize}
 \end{columns}
 \end{frame}
@@ -239,21 +258,23 @@ Model 7 & SGD Classifier & 82.40\% & 81.80\% & 83.20\% \\
 \section{Implementation}
 
 \begin{frame}{System Architecture}
-\textbf{Modular Pipeline Components:}
+\textbf{13-Module Pipeline Structure:}
 \begin{enumerate}
-    \item \textbf{Data Loading}: CSV file handling with pandas
-    \item \textbf{Preprocessing Module}: Configurable data cleaning
-    \item \textbf{Feature Engineering}: Optional transformation steps
-    \item \textbf{Model Training}: Multiple algorithm support
-    \item \textbf{Evaluation}: Comprehensive metrics and visualization
-    \item \textbf{Prediction}: Automated submission generation
+    \item Environment Setup \& Configuration
+    \item Data Loading \& Utilities (save/load models)
+    \item Exploratory Data Analysis (EDA)
+    \item Data Preprocessing (imputation, encoding, scaling)
+    \item Feature Engineering (interactions, selection)
+    \item Model Training (7 algorithms with tuning)
+    \item Model Evaluation \& Comparison
+    \item Prediction \& Submission Generation
 \end{enumerate}
 
-\vspace{0.3cm}
+\vspace{0.2cm}
 \textbf{Technology Stack:}
 \begin{itemize}
-    \item Python 3.11, scikit-learn, LightGBM
-    \item pandas, numpy, matplotlib
+    \item Python 3.x, scikit-learn 1.3+, LightGBM
+    \item pandas, numpy, matplotlib, seaborn, joblib
 \end{itemize}
 \end{frame}
 
@@ -284,17 +305,17 @@ Selective enabling/disabling of:
 
 \begin{frame}{Key Contributions}
 \begin{enumerate}
-    \item \textbf{Comprehensive Model Comparison}: Systematic evaluation of seven algorithms
+    \item \textbf{Comprehensive Model Comparison}: Systematic evaluation of 7 classification algorithms
     
-    \item \textbf{Modular Pipeline}: Flexible, configuration-driven architecture
+    \item \textbf{Production-Ready Pipeline}: 13-module architecture with configuration control
     
-    \item \textbf{Robust Preprocessing}: Complete data handling pipeline
+    \item \textbf{Robust Preprocessing}: Handles 76 features (48 numerical, 28 categorical)
     
-    \item \textbf{Automated Optimization}: Hyperparameter tuning integration
+    \item \textbf{Automated Workflows}: Hyperparameter tuning, cross-validation, model persistence
     
-    \item \textbf{Production-Ready}: Maintainable codebase with model persistence
+    \item \textbf{Best-in-Class Performance}: 63\% accuracy with LightGBM on 100K samples
     
-    \item \textbf{Superior Performance}: 91.30\% accuracy with LightGBM
+    \item \textbf{Reproducible Results}: Complete logging and results tracking system
 \end{enumerate}
 \end{frame}
 
@@ -332,16 +353,24 @@ Selective enabling/disabling of:
 \end{columns}
 \end{frame}
 
-\begin{frame}{Limitations}
-\begin{alertblock}{Current Limitations}
+\begin{frame}{Challenges \& Limitations}
+\begin{alertblock}{Key Challenges Identified}
 \begin{itemize}
-    \item Depends on training data quality and representativeness
-    \item Performance may degrade with new malware variants
-    \item Manual feature engineering process
-    \item Requires periodic retraining
-    \item Real-time optimization needs investigation
+    \item \textbf{Performance Ceiling}: 63\% accuracy indicates complex relationships
+    \item \textbf{Feature Correlations}: Weak correlations (max 0.118) limit predictive power
+    \item \textbf{Missing Data}: RealTimeProtectionState, CityID have significant gaps
+    \item \textbf{Feature Engineering}: Currently disabled, potential for improvement
+    \item \textbf{Model Complexity}: Balance between accuracy and interpretability
 \end{itemize}
 \end{alertblock}
+
+\vspace{0.2cm}
+\textbf{Future Improvements:}
+\begin{itemize}
+    \item Enable and optimize feature engineering
+    \item Advanced imputation strategies
+    \item Deep learning exploration
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Resources}
@@ -373,7 +402,7 @@ Selective enabling/disabling of:
 
 \textbf{Milav Jayeshkumar Dabgar}\\
 Government Polytechnic Palanpur\\
-Department of Electronics and Communication Engineering
+Department of Computer Engineering
 
 \end{center}
 \end{frame}
