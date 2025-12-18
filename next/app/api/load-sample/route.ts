@@ -19,8 +19,8 @@ export async function GET() {
     const randomIndex = Math.floor(Math.random() * records.length)
     const sample = records[randomIndex]
 
-    // Separate target from features
-    const { HasDetections, ...features } = sample
+    // Separate target from features (CSV has 'target' column, not 'HasDetections')
+    const { target, ...features } = sample
 
     // Convert numeric strings to numbers
     const processedFeatures: Record<string, any> = {}
@@ -31,7 +31,7 @@ export async function GET() {
 
     return NextResponse.json({
       features: processedFeatures,
-      target: Number(HasDetections),
+      target: Number(target),
       sampleIndex: randomIndex,
     })
   } catch (error) {

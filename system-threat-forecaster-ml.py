@@ -402,6 +402,10 @@ def preprocess_data(data, is_training=True, target_col='target', preprocessors=N
     if preprocessors is None:
         preprocessors = {}
         
+        # Save original column types for preprocessing (before label encoding)
+        preprocessors['_original_numeric_cols'] = list(numeric_cols)
+        preprocessors['_original_categorical_cols'] = list(categorical_cols)
+        
         # Create preprocessors for numerical and categorical features
         if CONFIG['handle_missing_values']:
             print("Creating new preprocessors...")
@@ -1321,7 +1325,8 @@ def run_pipeline():
     
     # Save all trained ML models in a single file (industry standard: joblib for sklearn)
     if trained_models:
-        ml_models_dict = {name: model for name, model in trained_models.items()}
+        # Extract only the models from (model, metrics) tuples
+        ml_models_dict = {name: model_tuple[0] for name, model_tuple in trained_models.items()}
         joblib.dump(ml_models_dict, 'saved_models/ml_models.pkl')
         print(f"✓ Saved {len(ml_models_dict)} ML models to saved_models/ml_models.pkl")
         
@@ -1330,8 +1335,14 @@ def run_pipeline():
         print(f"  Model file size: {size_mb:.2f} MB")
     
     # Save preprocessors (scalers, encoders) - essential for inference
+    # Add feature column order for inference
+    preprocessors['feature_columns'] = list(X_train.columns)
+    # Add original numeric columns (before encoding) - scaler was fit on these
+    preprocessors['numeric_columns'] = preprocessors.get('_original_numeric_cols', [])
     joblib.dump(preprocessors, 'saved_models/preprocessors.pkl')
     print("✓ Saved preprocessors to saved_models/preprocessors.pkl")
+    print(f"  Saved {len(preprocessors['feature_columns'])} feature column names")
+    print(f"  - {len(preprocessors['numeric_columns'])} numeric columns to scale")
     
     print("\nModels are ready for deployment!")
     print("Next steps:")
