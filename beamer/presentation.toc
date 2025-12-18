@@ -1,7 +1,22 @@
 \beamer@sectionintoc {1}{Introduction}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Background}{3}{0}{1}
+\beamer@subsectionintoc {1}{2}{Problem Statement}{4}{0}{1}
 \beamer@sectionintoc {2}{Objectives}{5}{0}{2}
+\beamer@subsectionintoc {2}{1}{Project Goals}{5}{0}{2}
 \beamer@sectionintoc {3}{Methodology}{6}{0}{3}
+\beamer@subsectionintoc {3}{1}{Data Processing Pipeline}{6}{0}{3}
+\beamer@subsectionintoc {3}{2}{Preprocessing Pipeline}{7}{0}{3}
+\beamer@subsectionintoc {3}{3}{Machine Learning Models}{8}{0}{3}
 \beamer@sectionintoc {4}{Data Analysis}{9}{0}{4}
+\beamer@subsectionintoc {4}{1}{Dataset Overview}{9}{0}{4}
+\beamer@subsectionintoc {4}{2}{Data Quality}{11}{0}{4}
+\beamer@subsectionintoc {4}{3}{Feature Analysis}{13}{0}{4}
 \beamer@sectionintoc {5}{Model Performance}{16}{0}{5}
+\beamer@subsectionintoc {5}{1}{Performance Comparison}{16}{0}{5}
+\beamer@subsectionintoc {5}{2}{Key Findings}{18}{0}{5}
 \beamer@sectionintoc {6}{Implementation}{20}{0}{6}
+\beamer@subsectionintoc {6}{1}{System Architecture}{20}{0}{6}
 \beamer@sectionintoc {7}{Conclusion}{22}{0}{7}
+\beamer@subsectionintoc {7}{1}{Key Contributions}{22}{0}{7}
+\beamer@subsectionintoc {7}{2}{Future Work}{24}{0}{7}
+\beamer@subsectionintoc {7}{3}{Challenges \& Limitations}{25}{0}{7}
