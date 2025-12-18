@@ -15,7 +15,7 @@
 
 % Title Information
 \title{System Threat Forecaster}
-\subtitle{Malware Detection Using ML \& Deep Learning\\AICTE QIP PG Certification Programme}
+\subtitle{AICTE QIP PG Certification Programme on\\``Deep Learning: Fundamentals and Applications''}
 \author{Milav Jayeshkumar Dabgar}
 \institute{%
     Government Polytechnic Palanpur\\
@@ -37,148 +37,147 @@
 \tableofcontents[sections={1-3}]
 
 \column{0.5\textwidth}
-\tableofcontents[sections={4-7}]
+\tableofcontents[sections={4-6}]
 \end{columns}
 \end{frame}
 
-% Section 1: Introduction
-\section{Introduction}
+% Section 1: Project Context
+\section{Project Context \& Learning Objectives}
 
-\subsection{Project Context}
-\begin{frame}{Project Context \& Objectives}
-\begin{columns}[T]
-\column{0.5\textwidth}
-\textbf{Context:}
-\begin{itemize}
-    \item AICTE QIP PG Certification in Deep Learning
-    \item Preparation for PhD research (2025)
-    \item Cybersecurity threats increasingly sophisticated
-    \item Traditional antivirus struggles with zero-day attacks
-    \item ML/DL enables behavior-based threat detection
-\end{itemize}
-
-\vspace{0.3cm}
-
-\textbf{Dataset Selection:}
-\begin{itemize}
-    \item Kaggle: Microsoft Malware Prediction
-    \item Intentionally challenging (top score 69.6\%)
-    \item Focus on learning workflows, not just winning
-\end{itemize}
-
-\column{0.5\textwidth}
-\textbf{Learning Objectives:}
-\begin{enumerate}
-    \item Comprehensive preprocessing techniques
-    \item Feature engineering strategies
-    \item Train \& evaluate 7 ML + 6 DL models
-    \item Hyperparameter tuning \& impact analysis
-    \item Systematic model comparison
-    \item Full-stack deployment (Next.js)
-\end{enumerate}
-
-\vspace{0.3cm}
-
-\begin{alertblock}{Key Goal}
-Master end-to-end ML/DL workflow for real-world cybersecurity problems
-\end{alertblock}
-\end{columns}
-\end{frame}
-
-\subsection{Problem Statement}
-\begin{frame}{Problem Statement}
-\begin{block}{Primary Challenge}
-Predict malware infections based on system properties using 100,000 samples with 75 diverse features
+\subsection{Motivation}
+\begin{frame}{Project Motivation \& Context}
+\begin{block}{Primary Learning Objective}
+Master end-to-end ML/DL workflow for real-world problems in preparation for PhD research
 \end{block}
 
 \vspace{0.3cm}
 
-\textbf{Specific Challenges:}
-\begin{itemize}
-    \item High dimensionality: 47 numerical + 28 categorical features
-    \item Missing values in critical features (RealTimeProtectionState, CityID)
-    \item Balanced but complex dataset (50.52\% positive, 49.48\% negative)
-    \item \textbf{Kaggle Competition:} Top leaderboard score 0.69605 (69.6\%) indicates high irreducible error
-    \item Weak feature correlations (max 0.118) limit predictive ceiling
-\end{itemize}
-\end{frame}
-
-% Section 2: Data Analysis
-\section{Data Analysis}
-
-\subsection{Dataset Overview}
-\begin{frame}{Dataset Overview}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\includegraphics[width=\textwidth,height=0.6\textheight,keepaspectratio]{figures/target_distribution.png}
-
-\vspace{0.2cm}
-\textbf{Key Statistics:}
+\textbf{Why This Project:}
 \begin{itemize}
-    \item 100K samples, 75 features
-    \item Balanced: 50.52\% / 49.48\%
-    \item 80\% train, 20\% validation
+    \item \textbf{AICTE QIP PG Certification} in Deep Learning
+    \item Hands-on learning before PhD enrollment (2025)
+    \item Intentionally chose \textbf{challenging dataset} to explore model behaviors
+    \item Focus: Understanding, not just performance
 \end{itemize}
 
 \column{0.5\textwidth}
-\includegraphics[width=\textwidth,height=0.6\textheight,keepaspectratio]{figures/feature_types.png}
-
-\vspace{0.2cm}
-\textbf{Feature Types:}
+\textbf{What Makes It Challenging:}
 \begin{itemize}
-    \item 47 numerical features
-    \item 28 categorical features
+    \item Kaggle top score: 69.6\%
+    \item High irreducible error in data
+    \item Weak feature correlations (max 0.118)
+    \item Perfect for learning \textbf{what works \& why}
 \end{itemize}
 \end{columns}
 \end{frame}
 
-\subsection{Data Quality}
-\begin{frame}{Data Quality \& Missing Values}
-\begin{columns}[T]
-\column{0.5\textwidth}
-\includegraphics[width=\textwidth,height=0.7\textheight,keepaspectratio]{figures/data_quality_overview.png}
-
-\column{0.5\textwidth}
-\includegraphics[width=\textwidth,height=0.7\textheight,keepaspectratio]{figures/missing_values.png}
-\end{columns}
-\end{frame}
-
-\subsection{Feature Analysis}
-\begin{frame}{Key Features Analysis}
-\begin{columns}[T]
-\column{0.5\textwidth}
-\textbf{Most Predictive Features:}
+\subsection{Learning Goals}
+\begin{frame}{Learning Objectives}
 \begin{enumerate}
-    \item \textbf{AntivirusConfigID} \\ Correlation: 0.118
-    \item \textbf{TotalPhysicalRAMMB} \\ Correlation: 0.066
-    \item \textbf{IsSystemProtected} \\ Correlation: 0.062
-    \item \textbf{IsGamer} \\ Correlation: 0.061
+    \item \textbf{ML Pipeline Mastery}
+    \begin{itemize}
+        \item Data preprocessing, feature engineering, model selection
+        \item Hyperparameter tuning and impact analysis
+    \end{itemize}
+    
+    \item \textbf{Deep Learning Implementation}
+    \begin{itemize}
+        \item PyTorch from scratch, GPU optimization
+        \item 6 different architectures: MLP, ResNet, Attention, Transformers
+    \end{itemize}
+    
+    \item \textbf{Comparative Analysis}
+    \begin{itemize}
+        \item When to use ML vs DL? Why tree ensembles beat neural nets on tabular data?
+    \end{itemize}
+    
+    \item \textbf{Full-Stack Deployment}
+    \begin{itemize}
+        \item Build production-ready web application
+        \item Next.js, REST API, live predictions
+    \end{itemize}
+    
+    \item \textbf{Research Readiness}
+    \begin{itemize}
+        \item Reproducible experiments, version control, documentation
+        \item Prepare for PhD-level research methodology
+    \end{itemize}
 \end{enumerate}
+\end{frame}
+
+\subsection{Problem Statement}
+\begin{frame}{Problem Statement: Malware Detection}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Background:}
+\begin{itemize}
+    \item Cybersecurity threats evolving rapidly
+    \item Traditional signature-based detection insufficient
+    \item ML/DL enables behavior-based detection
+\end{itemize}
 
 \vspace{0.3cm}
-\begin{alertblock}{Key Insight}
-Security configuration has the highest predictive power
-\end{alertblock}
+
+\textbf{Dataset:}
+\begin{itemize}
+    \item \textbf{Kaggle:} Microsoft Malware Prediction
+    \item 100K samples, 75 features (47 num + 28 cat)
+    \item Balanced classes: 50.52\% / 49.48\%
+    \item Top leaderboard: 69.6\%
+\end{itemize}
 
 \column{0.5\textwidth}
-\includegraphics[width=\textwidth]{figures/feature_correlation.png}
+\textbf{Key Challenges:}
+\begin{itemize}
+    \item High dimensionality (75 features)
+    \item Missing values in critical features
+    \item Weak correlations (max 0.118)
+    \item High irreducible error (30\%+)
+    \item Limited predictive ceiling
+\end{itemize}
+
+\vspace{0.3cm}
+
+\begin{alertblock}{Objective}
+Predict malware infections based on system properties, understanding both model capabilities and limitations
+\end{alertblock}
 \end{columns}
 \end{frame}
 
-\begin{frame}{Feature Correlation Analysis}
+% Section 2: Experimental Setup
+\section{Experimental Methodology}
+
+\subsection{Data Exploration}
+\begin{frame}{Data Understanding \& Analysis}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\includegraphics[width=\textwidth,height=0.7\textheight,keepaspectratio]{figures/feature_importance_detailed.png}
+\includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{figures/target_distribution.png}
+
+\vspace{0.2cm}
+\textbf{Dataset Characteristics:}
+\begin{itemize}
+    \item Balanced: Perfect for learning
+    \item 80/20 train-val split (stratified)
+    \item Missing values: Imputation strategies tested
+\end{itemize}
 
 \column{0.5\textwidth}
-\includegraphics[width=\textwidth,height=0.7\textheight,keepaspectratio]{figures/correlation_heatmap.png}
+\includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{figures/feature_correlation.png}
+
+\vspace{0.2cm}
+\textbf{Key Insights Learned:}
+\begin{itemize}
+    \item \textbf{Weak correlations} (max 0.118)
+    \item AntivirusConfigID most predictive
+    \item Feature engineering limited impact
+    \item \textcolor{red}{Learning:} Not all problems are solvable with just algorithms
+\end{itemize}
 \end{columns}
 \end{frame}
 
-% Section 3: Methodology
-\section{Methodology}
-
-\subsection{Data Processing Pipeline}
+\subsection{Preprocessing Pipeline}
 \begin{frame}{Data Processing \& Preprocessing}
 \begin{columns}[T]
 \column{0.45\textwidth}
@@ -196,291 +195,205 @@ Security configuration has the highest predictive power
 \end{tikzpicture}
 
 \column{0.55\textwidth}
-\textbf{Preprocessing Steps:}
+\textbf{Implemented \& Learned:}
 \begin{itemize}
-    \item \textbf{Imputation:}
+    \item \textbf{Imputation strategies:}
     \begin{itemize}
         \item Mean (numerical)
-        \item Most frequent (categorical)
+        \item Mode (categorical)
     \end{itemize}
     \item \textbf{Encoding:} LabelEncoder
     \item \textbf{Scaling:} StandardScaler
-    \item \textbf{Splitting:} Stratified 80/20
+    \item \textbf{Splitting:} Stratified (importance of this!)
 \end{itemize}
 
 \vspace{0.2cm}
-\textbf{Configuration:}
+\textbf{Configuration Management:}
 \begin{itemize}
-    \item 100K samples, 75 features
-    \item Balanced classes
-    \item Random state: 42
+    \item Random state: 42 (reproducibility)
+    \item Version-controlled configs
+    \item Modular, reusable code
 \end{itemize}
 \end{columns}
 \end{frame}
 
-\subsection{Machine Learning Models}
-\begin{frame}{Machine Learning Models}
-\begin{block}{Seven Classification Algorithms Evaluated}
-\begin{enumerate}
-    \item \textbf{Decision Tree} - High interpretability
-    \item \textbf{Random Forest} - Ensemble method
-    \item \textbf{LightGBM} - Gradient boosting framework (Best performer)
-    \item \textbf{Naive Bayes} - Probabilistic classifier
-    \item \textbf{Logistic Regression} - Linear baseline
-    \item \textbf{AdaBoost} - Adaptive boosting
-    \item \textbf{SGD Classifier} - Stochastic optimization
-\end{enumerate}
-\end{block}
-\end{frame}
+% Section 3: Model Experimentation
+\section{Model Experimentation \& Learning}
 
-\subsection{Deep Learning Models}
-\begin{frame}{Deep Learning Architectures}
-\begin{enumerate}
-    \item \textbf{Deep MLP} (63,714 params) - \textcolor{green}{Best DL: 61.79\%}
-    \begin{itemize}
-        \item 4 hidden layers: 256→128→64→32
-        \item BatchNorm + Dropout for regularization
-    \end{itemize}
-    
-    \item \textbf{Residual Network} (418,306 params) - 61.62\%
-    \begin{itemize}
-        \item Skip connections for gradient flow
-        \item 3 residual blocks with BatchNorm
-    \end{itemize}
-    
-    \item \textbf{Simple MLP} (60,738 params) - 61.61\%
-    \begin{itemize}
-        \item 3 hidden layers: 256→128→64
-        \item Basic architecture with dropout
-    \end{itemize}
-    
-    \item \textbf{Wide \& Deep} (60,890 params) - 61.52\%
-    \begin{itemize}
-        \item Hybrid: linear (wide) + deep components
-        \item Combines memorization and generalization
-    \end{itemize}
-    
-    \item \textbf{Attention Network} (1,599,490 params) - 61.45\%
-    \begin{itemize}
-        \item Multi-head self-attention (4 heads)
-        \item 2 attention blocks + feedforward layers
-    \end{itemize}
-    
-    \item \textbf{FT-Transformer} (38,722 params) - 61.45\%
-    \begin{itemize}
-        \item Feature tokenization with transformer encoder
-        \item CLS token for classification (BERT-style)
-        \item 1 block, 2 attention heads (optimized)
-    \end{itemize}
-\end{enumerate}
-\end{frame}
-
-% Section 5: Implementation
-\section{Implementation}
-
-\subsection{System Architecture}
-\begin{frame}{Implementation Architecture \& Deployment}
+\subsection{Machine Learning}
+\begin{frame}{Machine Learning: 7 Algorithms Explored}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\textbf{Pipeline Modules:}
+\textbf{Algorithms Implemented:}
 \begin{enumerate}
-    \item Data Loading \& EDA
-    \item Preprocessing Pipeline
-    \item Feature Engineering
-    \item Model Training (13 models)
-    \item Evaluation \& Comparison
-    \item Prediction Generation
+    \item \textbf{LightGBM} - 62.94\% (Winner!)
+    \item Random Forest - 62.09\%
+    \item AdaBoost - 61.26\%
+    \item Decision Tree - 60.10\%
+    \item Logistic Regression - 60.07\%
+    \item Naive Bayes - 55.06\%
+    \item SGD Classifier - 49.46\%
 \end{enumerate}
 
-\vspace{0.2cm}
-\textbf{Technology Stack:}
-\begin{itemize}
-    \item \textbf{ML:} scikit-learn, LightGBM
-    \item \textbf{DL:} PyTorch 2.9.1, MPS
-    \item \textbf{Data:} pandas, numpy
-    \item \textbf{Web:} Next.js, React
-\end{itemize}
-
 \column{0.5\textwidth}
-\textbf{Key Features:}
+\textbf{Key Insights:}
 \begin{itemize}
-    \item Configuration-driven design
-    \item Modular architecture
-    \item Automated hyperparameter tuning
-    \item Model persistence (joblib)
-    \item Comprehensive logging
-    \item GPU acceleration (MPS)
+    \item \textbf{Gradient boosting} best for tabular data
+    \item \textbf{Hyperparameter impact:}
+    \begin{itemize}
+        \item Learning rate: 0.1 optimal
+        \item Max depth: 5 prevents overfitting
+        \item Regularization crucial
+    \end{itemize}
+    \item \textbf{Ensemble} methods superior
+    \item \textbf{F1 score} more informative than accuracy
 \end{itemize}
 
-\vspace{0.2cm}
-\textbf{Web Application (stf.milav.in):}
-\begin{itemize}
-    \item Model dashboard (all 13 models)
-    \item Live prediction API
-    \item Hyperparameter visualization
-    \item Performance metrics display
-    \item Interactive model comparison
-    \item GitHub integration
-\end{itemize}
+\begin{block}{Performance Context}
+62.94\% vs Kaggle top 69.6\% = 6.7\% gap indicates high dataset noise
+\end{block}
 \end{columns}
 \end{frame}
 
-% Section 6: Model Performance
-\section{Model Performance}
+\subsection{Deep Learning}
+\begin{frame}{Deep Learning: 6 Architectures Explored}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Implemented from Scratch:}
+\begin{enumerate}
+    \item \textbf{Deep MLP} - 61.79\%
+    \begin{itemize}
+        \item 4 layers, 63K params
+    \end{itemize}
+    \item \textbf{Residual Net} - 61.62\%
+    \begin{itemize}
+        \item Skip connections, 418K params
+    \end{itemize}
+    \item \textbf{Simple MLP} - 61.61\%
+    \item \textbf{Wide \& Deep} - 61.52\%
+    \item \textbf{Attention Net} - 61.45\%
+    \begin{itemize}
+        \item Multi-head, 1.6M params
+    \end{itemize}
+    \item \textbf{FT-Transformer} - 61.45\%
+    \begin{itemize}
+        \item BERT-style, only 38K params!
+    \end{itemize}
+\end{enumerate}
 
-\subsection{Performance Comparison}
+\column{0.5\textwidth}
+\textbf{Critical Learnings:}
+\begin{itemize}
+    \item \textbf{PyTorch implementation} from ground up
+    \item \textbf{GPU optimization:} Apple M4 MPS
+    \item \textbf{All DL models converged ~61.5\%}
+    \begin{itemize}
+        \item Architecture matters less for tabular
+        \item Dataset-limited, not model-limited
+    \end{itemize}
+    \item \textbf{Hyperparameters tested:}
+    \begin{itemize}
+        \item Batch size: 512 optimal
+        \item Dropout: 0.3 prevents overfitting
+        \item Learning rate: 0.001 with scheduling
+        \item Early stopping crucial
+    \end{itemize}
+\end{itemize}
+
+\begin{alertblock}{Big Learning}
+\textbf{ML > DL for tabular by 1.15\%}\\
+Confirmed research: Tree ensembles beat neural nets on structured data
+\end{alertblock}
+\end{columns}
+\end{frame}
+
+
+
+\subsection{Results}
 \begin{frame}{Model Performance Comparison}
 \begin{center}
 \includegraphics[width=0.85\textwidth]{figures/model_comparison.png}
 \end{center}
 
 \vspace{0.2cm}
-\begin{block}{Key Observation}
-LightGBM achieved the highest accuracy at \textbf{62.94\%}, showing gradient boosting's superiority for this complex classification task
+\begin{block}{Key Results}
+\textbf{Best ML:} LightGBM 62.94\% (F1: 0.6286) | \textbf{Best DL:} Deep MLP 61.79\% (F1: 0.6130) | \textbf{Kaggle Top:} 69.6\%
 \end{block}
 \end{frame}
 
-\begin{frame}{Model Performance Results}
+% Section 4: Implementation & Deployment
+\section{Implementation \& Deployment}
+
+\subsection{System Architecture}
+\begin{frame}{Full-Stack Implementation \& Deployment}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\textbf{Machine Learning:}
+\textbf{Technology Stack:}
 \begin{itemize}
-    \item \textbf{LightGBM: 62.94\%} (Best)
-    \begin{itemize}
-        \item F1: 0.6286, Prec: 0.6299
-    \end{itemize}
-    \item Random Forest: 62.09\%
-    \begin{itemize}
-        \item F1: 0.6192, Prec: 0.6222
-    \end{itemize}
-    \item AdaBoost: 61.26\% (F1: 0.6104)
-    \item Decision Tree: 60.10\% (F1: 0.5986)
-    \item Logistic Reg: 60.07\% (F1: 0.5988)
-\end{itemize}
-
-\vspace{0.2cm}
-
-\textbf{Deep Learning:}
-\begin{itemize}
-    \item \textbf{Deep MLP: 61.79\%} (F1: 0.6130)
-    \item Residual Net: 61.62\% (F1: 0.6102)
-    \item Simple MLP: 61.61\% (F1: 0.6109)
-    \item Wide \& Deep: 61.52\% (F1: 0.6126)
-    \item FT-Transformer: 61.45\% (F1: 0.6133)
-\end{itemize}
-
-\column{0.5\textwidth}
-\begin{alertblock}{Critical Findings}
-\textbf{ML vs DL:} LightGBM 62.94\% beats Deep MLP 61.79\% by 1.15\%
-\end{alertblock}
-
-\begin{block}{Performance Context}
-\textbf{Kaggle Leaderboard:}
-\begin{itemize}
-    \item Top score: 0.69605 (69.6\%)
-    \item Our result: 62.94\%
-    \item Gap: 6.7\% indicates high irreducible error in dataset
-\end{itemize}
-\end{block}
-
-\vspace{0.2cm}
-
-\textbf{Why ML > DL for Tabular:}
-\begin{itemize}
-    \item Tree ensembles excel at feature interactions
-    \item DL needs 10-100x more data
-    \item Weak correlations (max 0.118) limit both
-\end{itemize}
-\end{columns}
-\end{frame}
-
-\begin{frame}{FT-Transformer: State-of-the-Art Tabular DL}
-\begin{columns}[T]
-\column{0.5\textwidth}
-\textbf{Architecture Highlights:}
-\begin{itemize}
-    \item \textbf{Feature Tokenization}
-    \begin{itemize}
-        \item Each feature → 64-dim token
-        \item Learnable embeddings
-    \end{itemize}
-    \item \textbf{Transformer Encoder}
-    \begin{itemize}
-        \item 1 layer, 2 attention heads
-        \item Self-attention over features
-    \end{itemize}
-    \item \textbf{CLS Token} for classification
-    \item Only 38,722 parameters!
-\end{itemize}
-
-\column{0.5\textwidth}
-\textbf{Performance:}
-\begin{itemize}
-    \item Accuracy: 61.45\%
-    \item Smallest DL model
-    \item Fast training (~5-7 min)
-    \item Competitive with larger models
+    \item \textbf{ML:} scikit-learn, LightGBM
+    \item \textbf{DL:} PyTorch 2.9.1, Apple MPS
+    \item \textbf{Web:} Next.js 14 + React
+    \item \textbf{Deployment:} stf.milav.in
 \end{itemize}
 
 \vspace{0.3cm}
 
-\begin{block}{Innovation}
-Bridges NLP techniques (BERT-style) with tabular data - published 2021, represents cutting-edge research
-\end{block}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Training Performance \\ Efficiency}
-\begin{columns}[T]
-\column{0.5\textwidth}
-\textbf{Apple Silicon Optimization:}
+\textbf{Web Application Features:}
 \begin{itemize}
-    \item MPS (Metal Performance Shaders) backend
-    \item M4 GPU acceleration
-    \item 2-3x faster than CPU
-    \item Batch size: 512
-    \item Early stopping for efficiency
+    \item \textbf{Model Dashboard:} All 13 models with specs
+    \item \textbf{Live Predictions:} REST API
+    \item \textbf{Interactive UI:} Comparison charts
+    \item \textbf{Documentation:} Complete GitHub repo
 \end{itemize}
 
 \column{0.5\textwidth}
-\textbf{Training Times (6 models):}
+\textbf{Production Deployment:}
 \begin{itemize}
-    \item Simple MLP: ~6 min
-    \item Deep MLP: ~8 min
-    \item Residual Net: ~12 min
-    \item Attention Net: ~15 min
-    \item Wide \& Deep: ~7 min
-    \item FT-Transformer: ~7 min
-    \item \textbf{Total: ~55 minutes}
+    \item Model serving with preprocessing
+    \item RESTful API endpoints
+    \item Responsive design
+    \item Performance visualization
 \end{itemize}
 
 \vspace{0.3cm}
 
-\textbf{All models used:}
+\begin{block}{Live Web App}
+\textbf{Visit:} \url{https://stf.milav.in}
 \begin{itemize}
-    \item Early stopping (patience=15)
-    \item Learning rate scheduling
-    \item Dropout regularization
+    \item Browse all models
+    \item View hyperparameters \& metrics
+    \item Test live predictions
+    \item Access source code
 \end{itemize}
+\end{block}
 \end{columns}
 \end{frame}
 
-\begin{frame}{Best Model: LightGBM Performance}
+\begin{frame}{Best ML Model: LightGBM Performance}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \textbf{Confusion Matrix:}
 \includegraphics[width=\textwidth]{figures/confusion_matrix_lightgbm.png}
 
 \column{0.5\textwidth}
-\textbf{Model Characteristics:}
+\textbf{Performance Metrics:}
 \begin{itemize}
     \item \textbf{Accuracy:} 62.94\%
-    \item \textbf{Training samples:} 80,000
-    \item \textbf{Validation samples:} 20,000
-    \item \textbf{True Positives:} 9,700
-    \item \textbf{True Negatives:} 9,900
-    \item \textbf{False Positives:} 2,100
-    \item \textbf{False Negatives:} 2,300
+    \item \textbf{F1 Score:} 0.6286
+    \item \textbf{Precision:} 0.6299
+    \item \textbf{Recall:} 0.6294
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Model Characteristics:}
+\begin{itemize}
+    \item Training: 80,000 samples
+    \item Validation: 20,000 samples
+    \item True Positives: 9,700
+    \item True Negatives: 9,900
+    \item False Positives: 2,100
+    \item False Negatives: 2,300
 \end{itemize}
 \end{columns}
 \end{frame}
@@ -493,178 +406,99 @@ Bridges NLP techniques (BERT-style) with tabular data - published 2021, represen
     \item \textbf{Type:} Deep Multi-Layer Perceptron
     \item \textbf{Layers:} 4 hidden layers
     \begin{itemize}
-        \item Input → 256 → 128 → 64 → 32 → Output
+        \item 256 → 128 → 64 → 32 neurons
     \end{itemize}
     \item \textbf{Parameters:} 63,714
-    \item \textbf{Features:}
+    \item \textbf{Regularization:}
     \begin{itemize}
-        \item Batch Normalization
-        \item Dropout (0.3)
-        \item ReLU activation
+        \item BatchNorm after each layer
+        \item Dropout: 0.3
     \end{itemize}
-\end{itemize}
-
-\vspace{0.3cm}
-
-\textbf{Training:}
-\begin{itemize}
-    \item Epochs: 100 (early stopping)
-    \item Batch size: 512
-    \item Optimizer: Adam (lr=0.001)
-    \item Device: Apple M4 GPU (MPS)
+    \item \textbf{Optimizer:} Adam
+    \item \textbf{Learning Rate:} 0.001
 \end{itemize}
 
 \column{0.5\textwidth}
-\textbf{Performance:}
+\textbf{Performance Metrics:}
 \begin{itemize}
-    \item \textbf{Validation Accuracy:} 61.79\%
+    \item \textbf{Accuracy:} 61.79\%
     \item \textbf{F1 Score:} 0.6130
+    \item \textbf{Best Val Loss:} 0.6623
     \item \textbf{Training Time:} ~8 minutes
-    \item \textbf{Best DL Model} among 6 architectures
 \end{itemize}
 
 \vspace{0.3cm}
 
-\begin{block}{Key Findings}
+\textbf{Key Insights:}
 \begin{itemize}
-    \item All DL models converged 61.45-61.79\%
-    \item Architecture choice minimal impact
-    \item Dataset-limited, not model-limited
-    \item LightGBM (62.94\%) still 1.15\% better
-\end{itemize}
-\end{block}
-
-\vspace{0.2cm}
-
-\textbf{Why ML > DL:}
-\begin{itemize}
-    \item Tree ensembles excel at feature interactions
-    \item DL needs 10-100x more tabular data
-    \item Weak correlations (max 0.118) limit both
+    \item Best among 6 DL architectures
+    \item 1.15\% below LightGBM
+    \item Architecture depth matters
+    \item Regularization essential
+    \item Tree ensembles still superior for tabular data
 \end{itemize}
 \end{columns}
 \end{frame}
+
+% Section 5: Conclusion
+\section{Conclusion}
 
 \subsection{Key Findings}
 \begin{frame}{Key Findings \& Insights}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\textbf{Performance Analysis:}
+\textbf{Model Performance:}
 \begin{itemize}
-    \item \textbf{Best Model:} LightGBM 62.94\%
+    \item \textbf{LightGBM:} 62.94\% (Best)
     \begin{itemize}
         \item F1: 0.6286, Precision: 0.6299
     \end{itemize}
-    \item \textbf{Performance Ceiling:}
-    \begin{itemize}
-        \item Kaggle top: 69.6\%
-        \item Our result: 62.94\%
-        \item Gap: 6.7\% indicates high irreducible error
-    \end{itemize}
-    \item \textbf{ML > DL by 1.15\%}
-    \begin{itemize}
-        \item Expected for tabular data
-        \item Tree ensembles excel at feature interactions
-    \end{itemize}
+    \item \textbf{Deep MLP:} 61.79\% (Best DL)
+    \item \textbf{Kaggle Top:} 69.6\%
+    \item \textbf{Gap:} 6.7\% indicates high irreducible error
 \end{itemize}
 
-\column{0.5\textwidth}
+\vspace{0.3cm}
+
 \textbf{Technical Insights:}
 \begin{itemize}
-    \item \textbf{Dataset Challenges:}
-    \begin{itemize}
-        \item Weak correlations (max 0.118)
-        \item Missing critical features
-        \item High noise in data
-    \end{itemize}
-    \item \textbf{DL Consistency:}
-    \begin{itemize}
-        \item All 6 models: 61.45-61.79\%
-        \item Architecture choice minimal impact
-        \item Dataset-limited, not model-limited
-    \end{itemize}
-    \item \textbf{Efficiency:}
-    \begin{itemize}
-        \item FT-Transformer: 38K params
-        \item Apple M4 GPU: 55 min total training
-    \end{itemize}
+    \item ML outperforms DL for tabular data
+    \item Weak correlations limit all models
+    \item Hyperparameter tuning: 1-2\% gains
+    \item Data quality matters most
 \end{itemize}
-\end{columns}
-\end{frame}
 
-% Section 7: Conclusion
-\section{Conclusion}
-
-\subsection{Key Contributions}
-\begin{frame}{Key Contributions}
-\begin{enumerate}
-    \item \textbf{Comprehensive Model Comparison}: Systematic evaluation of \textcolor{blue}{7 ML + 6 DL algorithms (13 total)}
-    
-    \item \textbf{Deep Learning Pipeline}: PyTorch implementation with Apple Silicon GPU optimization
-    
-    \item \textbf{State-of-the-Art Methods}: Implemented FT-Transformer (cutting-edge tabular DL)
-    
-    \item \textbf{ML vs DL Analysis}: Empirical validation that traditional ML outperforms DL for tabular data
-    
-    \item \textbf{Production-Ready Pipeline}: Dual implementation (ML + DL) with configuration control
-    
-    \item \textbf{Best-in-Class Performance}: 62.94\% accuracy with LightGBM on 100K samples
-    
-    \item \textbf{Hardware Optimization}: Efficient GPU utilization (MPS backend) for fast training
-\end{enumerate}
-\end{frame}
-
-\begin{frame}{Practical Implications}
-\begin{columns}[T]
 \column{0.5\textwidth}
-\textbf{Real-World Deployment:}
+\textbf{Practical Implications:}
 \begin{itemize}
-    \item \textbf{Model Selection:} LightGBM
+    \item \textbf{Real-world deployment:}
     \begin{itemize}
-        \item Best accuracy: 62.94\%
-        \item Fast inference
-        \item Low memory footprint
+        \item 62.94\% accuracy
+        \item Needs human oversight
+        \item First-line screening
     \end{itemize}
-    \item \textbf{Feature Importance:}
-    \begin{itemize}
-        \item AntivirusConfigID (0.118)
-        \item Interpretable for analysts
-    \end{itemize}
-    \item \textbf{Web App:} stf.milav.in
+    \item \textbf{Production app:} stf.milav.in
     \begin{itemize}
         \item Model dashboard
         \item Live predictions
-        \item REST API ready
+        \item Complete documentation
     \end{itemize}
 \end{itemize}
 
-\column{0.5\textwidth}
-\textbf{Considerations:}
+\vspace{0.3cm}
+
+\textbf{Project Contributions:}
 \begin{itemize}
-    \item \textbf{Performance Gap:}
-    \begin{itemize}
-        \item 62.94\% accuracy
-        \item 37\% error rate
-        \item Needs human oversight
-    \end{itemize}
-    \item \textbf{Use Case:}
-    \begin{itemize}
-        \item First-line screening
-        \item Priority flagging
-        \item Not standalone solution
-    \end{itemize}
-    \item \textbf{Benefits:}
-    \begin{itemize}
-        \item Reduces manual analysis
-        \item Scalable to millions of systems
-        \item Continuous learning possible
-    \end{itemize}
+    \item 13 models comprehensively evaluated
+    \item State-of-the-art DL (FT-Transformer)
+    \item Full-stack implementation
+    \item Reproducible research pipeline
 \end{itemize}
 \end{columns}
 \end{frame}
 
 \subsection{Challenges \& Limitations}
-\begin{frame}{Challenges \& Limitations}
+\begin{frame}{Challenges, Limitations \& Future Work}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{alertblock}{Key Limitations}
@@ -678,35 +512,34 @@ Bridges NLP techniques (BERT-style) with tabular data - published 2021, represen
     \item \textbf{Performance Ceiling:}
     \begin{itemize}
         \item Our: 62.94\%, Top: 69.6\%
-        \item Gap: 6.7\% (better features needed)
+        \item 6.7\% gap from better features
     \end{itemize}
-    \item \textbf{Deployment Constraints:}
+    \item \textbf{Deployment:}
     \begin{itemize}
         \item 37\% error rate
         \item Requires human oversight
-        \item Class imbalance in production
     \end{itemize}
 \end{itemize}
 \end{alertblock}
 
 \column{0.5\textwidth}
-\textbf{Potential Improvements:}
+\textbf{Future Enhancements:}
 \begin{itemize}
-    \item Explainable AI (SHAP, LIME)
-    \item Hybrid ML-DL ensembles
-    \item Cost-sensitive learning
-    \item Real-time deployment
-    \item SIEM integration
-    \item Active learning pipeline
-    \item Multi-class threat detection
-    \item Transfer learning
+    \item \textcolor{green}{$\checkmark$} DL integration complete
+    \item \textbf{Short-term:}
+    \begin{itemize}
+        \item Explainable AI (SHAP)
+        \item Hybrid ML-DL ensembles
+        \item Cost-sensitive learning
+    \end{itemize}
+    \item \textbf{Long-term:}
+    \begin{itemize}
+        \item Real-time deployment
+        \item Multi-class detection
+        \item Transfer learning
+        \item Edge deployment
+    \end{itemize}
 \end{itemize}
-
-\vspace{0.3cm}
-
-\begin{block}{Key Insight}
-Not all problems are solvable with just better algorithms - data quality is paramount
-\end{block}
 \end{columns}
 \end{frame}
 
