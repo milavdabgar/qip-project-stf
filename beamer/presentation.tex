@@ -72,6 +72,12 @@ Predict malware infections based on system properties using 100,000 samples with
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Dataset Overview}
+\begin{center}
+\includegraphics[width=0.85\textwidth]{figures/dataset_overview.png}
+\end{center}
+\end{frame}
+
 % Section 2: Objectives
 \section{Objectives}
 
@@ -144,6 +150,22 @@ Predict malware infections based on system properties using 100,000 samples with
 \end{columns}
 \end{frame}
 
+\begin{frame}{Target Distribution \& Feature Types}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\includegraphics[width=\textwidth]{figures/target_distribution.png}
+
+\column{0.5\textwidth}
+\includegraphics[width=\textwidth]{figures/feature_types.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Data Quality: Missing Values}
+\begin{center}
+\includegraphics[width=0.85\textwidth]{figures/missing_values.png}
+\end{center}
+\end{frame}
+
 \begin{frame}{Machine Learning Models}
 \begin{block}{Seven Classification Algorithms Evaluated}
 \begin{enumerate}
@@ -159,57 +181,64 @@ Predict malware infections based on system properties using 100,000 samples with
 \end{frame}
 
 \begin{frame}{Key Features Analysis}
-\textbf{Most Predictive Features (Correlation with Target):}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Most Predictive Features:}
 \begin{enumerate}
-    \item \textbf{AntivirusConfigID} -- Correlation: 0.118
-    \item \textbf{TotalPhysicalRAMMB} -- Correlation: 0.066
-    \item \textbf{IsSystemProtected} -- Correlation: 0.062
-    \item \textbf{IsGamer} -- Correlation: 0.061
+    \item \textbf{AntivirusConfigID} \\ Correlation: 0.118
+    \item \textbf{TotalPhysicalRAMMB} \\ Correlation: 0.066
+    \item \textbf{IsSystemProtected} \\ Correlation: 0.062
+    \item \textbf{IsGamer} \\ Correlation: 0.061
 \end{enumerate}
 
 \vspace{0.3cm}
-\textbf{Feature Engineering Configuration:}
-\begin{itemize}
-    \item Interaction terms available (currently disabled)
-    \item SelectKBest with f\_classif (top 30 features)
-    \item Optional PCA for dimensionality reduction
-\end{itemize}
-
-\vspace{0.2cm}
 \begin{alertblock}{Key Insight}
-Security configuration and system specifications show moderate but consistent predictive power
+Security configuration has the highest predictive power
 \end{alertblock}
+
+\column{0.5\textwidth}
+\includegraphics[width=\textwidth]{figures/feature_correlation.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Feature Correlation Heatmap}
+\begin{center}
+\includegraphics[width=0.75\textwidth]{figures/correlation_heatmap.png}
+\end{center}
 \end{frame}
 
 % Section 4: Results
 \section{Results}
 
 \begin{frame}{Model Performance Comparison}
-\begin{table}
-\centering
-\small
-\begin{tabular}{@{}lcc@{}}
-\toprule
-\textbf{Model} & \textbf{Accuracy} & \textbf{Rank} \\
-\midrule
-\textbf{LightGBM} & \textbf{63.0\%} & \textbf{1st} \\
-Random Forest & 62.4\% & 2nd \\
-AdaBoost & 62.0\% & 3rd \\
-Logistic Regression & $\sim$60\% & 4th \\
-Decision Tree & $\sim$60\% & 5th \\
-SGD Classifier & $\sim$60\% & 6th \\
-Naive Bayes & <60\% & 7th \\
-\bottomrule
-\end{tabular}
-\end{table}
+\begin{center}
+\includegraphics[width=0.85\textwidth]{figures/model_comparison.png}
+\end{center}
 
 \vspace{0.2cm}
 \begin{block}{Key Observation}
 LightGBM achieved the highest accuracy at \textbf{63.0\%}, showing gradient boosting's superiority for this complex classification task
 \end{block}
+\end{frame}
 
-\vspace{0.1cm}
-\footnotesize{Note: Ensemble methods (Random Forest, AdaBoost) outperformed traditional classifiers}
+\begin{frame}{Best Model: LightGBM Performance}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Confusion Matrix:}
+\includegraphics[width=\textwidth]{figures/confusion_matrix_lightgbm.png}
+
+\column{0.5\textwidth}
+\textbf{Model Characteristics:}
+\begin{itemize}
+    \item \textbf{Accuracy:} 63.0\%
+    \item \textbf{Training samples:} 80,000
+    \item \textbf{Validation samples:} 20,000
+    \item \textbf{True Positives:} 9,700
+    \item \textbf{True Negatives:} 9,900
+    \item \textbf{False Positives:} 2,100
+    \item \textbf{False Negatives:} 2,300
+\end{itemize}
+\end{columns}
 \end{frame}
 
 \begin{frame}{Key Findings}
