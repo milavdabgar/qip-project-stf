@@ -56,6 +56,8 @@ if torch.cuda.is_available():
     torch.cuda.manual_seed_all(SEED)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
+if torch.backends.mps.is_available():
+    torch.mps.manual_seed(SEED)
 
 # Set plot style
 plt.style.use('seaborn-v0_8-whitegrid')
@@ -66,13 +68,19 @@ warnings.filterwarnings('ignore')
 os.makedirs('models', exist_ok=True)
 os.makedirs('results', exist_ok=True)
 
-# Check for GPU availability
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(f"Using device: {device}")
+# Check for GPU availability - Support CUDA (NVIDIA) and MPS (Apple Silicon)
 if torch.cuda.is_available():
+    device = torch.device('cuda')
+    print(f"Using device: CUDA")
     print(f"GPU: {torch.cuda.get_device_name(0)}")
     print(f"GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.2f} GB")
+elif torch.backends.mps.is_available():
+    device = torch.device('mps')
+    print(f"Using device: MPS (Apple Silicon GPU)")
+    print("🚀 Apple Silicon GPU acceleration enabled! Training will be much faster.")
 else:
+    device = torch.device('cpu')
+    print("Using device: CPU")
     print("Running on CPU - training will be slower but still effective")
     print("Tip: Consider using smaller batch sizes or fewer epochs if training is too slow")
 
@@ -97,8 +105,8 @@ CONFIG = {
     },
     
     # Training parameters (auto-adjusted for CPU vs GPU)
-    'batch_size': 512 if torch.cuda.is_available() else 256,
-    'epochs': 100 if torch.cuda.is_available() else 50,
+    'batch_size': 512 if (torch.cuda.is_available() or torch.backends.mps.is_available()) else 256,
+    'epochs': 100 if (torch.cuda.is_available() or torch.backends.mps.is_available()) else 50,
     'learning_rate': 0.001,
     'weight_decay': 1e-5,
     'early_stopping_patience': 15,
@@ -279,15 +287,16 @@ def create_dataloaders(X_train, y_train, X_val, y_val, batch_size=None):
     val_dataset = TabularDataset(X_val, y_val)
     
     # Create dataloaders
-    # Optimize num_workers for hardware
-    num_workers = 2 if torch.cuda.is_available() else 0
+    # num_workers=0 for MPS to avoid multiprocessing issues on macOS
+    num_workers = 0  # Multiprocessing can cause issues with MPS on macOS
+    use_pin_memory = torch.cuda.is_available()  # pin_memory only for CUDA, not MPS
     
     train_loader = DataLoader(
         train_dataset,
         batch_size=batch_size,
         shuffle=True,
         num_workers=num_workers,
-        pin_memory=torch.cuda.is_available()
+        pin_memory=use_pin_memory
     )
     
     val_loader = DataLoader(
@@ -295,7 +304,7 @@ def create_dataloaders(X_train, y_train, X_val, y_val, batch_size=None):
         batch_size=batch_size * 2,
         shuffle=False,
         num_workers=num_workers,
-        pin_memory=torch.cuda.is_available()
+        pin_memory=use_pin_memory
     )
     
     return train_loader, val_loader, class_weights
@@ -608,11 +617,16 @@ def train_epoch(model, train_loader, criterion, optimizer, device, scaler=None):
         
         optimizer.zero_grad()
         
-        # Mixed precision training
+        # Mixed precision training (supports CUDA and MPS)
         if scaler is not None and CONFIG['use_mixed_precision']:
-            with torch.cuda.amp.autocast():
-                output = model(data)
-                loss = criterion(output, target)
+            if device.type == 'cuda':
+                with torch.cuda.amp.autocast():
+                    output = model(data)
+                    loss = criterion(output, target)
+            elif device.type == 'mps':
+                with torch.amp.autocast('mps'):
+                    output = model(data)
+                    loss = criterion(output, target)
             
             scaler.scale(loss).backward()
             scaler.step(optimizer)
@@ -717,12 +731,20 @@ def train_model(model_name, X_train, y_train, X_val, y_val):
     else:
         scheduler = None
     
-    # Mixed precision scaler (only for CUDA)
-    scaler = torch.cuda.amp.GradScaler() if CONFIG['use_mixed_precision'] and torch.cuda.is_available() else None
-    if scaler is not None:
-        print("Using mixed precision training (faster on NVIDIA GPUs)")
+    # Mixed precision scaler (supports CUDA and MPS)
+    if CONFIG['use_mixed_precision']:
+        if device.type == 'cuda':
+            scaler = torch.cuda.amp.GradScaler()
+            print("Using mixed precision training (faster on NVIDIA GPUs)")
+        elif device.type == 'mps':
+            scaler = torch.amp.GradScaler('mps')
+            print("Using mixed precision training (faster on Apple Silicon)")
+        else:
+            scaler = None
+            print("Using standard precision training (CPU)")
     else:
-        print("Using standard precision training (CPU or non-CUDA device)")
+        scaler = None
+        print("Mixed precision disabled")
     
     # Early stopping
     early_stopping = EarlyStopping(patience=CONFIG['early_stopping_patience'], mode='max')
