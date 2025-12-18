@@ -1,0 +1,135 @@
+{
+  "metadata": {
+    "project": "System Threat Forecaster",
+    "dataset": "Microsoft Malware Prediction",
+    "total_samples": 100000,
+    "training_samples": 80000,
+    "validation_samples": 20000,
+    "features": 75,
+    "target": "HasDetections (0=No Malware, 1=Malware)",
+    "last_updated": "2025-12-18 20:12:10"
+  },
+  "preprocessing": {
+    "numeric_features": 47,
+    "categorical_features": 28,
+    "scaling": "StandardScaler",
+    "encoding": "LabelEncoder",
+    "imputation": {
+      "numeric": "mean",
+      "categorical": "most_frequent"
+    }
+  },
+  "ml_models": {
+    "decision_tree": {
+      "training_accuracy": 0.6352,
+      "validation_accuracy": 0.601,
+      "precision": 0.6025,
+      "recall": 0.601,
+      "f1_score": 0.5986,
+      "hyperparameters": {
+        "max_depth": 10,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "class_weight": "balanced",
+        "random_state": 42
+      },
+      "trained_at": "2025-12-18 20:12:10"
+    },
+    "random_forest": {
+      "training_accuracy": 0.9254,
+      "validation_accuracy": 0.6209,
+      "precision": 0.6222,
+      "recall": 0.6209,
+      "f1_score": 0.6192,
+      "hyperparameters": {
+        "n_estimators": 100,
+        "max_depth": 20,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "class_weight": "balanced",
+        "random_state": 42
+      },
+      "trained_at": "2025-12-18 20:12:10"
+    },
+    "lightgbm": {
+      "training_accuracy": 0.6715,
+      "validation_accuracy": 0.6294,
+      "precision": 0.6299,
+      "recall": 0.6294,
+      "f1_score": 0.6286,
+      "hyperparameters": {
+        "n_estimators": 200,
+        "learning_rate": 0.1,
+        "max_depth": 5,
+        "min_child_samples": 10,
+        "subsample": 0.6,
+        "colsample_bytree": 1.0,
+        "reg_alpha": 1.0,
+        "reg_lambda": 0.75,
+        "random_state": 42
+      },
+      "trained_at": "2025-12-18 20:12:10"
+    },
+    "naive_bayes": {
+      "training_accuracy": 0.5536,
+      "validation_accuracy": 0.5506,
+      "precision": 0.5792,
+      "recall": 0.5506,
+      "f1_score": 0.4996,
+      "hyperparameters": {
+        "var_smoothing": 1e-09
+      },
+      "trained_at": "2025-12-18 20:12:10"
+    },
+    "logistic_regression": {
+      "training_accuracy": 0.5972,
+      "validation_accuracy": 0.6007,
+      "precision": 0.6017,
+      "recall": 0.6007,
+      "f1_score": 0.5988,
+      "hyperparameters": {
+        "C": 1.0,
+        "solver": "liblinear",
+        "max_iter": 1000,
+        "class_weight": "balanced",
+        "random_state": 42
+      },
+      "trained_at": "2025-12-18 20:12:10"
+    },
+    "ada_boost": {
+      "training_accuracy": 0.6111,
+      "validation_accuracy": 0.6126,
+      "precision": 0.6143,
+      "recall": 0.6126,
+      "f1_score": 0.6104,
+      "hyperparameters": {
+        "n_estimators": 200,
+        "learning_rate": 1.0,
+        "random_state": 42
+      },
+      "trained_at": "2025-12-18 20:12:10"
+    },
+    "sgd": {
+      "training_accuracy": 0.495,
+      "validation_accuracy": 0.4946,
+      "precision": 0.4644,
+      "recall": 0.4946,
+      "f1_score": 0.3283,
+      "hyperparameters": {
+        "loss": "log_loss",
+        "penalty": "elasticnet",
+        "alpha": 0.001,
+        "max_iter": 1000,
+        "class_weight": null,
+        "random_state": 42
+      },
+      "trained_at": "2025-12-18 20:12:10"
+    }
+  },
+  "dl_models": {},
+  "best_overall": {
+    "model": "lightgbm",
+    "accuracy": 0.6294,
+    "type": "ML"
+  }
+}

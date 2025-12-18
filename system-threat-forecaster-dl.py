@@ -1137,6 +1137,76 @@ def run_dl_pipeline():
         size = os.path.getsize(f'saved_models/{file}') / (1024 * 1024)
         print(f"  ✓ {file} ({size:.2f} MB)")
     
+    # Export DL model performance metrics to JSON
+    print("\n=== Exporting DL Model Performance Metrics ===")
+    import json
+    from datetime import datetime
+    
+    perf_file = 'results/model_performance.json'
+    try:
+        with open(perf_file, 'r') as f:
+            perf_data = json.load(f)
+    except FileNotFoundError:
+        perf_data = {
+            "metadata": {},
+            "preprocessing": {},
+            "ml_models": {},
+            "dl_models": {},
+            "best_overall": {}
+        }
+    
+    # Update timestamp
+    perf_data["metadata"]["last_updated"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Extract and save DL model performance
+    for model_name, metrics in trained_models.items():
+        model_config = CONFIG['model_configs'].get(model_name, {})
+        
+        # Count parameters
+        model = metrics['model']
+        total_params = sum(p.numel() for p in model.parameters())
+        trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        
+        perf_data["dl_models"][model_name] = {
+            "architecture": model.__class__.__name__,
+            "validation_accuracy": round(metrics['best_val_acc'] / 100, 4),
+            "best_val_loss": round(metrics['best_val_loss'], 4),
+            "total_parameters": total_params,
+            "trainable_parameters": trainable_params,
+            "hyperparameters": {
+                "learning_rate": CONFIG['learning_rate'],
+                "batch_size": CONFIG['batch_size'],
+                "epochs": CONFIG['epochs'],
+                "optimizer": CONFIG['optimizer'],
+                "dropout": model_config.get('dropout_rate', 0.3),
+                "hidden_dims": model_config.get('hidden_dims', [])
+            },
+            "training": {
+                "device": str(device),
+                "early_stopping_patience": CONFIG['early_stopping_patience'],
+                "scheduler": CONFIG['scheduler']
+            },
+            "trained_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+    
+    # Update best overall if DL model is better
+    current_best_acc = perf_data.get("best_overall", {}).get("accuracy", 0)
+    if best_acc / 100 > current_best_acc:
+        perf_data["best_overall"] = {
+            "model": best_model_name,
+            "accuracy": round(best_acc / 100, 4),
+            "type": "DL"
+        }
+    
+    # Save to JSON
+    os.makedirs('results', exist_ok=True)
+    with open(perf_file, 'w') as f:
+        json.dump(perf_data, f, indent=2)
+    
+    print(f"✓ Exported DL model performance to {perf_file}")
+    print(f"  - {len(perf_data['dl_models'])} DL models documented")
+    print(f"  - Best DL: {best_model_name} ({best_acc:.2f}%)")
+    
     print("\nNext steps:")
     print("  1. Test predictions: python predict.py")
     print("  2. Run web app: cd next && npm run dev")

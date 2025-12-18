@@ -1349,6 +1349,99 @@ def run_pipeline():
     print("  1. Train DL models: python system-threat-forecaster-dl.py")
     print("  2. Test web app: cd next && npm run dev")
     
+    # Step 12: Export comprehensive model performance metrics to JSON
+    print("\n=== Exporting Model Performance Metrics ===")
+    import json
+    import ast
+    from datetime import datetime
+    
+    # Load existing performance data if it exists
+    perf_file = 'results/model_performance.json'
+    try:
+        with open(perf_file, 'r') as f:
+            perf_data = json.load(f)
+    except FileNotFoundError:
+        perf_data = {
+            "metadata": {
+                "project": "System Threat Forecaster",
+                "dataset": "Microsoft Malware Prediction",
+                "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            },
+            "preprocessing": {},
+            "ml_models": {},
+            "dl_models": {},
+            "best_overall": {}
+        }
+    
+    # Update metadata
+    perf_data["metadata"]["last_updated"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    perf_data["metadata"]["total_samples"] = len(train_data)
+    perf_data["metadata"]["training_samples"] = len(X_train)
+    perf_data["metadata"]["validation_samples"] = len(X_val)
+    perf_data["metadata"]["features"] = X_train.shape[1]
+    
+    # Update preprocessing info
+    perf_data["preprocessing"] = {
+        "numeric_features": len(preprocessors.get('_original_numeric_cols', [])),
+        "categorical_features": len(preprocessors.get('_original_categorical_cols', [])),
+        "scaling": "StandardScaler",
+        "encoding": "LabelEncoder",
+        "imputation": {
+            "numeric": CONFIG['numeric_imputation_strategy'],
+            "categorical": CONFIG['categorical_imputation_strategy']
+        }
+    }
+    
+    # Extract and save ML model performance
+    # Read from CSV to get hyperparameters
+    csv_file = 'results/model_comparison.csv'
+    model_csv_data = {}
+    if os.path.exists(csv_file):
+        csv_df = pd.read_csv(csv_file)
+        # Get the latest entry for each model
+        for model_name in trained_models.keys():
+            model_rows = csv_df[csv_df['model_name'] == model_name]
+            if not model_rows.empty:
+                latest_row = model_rows.iloc[-1]
+                model_csv_data[model_name] = {
+                    'hyperparams': ast.literal_eval(latest_row['hyperparams']) if pd.notna(latest_row['hyperparams']) else {},
+                    'val_report': ast.literal_eval(latest_row['val_report']) if pd.notna(latest_row['val_report']) else {}
+                }
+    
+    for model_name, (model, metrics) in trained_models.items():
+        # Get hyperparameters and report from CSV
+        csv_data = model_csv_data.get(model_name, {})
+        hyperparams = csv_data.get('hyperparams', {})
+        report_dict = csv_data.get('val_report', {})
+        
+        perf_data["ml_models"][model_name] = {
+            "training_accuracy": round(metrics.get('train_accuracy', 0), 4),
+            "validation_accuracy": round(metrics.get('val_accuracy', 0), 4),
+            "precision": round(report_dict.get('weighted avg', {}).get('precision', 0), 4),
+            "recall": round(report_dict.get('weighted avg', {}).get('recall', 0), 4),
+            "f1_score": round(report_dict.get('weighted avg', {}).get('f1-score', 0), 4),
+            "hyperparameters": hyperparams,
+            "trained_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+    
+    # Update best model
+    if best_model_name:
+        best_metrics = trained_models[best_model_name][1]
+        perf_data["best_overall"] = {
+            "model": best_model_name,
+            "accuracy": round(best_metrics.get('val_accuracy', 0), 4),
+            "type": "ML"
+        }
+    
+    # Save to JSON file
+    os.makedirs('results', exist_ok=True)
+    with open(perf_file, 'w') as f:
+        json.dump(perf_data, f, indent=2)
+    
+    print(f"✓ Exported model performance to {perf_file}")
+    print(f"  - {len(perf_data['ml_models'])} ML models documented")
+    print(f"  - Best: {best_model_name} ({perf_data['best_overall']['accuracy']:.2%})")
+    
     print("\n=== Pipeline Completed ===\n")
     
     return train_data, X_train, y_train, X_val, y_val, best_model_name, best_model, trained_models
