@@ -15,7 +15,7 @@
 
 % Title Information
 \title{System Threat Forecaster}
-\subtitle{AICTE QIP PG Certification Programme on\\``Deep Learning: Fundamentals and Applications''}
+\subtitle{Malware Detection Using ML \& Deep Learning\\AICTE QIP PG Certification Programme}
 \author{Milav Jayeshkumar Dabgar}
 \institute{%
     Government Polytechnic Palanpur\\
@@ -44,23 +44,45 @@
 % Section 1: Introduction
 \section{Introduction}
 
-\subsection{Background}
-\begin{frame}{Background}
+\subsection{Project Context}
+\begin{frame}{Project Context \& Objectives}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Context:}
 \begin{itemize}
-    \item Cybersecurity threats are increasingly sophisticated
-    \item Malware poses significant risks:
-    \begin{itemize}
-        \item Data breaches and financial losses
-        \item System compromise and data theft
-        \item Operational disruptions
-    \end{itemize}
-    \item Traditional signature-based antivirus solutions struggle with:
-    \begin{itemize}
-        \item Zero-day attacks and polymorphic malware
-        \item Evolving threat landscapes
-    \end{itemize}
-    \item \textbf{Machine Learning} offers proactive, behavior-based threat detection
+    \item AICTE QIP PG Certification in Deep Learning
+    \item Preparation for PhD research (2025)
+    \item Cybersecurity threats increasingly sophisticated
+    \item Traditional antivirus struggles with zero-day attacks
+    \item ML/DL enables behavior-based threat detection
 \end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Dataset Selection:}
+\begin{itemize}
+    \item Kaggle: Microsoft Malware Prediction
+    \item Intentionally challenging (top score 69.6\%)
+    \item Focus on learning workflows, not just winning
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Learning Objectives:}
+\begin{enumerate}
+    \item Comprehensive preprocessing techniques
+    \item Feature engineering strategies
+    \item Train \& evaluate 7 ML + 6 DL models
+    \item Hyperparameter tuning \& impact analysis
+    \item Systematic model comparison
+    \item Full-stack deployment (Next.js)
+\end{enumerate}
+
+\vspace{0.3cm}
+
+\begin{alertblock}{Key Goal}
+Master end-to-end ML/DL workflow for real-world cybersecurity problems
+\end{alertblock}
+\end{columns}
 \end{frame}
 
 \subsection{Problem Statement}
@@ -153,31 +175,7 @@ Security configuration has the highest predictive power
 \end{columns}
 \end{frame}
 
-% Section 3: Objectives
-\section{Objectives}
-
-\subsection{Project Goals}
-\begin{frame}{Project Objectives}
-\begin{enumerate}
-    \item \textbf{Data Preprocessing}: Implement comprehensive preprocessing techniques
-    \begin{itemize}
-        \item Missing value imputation
-        \item Feature encoding and normalization
-    \end{itemize}
-    
-    \item \textbf{Feature Engineering}: Develop strategies to enhance model performance
-    
-    \item \textbf{Model Development}: Train and evaluate multiple ML models
-    
-    \item \textbf{Performance Optimization}: Hyperparameter tuning and model selection
-    
-    \item \textbf{Model Comparison}: Systematic evaluation using standard metrics
-    
-    \item \textbf{Deployment Ready}: Create maintainable, production-ready codebase
-\end{enumerate}
-\end{frame}
-
-% Section 4: Methodology
+% Section 3: Methodology
 \section{Methodology}
 
 \subsection{Data Processing Pipeline}
@@ -281,7 +279,7 @@ Security configuration has the highest predictive power
 \section{Implementation}
 
 \subsection{System Architecture}
-\begin{frame}{Implementation Architecture}
+\begin{frame}{Implementation Architecture \& Deployment}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \textbf{Pipeline Modules:}
@@ -315,12 +313,14 @@ Security configuration has the highest predictive power
 \end{itemize}
 
 \vspace{0.2cm}
-\textbf{Reproducibility:}
+\textbf{Web Application (stf.milav.in):}
 \begin{itemize}
-    \item Random state: 42
-    \item Stratified splitting
-    \item Version-controlled configs
-    \item Performance tracking JSON
+    \item Model dashboard (all 13 models)
+    \item Live prediction API
+    \item Hyperparameter visualization
+    \item Performance metrics display
+    \item Interactive model comparison
+    \item GitHub integration
 \end{itemize}
 \end{columns}
 \end{frame}
@@ -485,6 +485,66 @@ Bridges NLP techniques (BERT-style) with tabular data - published 2021, represen
 \end{columns}
 \end{frame}
 
+\begin{frame}{Best DL Model: Deep MLP Performance}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Architecture:}
+\begin{itemize}
+    \item \textbf{Type:} Deep Multi-Layer Perceptron
+    \item \textbf{Layers:} 4 hidden layers
+    \begin{itemize}
+        \item Input → 256 → 128 → 64 → 32 → Output
+    \end{itemize}
+    \item \textbf{Parameters:} 63,714
+    \item \textbf{Features:}
+    \begin{itemize}
+        \item Batch Normalization
+        \item Dropout (0.3)
+        \item ReLU activation
+    \end{itemize}
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Training:}
+\begin{itemize}
+    \item Epochs: 100 (early stopping)
+    \item Batch size: 512
+    \item Optimizer: Adam (lr=0.001)
+    \item Device: Apple M4 GPU (MPS)
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Performance:}
+\begin{itemize}
+    \item \textbf{Validation Accuracy:} 61.79\%
+    \item \textbf{F1 Score:} 0.6130
+    \item \textbf{Training Time:} ~8 minutes
+    \item \textbf{Best DL Model} among 6 architectures
+\end{itemize}
+
+\vspace{0.3cm}
+
+\begin{block}{Key Findings}
+\begin{itemize}
+    \item All DL models converged 61.45-61.79\%
+    \item Architecture choice minimal impact
+    \item Dataset-limited, not model-limited
+    \item LightGBM (62.94\%) still 1.15\% better
+\end{itemize}
+\end{block}
+
+\vspace{0.2cm}
+
+\textbf{Why ML > DL:}
+\begin{itemize}
+    \item Tree ensembles excel at feature interactions
+    \item DL needs 10-100x more tabular data
+    \item Weak correlations (max 0.118) limit both
+\end{itemize}
+\end{columns}
+\end{frame}
+
 \subsection{Key Findings}
 \begin{frame}{Key Findings \& Insights}
 \begin{columns}[T]
@@ -554,10 +614,10 @@ Bridges NLP techniques (BERT-style) with tabular data - published 2021, represen
 \end{enumerate}
 \end{frame}
 
-\begin{frame}{Practical Implications \& Deployment}
+\begin{frame}{Practical Implications}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\textbf{Production Readiness:}
+\textbf{Real-World Deployment:}
 \begin{itemize}
     \item \textbf{Model Selection:} LightGBM
     \begin{itemize}
@@ -570,16 +630,16 @@ Bridges NLP techniques (BERT-style) with tabular data - published 2021, represen
         \item AntivirusConfigID (0.118)
         \item Interpretable for analysts
     \end{itemize}
-    \item \textbf{Deployment:}
+    \item \textbf{Web App:} stf.milav.in
     \begin{itemize}
-        \item Web app: stf.milav.in
+        \item Model dashboard
+        \item Live predictions
         \item REST API ready
-        \item Model versioning
     \end{itemize}
 \end{itemize}
 
 \column{0.5\textwidth}
-\textbf{Real-World Considerations:}
+\textbf{Considerations:}
 \begin{itemize}
     \item \textbf{Performance Gap:}
     \begin{itemize}
@@ -593,7 +653,7 @@ Bridges NLP techniques (BERT-style) with tabular data - published 2021, represen
         \item Priority flagging
         \item Not standalone solution
     \end{itemize}
-    \item \textbf{Cost-Benefit:}
+    \item \textbf{Benefits:}
     \begin{itemize}
         \item Reduces manual analysis
         \item Scalable to millions of systems
@@ -603,8 +663,8 @@ Bridges NLP techniques (BERT-style) with tabular data - published 2021, represen
 \end{columns}
 \end{frame}
 
-\subsection{Future Work \& Challenges}
-\begin{frame}{Challenges, Limitations \& Future Work}
+\subsection{Challenges \& Limitations}
+\begin{frame}{Challenges \& Limitations}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{alertblock}{Key Limitations}
@@ -630,28 +690,23 @@ Bridges NLP techniques (BERT-style) with tabular data - published 2021, represen
 \end{alertblock}
 
 \column{0.5\textwidth}
-\textbf{Future Enhancements:}
+\textbf{Potential Improvements:}
 \begin{itemize}
-    \item \textcolor{green}{$\checkmark$ DL integration complete}
-    \item \textbf{Short-term:}
-    \begin{itemize}
-        \item Explainable AI (SHAP, LIME)
-        \item Hybrid ML-DL ensembles
-        \item Cost-sensitive learning
-    \end{itemize}
-    \item \textbf{Medium-term:}
-    \begin{itemize}
-        \item Real-time deployment
-        \item SIEM integration
-        \item Active learning pipeline
-    \end{itemize}
-    \item \textbf{Long-term:}
-    \begin{itemize}
-        \item Multi-class threat detection
-        \item Transfer learning
-        \item Edge deployment
-    \end{itemize}
+    \item Explainable AI (SHAP, LIME)
+    \item Hybrid ML-DL ensembles
+    \item Cost-sensitive learning
+    \item Real-time deployment
+    \item SIEM integration
+    \item Active learning pipeline
+    \item Multi-class threat detection
+    \item Transfer learning
 \end{itemize}
+
+\vspace{0.3cm}
+
+\begin{block}{Key Insight}
+Not all problems are solvable with just better algorithms - data quality is paramount
+\end{block}
 \end{columns}
 \end{frame}
 
