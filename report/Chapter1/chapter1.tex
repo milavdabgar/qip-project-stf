@@ -40,26 +40,14 @@ Developing accurate malware prediction systems faces multiple challenges:
 
 \section{Objectives and Contributions}
 
-\subsection{Primary Objectives}
+This work implements and compares 13 models (7 ML algorithms + 6 DL architectures) under controlled conditions with identical preprocessing and evaluation metrics. Key contributions include:
 
 \begin{enumerate}
-    \item \textbf{Comprehensive Implementation}: Train 13 diverse models—7 ML algorithms (Decision Tree, Random Forest, LightGBM, Naive Bayes, Logistic Regression, AdaBoost, SGD) and 6 DL architectures (Simple MLP, Deep MLP, Residual Net, Attention Net, Wide \& Deep, FT-Transformer).
+    \item \textbf{Empirical Evidence}: Demonstrates gradient boosting (LightGBM: 62.94\%) outperforms deep learning (61.79\%) by 1.15\% with 4x faster training for tabular malware data.
     
-    \item \textbf{Systematic Evaluation}: Conduct controlled comparison using identical train-validation splits, preprocessing, and metrics (accuracy, F1-score, precision, recall).
+    \item \textbf{Architecture Analysis}: Increasing DL complexity from 38K to 1.6M parameters yields only 0.34\% variation, confirming dataset quality—not model sophistication—determines performance.
     
-    \item \textbf{Production Deployment}: Build full-stack web application at \url{https://stf.milav.in} with all 13 trained models, interactive comparison, and live predictions.
+    \item \textbf{Practical Guidelines}: Establishes decision criteria favoring tree-based ensembles over DL for tabular cybersecurity data with moderate samples and weak correlations.
     
-    \item \textbf{Reproducible Research}: Document complete methodology, hyperparameters, and training procedures.
-\end{enumerate}
-
-\subsection{Key Contributions}
-
-\begin{enumerate}
-    \item \textbf{Empirical Validation}: Provides rigorous evidence that gradient boosting (LightGBM: 62.94\%) outperforms deep learning (best: 61.79\%) by 1.15\% with 4x faster training.
-    
-    \item \textbf{Architecture Analysis}: Demonstrates that increasing DL complexity from 38K to 1.6M parameters yields only 0.34\% performance variation, confirming dataset quality—not model sophistication—determines performance ceiling.
-    
-    \item \textbf{Practical Guidelines}: For tabular cybersecurity data with moderate samples (100K), heterogeneous features, and weak correlations, prioritize tree-based ensembles for superior accuracy, faster training, and better interpretability.
-    
-    \item \textbf{Production System}: Delivers fully functional web application bridging academic research and practical deployment.
+    \item \textbf{Production Deployment}: Full-stack web application at \url{https://stf.milav.in} with all trained models, interactive comparison, and live predictions.
 \end{enumerate}
