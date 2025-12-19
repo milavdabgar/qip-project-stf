@@ -21,6 +21,15 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{shwartz2022tabular}
+R.~Shwartz-Ziv and A.~Armon, ``Tabular data: Deep learning is not all you
+  need,'' \emph{Information Fusion}, vol.~81, pp. 84--90, 2022.
+
+\bibitem{grinsztajn2022tree}
+L.~Grinsztajn, E.~Oyallon, and G.~Varoquaux, ``Why do tree-based models still
+  outperform deep learning on typical tabular data?'' \emph{Advances in Neural
+  Information Processing Systems}, vol.~35, pp. 507--520, 2022.
+
 \bibitem{kaggle_stf_competition}
 \BIBentryALTinterwordspacing
 {Kaggle}, ``System threat forecaster - kaggle competition,'' 2025, accessed:
@@ -28,28 +37,10 @@
   \url{https://www.kaggle.com/competitions/System-Threat-Forecaster/}
 \BIBentrySTDinterwordspacing
 
-\bibitem{ieee2025signaltoimage}
-J.~Smith and A.~Johnson, ``Signal-to-image transformation for eeg
-  classification using convolutional neural networks,'' \emph{IEEE Transactions
-  on Neural Systems and Rehabilitation Engineering}, vol.~31, pp. 1234--1245,
-  2023.
-
-\bibitem{banglajol2025dualtree}
-M.~Rahman and S.~Ahmed, ``Dual tree complex wavelet transform with support
-  vector machine for schizophrenia detection,'' \emph{Bangladesh Journal of
-  Medical Science}, vol.~22, no.~3, pp. 456--468, 2023.
-
-\bibitem{mdpi2025diagnosis}
-W.~Chen, X.~Liu, and M.~Zhang, ``Automated diagnosis of schizophrenia using
-  markov transition fields and deep learning,'' \emph{Diagnostics}, vol.~14,
-  no.~2, p. 234, 2024.
-
-\bibitem{kaggle_stf_notebook}
-\BIBentryALTinterwordspacing
-M.~J. Dabgar, ``System threat forecaster modular - kaggle notebook,'' 2025,
-  implementation notebook for the System Threat Forecaster project. [Online].
-  Available:
-  \url{https://www.kaggle.com/code/milavdabgar/system-threat-forecaster-modular}
-\BIBentrySTDinterwordspacing
+\bibitem{ke2017lightgbm}
+G.~Ke, Q.~Meng, T.~Finley, T.~Wang, W.~Chen, W.~Ma, Q.~Ye, and T.-Y. Liu,
+  ``Lightgbm: A highly efficient gradient boosting decision tree,''
+  \emph{Advances in Neural Information Processing Systems}, vol.~30, pp.
+  3146--3154, 2017.
 
 \end{thebibliography}
