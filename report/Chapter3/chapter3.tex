@@ -2,525 +2,58 @@
 
 \chapter{Experimental Setup and Model Selection}
 
-Building upon the dataset characteristics from Chapter 2, this chapter details the experimental methodology: preprocessing pipeline, rationale for selecting 13 models (7 ML + 6 DL), hyperparameter configurations, training procedures, and evaluation protocols.
-
-\section{Data Preprocessing Pipeline}
-
-\subsection{Missing Value Imputation}
-
-Given the 1-30\% missing rates identified in EDA, we implemented a two-strategy imputation approach:
-
-\textbf{Numerical Features (47 features)}:
-\begin{itemize}
-    \item Strategy: Mean imputation
-    \item Rationale: Preserves distribution characteristics; appropriate for balanced classes
-    \item Implementation: \texttt{SimpleImputer(strategy='mean')}
-    \item Applied to: Hardware metrics, timestamps, version numbers, counts
-\end{itemize}
-
-\textbf{Categorical Features (28 features)}:
-\begin{itemize}
-    \item Strategy: Mode imputation (most frequent value)
-    \item Rationale: Maintains dominant categories; suitable for nominal data
-    \item Implementation: \texttt{SimpleImputer(strategy='most\_frequent')}
-    \item Applied to: OS versions, processor types, antivirus vendors
-\end{itemize}
-
-\subsection{Categorical Encoding}
-
-\textbf{LabelEncoder} applied to all 28 categorical features:
-\begin{itemize}
-    \item Maps each unique category to integer (0, 1, 2, ...)
-    \item Avoids dimensionality explosion from one-hot encoding (1,000+ categories in some features)
-    \item Tree-based models handle ordinality naturally through splits
-    \item Neural networks receive compact numerical representation
-\end{itemize}
-
-Alternative one-hot encoding would create thousands of sparse features, dramatically increasing memory and computation while harming tree-based model performance.
-
-\subsection{Numerical Scaling}
-
-\textbf{StandardScaler} (z-score normalization) applied to all 47 numerical features:
-\begin{equation}
-z = \frac{x - \mu}{\sigma}
-\end{equation}
-
-where $\mu$ is feature mean and $\sigma$ is standard deviation.
-
-\textbf{Rationale}:
-\begin{itemize}
-    \item Features span vastly different ranges (e.g., binary flags vs. millions for RAM)
-    \item Neural networks require scaled inputs for gradient stability
-    \item Distance-based methods (logistic regression) sensitive to scale
-    \item Tree-based models unaffected but standardized for consistency
-\end{itemize}
-
-\subsection{Train-Validation Split}
-
-\textbf{Stratified 80/20 split}:
-\begin{itemize}
-    \item Training: 80,000 samples (50.52\% positive class)
-    \item Validation: 20,000 samples (50.52\% positive class)
-    \item Stratification: Maintains exact class distribution in both sets
-    \item Random seed: 42 (reproducibility across all experiments)
-\end{itemize}
-
-No test set used; Kaggle leaderboard serves as external validation.
-
-\section{Machine Learning Model Selection}
-
-Seven ML algorithms selected to represent diverse learning paradigms and complexity levels:
-
-\subsection{Decision Tree}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item Baseline for tree-based methods
-    \item Handles mixed data types natively
-    \item Interpretable through visualization
-    \item Tests whether simple partitioning suffices
-\end{itemize}
-
-\textbf{Hyperparameters} (Table~\ref{tab:ml_config}):
-\begin{itemize}
-    \item \texttt{max\_depth=10}: Limits tree growth to prevent overfitting
-    \item \texttt{min\_samples\_split=5}: Requires 5 samples to create split
-    \item \texttt{min\_samples\_leaf=2}: Ensures leaves have multiple samples
-    \item \texttt{class\_weight='balanced'}: Adjusts for any class imbalance
-\end{itemize}
-
-\subsection{Random Forest}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item Ensemble of decision trees reduces overfitting
-    \item Bootstrap sampling and random feature selection increase diversity
-    \item Proven effectiveness on high-dimensional tabular data
-    \item Provides feature importance rankings
-\end{itemize}
-
-\textbf{Hyperparameters}:
-\begin{itemize}
-    \item \texttt{n\_estimators=100}: 100 trees balance performance and speed
-    \item \texttt{max\_depth=20}: Deeper than single tree (ensemble protection)
-    \item \texttt{min\_samples\_split=2}: Standard aggressive splitting
-    \item \texttt{class\_weight='balanced'}: Handles any imbalance
-\end{itemize}
-
-\subsection{LightGBM}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item State-of-the-art gradient boosting framework
-    \item Sequential error correction captures complex patterns
-    \item Histogram-based splitting: fast, memory-efficient
-    \item Leaf-wise growth: maximizes gain per split
-    \item Excels in Kaggle competitions for tabular data
-    \item Expected to be top ML performer
-\end{itemize}
-
-\textbf{Hyperparameters}:
-\begin{itemize}
-    \item \texttt{n\_estimators=200}: More boosting rounds than Random Forest
-    \item \texttt{learning\_rate=0.1}: Moderate shrinkage balances speed and accuracy
-    \item \texttt{max\_depth=5}: Shallow trees (boosting compensates)
-    \item \texttt{min\_child\_samples=10}: Prevents overfitting to noise
-    \item \texttt{subsample=0.6}: 60\% data per iteration (stochastic)
-    \item \texttt{colsample\_bytree=1.0}: Use all features per tree
-    \item \texttt{reg\_alpha=1.0, reg\_lambda=0.75}: L1/L2 regularization
-\end{itemize}
-
-\subsection{Naive Bayes}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item Probabilistic baseline assuming feature independence
-    \item Tests whether weak correlations (max 0.118) allow naive assumption
-    \item Fast training and prediction
-    \item Theoretical lower bound for complex methods
-\end{itemize}
-
-\textbf{Hyperparameters}:
-\begin{itemize}
-    \item \texttt{var\_smoothing=1e-9}: Minimal smoothing (default)
-    \item Gaussian assumption for numerical features post-scaling
-\end{itemize}
-
-\subsection{Logistic Regression}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item Linear model baseline
-    \item Tests whether log-linear relationship exists with weak correlations
-    \item Probabilistic outputs (calibrated)
-    \item Fast, interpretable through coefficients
-\end{itemize}
-
-\textbf{Hyperparameters}:
-\begin{itemize}
-    \item \texttt{C=1.0}: Inverse regularization strength (standard)
-    \item \texttt{solver='liblinear'}: Handles L1/L2 penalties
-    \item \texttt{max\_iter=1000}: Ensures convergence
-    \item \texttt{class\_weight='balanced'}: Adjusts for imbalance
-\end{itemize}
-
-\subsection{AdaBoost}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item Alternative boosting algorithm to LightGBM
-    \item Adaptive re-weighting focuses on hard examples
-    \item Traditionally uses weak learners (decision stumps)
-    \item Tests whether simpler boosting suffices
-\end{itemize}
-
-\textbf{Hyperparameters}:
-\begin{itemize}
-    \item \texttt{n\_estimators=200}: Match LightGBM boosting rounds
-    \item \texttt{learning\_rate=1.0}: Standard AdaBoost weight update
-    \item Base estimator: Decision stump (max\_depth=1, implicit)
-\end{itemize}
-
-\subsection{SGD Classifier}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item Stochastic gradient descent for linear models
-    \item Tests online learning approach
-    \item Efficient for large datasets
-    \item Stress test: expected worst performer
-\end{itemize}
-
-\textbf{Hyperparameters}:
-\begin{itemize}
-    \item \texttt{loss='log\_loss'}: Logistic regression via SGD
-    \item \texttt{penalty='elasticnet'}: Combined L1+L2 regularization
-    \item \texttt{alpha=0.001}: Regularization strength
-    \item \texttt{max\_iter=1000}: Training epochs
-\end{itemize}
-
-\begin{table}[h]
-\centering
-\caption{ML Models: Hyperparameter Configuration}
-\label{tab:ml_config}
-\begin{tabular}{|l|p{9cm}|}
-\hline
-\textbf{Model} & \textbf{Key Hyperparameters} \\
-\hline
-Decision Tree & max\_depth=10, min\_samples\_split=5, min\_samples\_leaf=2, class\_weight='balanced' \\
-Random Forest & n\_estimators=100, max\_depth=20, min\_samples\_split=2, class\_weight='balanced' \\
-LightGBM & n\_estimators=200, learning\_rate=0.1, max\_depth=5, subsample=0.6, reg\_alpha=1.0, reg\_lambda=0.75 \\
-Naive Bayes & var\_smoothing=1e-9 (Gaussian assumption) \\
-Logistic Reg. & C=1.0, solver='liblinear', max\_iter=1000, class\_weight='balanced' \\
-AdaBoost & n\_estimators=200, learning\_rate=1.0 (decision stumps) \\
-SGD Classifier & loss='log\_loss', penalty='elasticnet', alpha=0.001, max\_iter=1000 \\
-\hline
-\end{tabular}
-\end{table}
-
-\section{Deep Learning Model Selection}
-
-Six neural network architectures designed from scratch using PyTorch, representing diverse DL paradigms:
-
-\subsection{Simple MLP (Baseline)}
-
-\textbf{Architecture}: 75 → 256 → 128 → 64 → 32 → 2
-\begin{itemize}
-    \item ReLU activation between layers
-    \item Dropout (0.3) after each hidden layer
-    \item No batch normalization
-\end{itemize}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item Standard feedforward neural network baseline
-    \item Tests whether basic multilayer perceptron suffices
-    \item Minimal architectural complexity
-    \item 60,738 parameters
-\end{itemize}
-
-\subsection{Deep MLP (Enhanced Baseline)}
-
-\textbf{Architecture}: 75 → 256 → 128 → 64 → 32 → 2
-\begin{itemize}
-    \item Batch Normalization after each linear layer
-    \item ReLU activation
-    \item Dropout (0.3)
-\end{itemize}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item Tests impact of batch normalization on training stability
-    \item BatchNorm addresses internal covariate shift
-    \item Expected to outperform Simple MLP
-    \item Minimal parameter increase: 63,714 (vs. 60,738)
-\end{itemize}
-
-\subsection{Residual Net}
-
-\textbf{Architecture}:
-\begin{itemize}
-    \item Input → Initial projection (75 → 256)
-    \item 3 residual blocks (256-dim, each with skip connection)
-    \item Each block: Linear → BatchNorm → ReLU → Dropout → Linear → (+skip)
-    \item Final: 256 → 2
-\end{itemize}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item Skip connections enable deeper networks without vanishing gradients
-    \item Tests whether residual learning benefits tabular data
-    \item Originally designed for computer vision (ResNet)
-    \item 418,306 parameters (6.6x more than Deep MLP)
-    \item Hypothesis: May capture hierarchical feature interactions
-\end{itemize}
-
-\subsection{Attention Net}
-
-\textbf{Architecture}:
-\begin{itemize}
-    \item Input → Initial embedding (75 → 256)
-    \item 2 multi-head self-attention blocks (4 heads each)
-    \item Each block: MultiHeadAttention → LayerNorm → Feedforward → LayerNorm
-    \item Final: 256 → 2
-\end{itemize}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item Multi-head attention captures feature interactions dynamically
-    \item Tests whether attention mechanisms benefit unordered tabular data
-    \item Successful in NLP (Transformers) and vision (ViT)
-    \item 1,599,490 parameters (25x more than Deep MLP)
-    \item Hypothesis: May learn which feature combinations matter
-\end{itemize}
-
-\subsection{Wide \& Deep}
-
-\textbf{Architecture}:
-\begin{itemize}
-    \item Wide path: Direct linear connection (75 → 2)
-    \item Deep path: 75 → 256 → 128 → 64 → 2
-    \item Concatenate outputs → Final prediction
-\end{itemize}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item Combines memorization (wide) and generalization (deep)
-    \item Originally designed for recommendation systems (Google)
-    \item Wide path captures direct feature effects
-    \item Deep path learns complex interactions
-    \item 60,890 parameters (similar to Simple MLP)
-    \item Tests whether hybrid approach improves tabular performance
-\end{itemize}
-
-\subsection{FT-Transformer}
-
-\textbf{Architecture}:
-\begin{itemize}
-    \item Per-feature linear embeddings (75 features → 75 × 64-dim tokens)
-    \item 3 Transformer encoder blocks (8 attention heads each)
-    \item Global average pooling across tokens
-    \item Final: 64 → 2
-\end{itemize}
-
-\textbf{Selection Rationale}:
-\begin{itemize}
-    \item State-of-the-art Transformer for tabular data (2021)
-    \item Feature Tokenizer treats each feature as separate token
-    \item Self-attention learns feature interactions
-    \item Most parameter-efficient: 38,722 parameters
-    \item Expected to be top DL performer for tabular data
-\end{itemize}
-
-\begin{table}[h]
-\centering
-\caption{DL Architectures: Configuration and Complexity}
-\label{tab:dl_architectures_full}
-\begin{tabular}{|l|p{6cm}|r|}
-\hline
-\textbf{Model} & \textbf{Architecture Details} & \textbf{Parameters} \\
-\hline
-Simple MLP & 75→256→128→64→32→2, ReLU, Dropout(0.3) & 60,738 \\
-Deep MLP & 75→256→128→64→32→2, BatchNorm, ReLU, Dropout(0.3) & 63,714 \\
-Residual Net & 3 residual blocks (256-dim), skip connections & 418,306 \\
-Attention Net & 2 attention blocks, 4 heads each, LayerNorm & 1,599,490 \\
-Wide \& Deep & Wide (75→2) + Deep (75→256→128→64→2) & 60,890 \\
-FT-Transformer & Per-feature tokens, 3 encoder blocks, 8 heads & 38,722 \\
-\hline
-\end{tabular}
-\end{table}
-
-\section{Deep Learning Training Methodology}
-
-\subsection{Framework and Hardware}
-
-\textbf{Framework}: PyTorch 2.5.1
-\begin{itemize}
-    \item Automatic differentiation for gradient computation
-    \item GPU acceleration via Apple MPS (Metal Performance Shaders)
-    \item Dynamic computation graphs for flexibility
-\end{itemize}
-
-\textbf{Hardware}: Apple MacBook Pro M4
-\begin{itemize}
-    \item 16GB unified memory
-    \item MPS device provides 3-5x speedup over CPU
-    \item macOS Sequoia 15.2
-\end{itemize}
+\section{Data Preprocessing}
+
+\textbf{Imputation}: Mean for 47 numerical features, mode for 28 categorical features.
+
+\textbf{Encoding}: LabelEncoder for all categorical features (avoids dimensionality explosion from one-hot with 1,000+ categories).
+
+\textbf{Scaling}: StandardScaler for numerical features: $z = \frac{x - \mu}{\sigma}$. Required for neural networks and distance-based methods.
+
+\textbf{Split}: Stratified 80/20 (80K train, 20K validation), seed=42, maintains 50.52\% class distribution.
+
+\section{Machine Learning Models}
+
+Seven algorithms representing diverse paradigms:
+
+\textbf{Decision Tree}: Baseline for tree methods, interpretable, handles mixed types. \textit{Hyperparameters}: max\_depth=10, min\_samples\_split=5, min\_samples\_leaf=2.
+
+\textbf{Random Forest}: Ensemble with bootstrap sampling, reduces overfitting. \textit{Hyperparameters}: n\_estimators=100, max\_depth=20.
+
+\textbf{LightGBM}: State-of-the-art gradient boosting, sequential error correction, histogram-based splits, expected top performer. \textit{Hyperparameters}: n\_estimators=200, learning\_rate=0.1, max\_depth=5, subsample=0.6, reg\_alpha=1.0, reg\_lambda=0.75.
+
+\textbf{Naive Bayes}: Probabilistic baseline testing independence assumption with weak correlations. \textit{Hyperparameters}: var\_smoothing=1e-9.
+
+\textbf{Logistic Regression}: Linear model baseline. \textit{Hyperparameters}: C=1.0, solver='liblinear', max\_iter=1000.
+
+\textbf{AdaBoost}: Alternative boosting with adaptive re-weighting. \textit{Hyperparameters}: n\_estimators=200, learning\_rate=1.0.
+
+\textbf{SGD Classifier}: Stochastic gradient descent, stress test. \textit{Hyperparameters}: loss='log\_loss', penalty='elasticnet', alpha=0.001.
+
+\section{Deep Learning Models}
+
+Six PyTorch architectures (38K-1.6M parameters):
+
+\textbf{Simple MLP} (60,738 params): 75→256→128→64→32→2, ReLU, Dropout(0.3). Baseline feedforward network.
+
+\textbf{Deep MLP} (63,714 params): Same architecture + BatchNorm after each layer. Expected best DL model.
+
+\textbf{Residual Net} (418,306 params): 3 residual blocks with skip connections (256-dim). Tests hierarchical learning.
+
+\textbf{Attention Net} (1,599,490 params): 2 multi-head self-attention blocks (4 heads), LayerNorm. Tests feature interaction learning.
+
+\textbf{Wide \& Deep} (60,890 params): Wide (75→2) + Deep (75→256→128→64→2) paths. Combines memorization and generalization.
+
+\textbf{FT-Transformer} (38,722 params): Per-feature tokens (75×64-dim), 3 encoder blocks (8 heads). State-of-the-art tabular architecture.
 
 \subsection{Training Configuration}
 
-\textbf{Optimizer}: AdamW (Adam with weight decay)
-\begin{itemize}
-    \item Learning rate: 0.001 (default Adam)
-    \item Weight decay: 1e-5 (L2 regularization)
-    \item Beta parameters: (0.9, 0.999)
-    \item Epsilon: 1e-8
-\end{itemize}
+PyTorch 2.5.1 on Apple M4 with MPS GPU (3-5x speedup). AdamW optimizer (lr=0.001, weight\_decay=1e-5), CrossEntropyLoss, batch size=512 (156 train batches, 39 val batches per epoch).
 
-\textbf{Loss Function}: CrossEntropyLoss
-\begin{itemize}
-    \item Combines log-softmax and negative log-likelihood
-    \item Standard for multi-class classification
-    \item Numerically stable implementation
-\end{itemize}
+\textbf{Training}: Max 100 epochs with early stopping (patience=15 on validation accuracy). ReduceLROnPlateau scheduler (factor=0.5, patience=5). Save best checkpoint, load for final evaluation.
 
-\textbf{Batch Size}: 512
-\begin{itemize}
-    \item Balances training speed and gradient noise
-    \item 80,000 / 512 = 156 batches per epoch (training)
-    \item 20,000 / 512 = 39 batches (validation)
-\end{itemize}
+\textbf{Regularization}: Dropout(0.3), BatchNorm, weight decay (1e-5), early stopping.
 
-\textbf{Dropout Rate}: 0.3
-\begin{itemize}
-    \item Applied after each hidden layer activation
-    \item Prevents co-adaptation of neurons
-    \item Standard regularization for overfitting prevention
-\end{itemize}
+\textbf{Metrics}: Accuracy (primary), F1-score, precision, recall. Seeds fixed (42) for reproducibility.
 
-\subsection{Training Procedure}
-
-Standardized protocol for all 6 DL models:
-
-\begin{enumerate}
-    \item \textbf{Initialization}: Random weights (PyTorch defaults), seed=42
-    \item \textbf{Training Loop} (max 100 epochs):
-    \begin{itemize}
-        \item Forward pass: Model predictions
-        \item Compute CrossEntropyLoss
-        \item Backward pass: Gradients via autograd
-        \item AdamW optimizer step: Update weights
-    \end{itemize}
-    \item \textbf{Validation} (no gradients):
-    \begin{itemize}
-        \item Compute accuracy, F1-score, precision, recall
-        \item Track validation loss for scheduler/early stopping
-    \end{itemize}
-    \item \textbf{Learning Rate Scheduler}: ReduceLROnPlateau
-    \begin{itemize}
-        \item Monitor: Validation loss
-        \item Patience: 5 epochs without improvement
-        \item Factor: 0.5 (halve learning rate)
-        \item Minimum LR: 1e-6
-    \end{itemize}
-    \item \textbf{Early Stopping}:
-    \begin{itemize}
-        \item Monitor: Validation accuracy
-        \item Patience: 15 epochs without improvement
-        \item Save best model checkpoint
-        \item Stop training if no progress
-    \end{itemize}
-    \item \textbf{Final Evaluation}: Load best checkpoint, report best validation metrics
-\end{enumerate}
-
-\subsection{Regularization Strategy}
-
-Multiple regularization techniques prevent overfitting:
-\begin{itemize}
-    \item \textbf{Dropout (0.3)}: Random neuron deactivation during training
-    \item \textbf{Batch Normalization}: Reduces internal covariate shift
-    \item \textbf{Weight Decay (1e-5)}: L2 penalty in optimizer
-    \item \textbf{Early Stopping}: Terminates before overfit
-    \item \textbf{Learning Rate Scheduling}: Adaptive fine-tuning
-\end{itemize}
-
-\section{Evaluation Metrics}
-
-All models (ML + DL) evaluated using identical metrics:
-
-\subsection{Primary Metrics}
-
-\textbf{Accuracy}:
-\begin{equation}
-\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
-\end{equation}
-Valid primary metric due to balanced classes (50.52\% vs. 49.48\%).
-
-\textbf{F1-Score}:
-\begin{equation}
-F1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
-\end{equation}
-Harmonic mean balances precision and recall.
-
-\subsection{Secondary Metrics}
-
-\textbf{Precision}:
-\begin{equation}
-\text{Precision} = \frac{TP}{TP + FP}
-\end{equation}
-Proportion of predicted malware that is truly malware (false positive rate).
-
-\textbf{Recall}:
-\begin{equation}
-\text{Recall} = \frac{TP}{TP + FN}
-\end{equation}
-Proportion of actual malware correctly identified (false negative rate).
-
-\section{Reproducibility and Experimental Control}
-
-\subsection{Random Seed Control}
-Fixed seed (42) for all random operations:
-\begin{itemize}
-    \item Python: \texttt{random.seed(42)}
-    \item NumPy: \texttt{np.random.seed(42)}
-    \item PyTorch: \texttt{torch.manual\_seed(42)}
-    \item scikit-learn: \texttt{random\_state=42}
-\end{itemize}
-
-\subsection{Deterministic Operations}
-\begin{itemize}
-    \item PyTorch: \texttt{torch.use\_deterministic\_algorithms(True)} where possible
-    \item Stratified split ensures identical train/val sets
-    \item Preprocessing pipeline applied consistently
-\end{itemize}
-
-\subsection{Model Persistence}
-\begin{itemize}
-    \item ML models: Joblib serialization with timestamps
-    \item DL models: PyTorch checkpoints (.pth) with timestamps
-    \item Results: JSON logging in \texttt{model\_performance.json}
-\end{itemize}
-
-\subsection{Version Control}
-\begin{itemize}
-    \item Git repository tracking all code changes
-    \item Centralized CONFIG dictionary for hyperparameters
-    \item Environment: Python 3.11, scikit-learn 1.5.2, LightGBM 4.5.0, PyTorch 2.5.1
-\end{itemize}
-
-\section{Summary}
-
-This chapter detailed the experimental methodology for comparing 7 ML and 6 DL models:
-
-\textbf{Preprocessing}: Mean/mode imputation → LabelEncoder for categories → StandardScaler for numericals → 80/20 stratified split
-
-\textbf{ML Selection}: Decision Tree (baseline), Random Forest (ensemble), LightGBM (state-of-the-art boosting, expected winner), Naive Bayes (probabilistic), Logistic Regression (linear), AdaBoost (alternative boosting), SGD (online learning)
-
-\textbf{DL Selection}: Simple MLP (baseline), Deep MLP (BatchNorm, expected best DL), Residual Net (skip connections), Attention Net (self-attention), Wide\&Deep (hybrid), FT-Transformer (state-of-the-art tabular)
-
-\textbf{DL Training}: PyTorch 2.5.1, AdamW optimizer, batch size 512, dropout 0.3, early stopping (patience=15), learning rate scheduling, MPS GPU acceleration
-
-\textbf{Evaluation}: Accuracy (primary), F1-score, precision, recall on 20K validation set
-
-All models trained on identical data with reproducible random seeds (42). Next chapter presents results and comparative analysis.
+All models trained on identical preprocessed data enabling fair ML vs. DL comparison.

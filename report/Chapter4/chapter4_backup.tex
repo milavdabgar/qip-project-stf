@@ -1,0 +1,496 @@
+% chapter4.tex
+
+\chapter{Experimental Results and Discussion}
+
+All 13 models (7 ML + 6 DL) were trained on identical preprocessed data (80,000 training, 20,000 validation samples) enabling systematic comparison.
+
+\section{Machine Learning Results}
+
+Table~\ref{tab:ml_results} summarizes ML model performance.
+
+\begin{table}[h]
+\centering
+\caption{ML Models: Performance Metrics}
+\label{tab:ml_results}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\textbf{Model} & \textbf{Train Acc} & \textbf{Val Acc} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\hline
+\textbf{LightGBM} & \textbf{67.15\%} & \textbf{62.94\%} & \textbf{0.6299} & \textbf{0.6294} & \textbf{0.6286} \\
+Random Forest & 92.54\% & 62.09\% & 0.6222 & 0.6209 & 0.6192 \\
+AdaBoost & 61.11\% & 61.26\% & 0.6143 & 0.6126 & 0.6104 \\
+Decision Tree & 63.52\% & 60.10\% & 0.6025 & 0.6010 & 0.5986 \\
+Logistic Reg. & 59.72\% & 60.07\% & 0.6017 & 0.6007 & 0.5988 \\
+Naive Bayes & 55.36\% & 55.06\% & 0.5792 & 0.5506 & 0.4996 \\
+SGD & 49.50\% & 49.46\% & 0.4644 & 0.4946 & 0.3283 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Key ML Findings}
+
+\textbf{LightGBM (Best ML - 62.94\%)}: Gradient boosting with L1/L2 regularization (200 trees, lr=0.1, max\_depth=5) achieved best performance. Minimal train-validation gap (4.21\%) indicates good generalization. Balanced precision/recall shows no class bias.
+
+\textbf{Why LightGBM Excels}: Sequential error correction, histogram-based splitting for high-dimensional data, leaf-wise growth captures interactions, handles mixed feature types natively, robust to noise.
+
+\textbf{Random Forest (62.09\%)}: Strong ensemble but severe overfitting (92.54\% train vs. 62.09\% val = 30.45\% gap). Bootstrap sampling limits learning capacity compared to boosting.
+
+\textbf{AdaBoost (61.26\%)}: Minimal overfitting (61.11\% train vs. 61.26\% val) shows good regularization. Adaptive weighting on misclassified examples.
+
+\textbf{Linear Models (60\%)}: Decision Tree, Logistic Regression cluster around 60\%, representing performance ceiling for linear/simple non-linear models on weakly correlated features.
+
+\section{Deep Learning Results}
+
+Six neural network architectures were implemented from scratch using PyTorch and trained with identical hyperparameters for fair comparison. All models were trained for up to 100 epochs with early stopping (patience=15) on Apple MPS GPU.
+
+\begin{table}[h]
+\centering
+\caption{Deep Learning Models: Comprehensive Performance Metrics}
+\label{tab:dl_results}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Model} & \textbf{Parameters} & \textbf{Val Acc} & \textbf{Best Val Loss} & \textbf{F1-Score} \\
+\hline
+\textbf{Deep MLP} & \textbf{63,714} & \textbf{61.79\%} & \textbf{0.6537} & \textbf{0.6130} \\
+Residual Net & 418,306 & 61.62\% & 0.6545 & 0.6102 \\
+Simple MLP & 60,738 & 61.61\% & 0.6535 & 0.6109 \\
+Wide \& Deep & 60,890 & 61.52\% & 0.6541 & 0.6126 \\
+Attention Net & 1,599,490 & 61.45\% & 0.6551 & 0.6118 \\
+FT-Transformer & 38,722 & 61.45\% & 0.6545 & 0.6133 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Deep MLP: Best Deep Learning Model}
+
+Deep MLP achieved the highest validation accuracy among all DL models at 61.79\%, with an F1-score of 0.6130.
+
+\subsubsection{Architecture Details}
+\begin{itemize}
+    \item \textbf{Input Layer}: 75 features
+    \item \textbf{Hidden Layers}: 256 → 128 → 64 → 32 neurons
+    \item \textbf{Batch Normalization}: After each linear layer
+    \item \textbf{Activation}: ReLU
+    \item \textbf{Dropout}: 0.3 after each activation
+    \item \textbf{Output}: 2 classes (softmax)
+    \item \textbf{Total Parameters}: 63,714
+\end{itemize}
+
+\subsubsection{Training Configuration}
+\begin{itemize}
+    \item Optimizer: AdamW (lr=0.001, weight\_decay=1e-5)
+    \item Loss: CrossEntropyLoss
+    \item Batch size: 512
+    \item Scheduler: ReduceLROnPlateau (factor=0.5, patience=5)
+    \item Early stopping: patience=15
+    \item Device: Apple MPS (GPU)
+\end{itemize}
+
+\subsubsection{Performance Analysis}
+
+\begin{enumerate}
+    \item \textbf{Training Dynamics}:
+    \begin{itemize}
+        \item Converged after approximately 40-50 epochs
+        \item Early stopping triggered before 100 epochs
+        \item Smooth convergence without significant oscillations
+        \item Training loss decreased steadily while validation loss plateaued
+    \end{itemize}
+    
+    \item \textbf{Best Validation Loss}: 0.6537 achieved during training, with final accuracy of 61.79\%
+    
+    \item \textbf{Regularization Effectiveness}:
+    \begin{itemize}
+        \item Batch normalization stabilized training
+        \item Dropout (0.3) prevented overfitting
+        \item Weight decay (1e-5) provided mild L2 regularization
+    \end{itemize}
+    
+    \item \textbf{Why Deep MLP Performs Best Among DL}:
+    \begin{itemize}
+        \item Batch normalization improves gradient flow and accelerates convergence
+        \item Four hidden layers provide sufficient depth for feature interactions
+        \item 63K parameters balance expressiveness and overfitting risk
+        \item Dropout effectively regularizes without excessive capacity reduction
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Residual Network: Skip Connections}
+
+Residual Network achieved 61.62\% validation accuracy with 418,306 parameters.
+
+\subsubsection{Architecture}
+\begin{itemize}
+    \item Input projection to 256 dimensions
+    \item 3 residual blocks with skip connections
+    \item Each block: Linear → BatchNorm → ReLU → Dropout → Linear → BatchNorm
+    \item Residual connection: output = block(x) + x
+    \item Total parameters: 418,306 (6.6x more than Deep MLP)
+\end{itemize}
+
+\subsubsection{Analysis}
+
+\textbf{Strengths}:
+\begin{itemize}
+    \item Skip connections enable gradient flow through deep architecture
+    \item Residual learning: each block learns residual function rather than full mapping
+    \item Helps prevent vanishing gradients
+\end{itemize}
+
+\textbf{Surprising Finding}:
+\begin{itemize}
+    \item Despite 6.6x more parameters (418K vs. 63K), only 0.17\% worse than Deep MLP
+    \item Suggests that for this tabular dataset, additional model capacity doesn't translate to better performance
+    \item Performance plateau indicates dataset limitations rather than model limitations
+\end{itemize}
+
+\subsection{Simple MLP: Baseline Neural Network}
+
+Simple MLP achieved 61.61\% validation accuracy with 60,738 parameters—only 0.18\% below Deep MLP despite lacking batch normalization.
+
+\subsubsection{Architecture}
+\begin{itemize}
+    \item Same layer structure as Deep MLP: 256 → 128 → 64 → 32
+    \item \textbf{No batch normalization} (only difference from Deep MLP)
+    \item ReLU activation with Dropout (0.3)
+    \item Total parameters: 60,738
+\end{itemize}
+
+\subsubsection{Analysis}
+
+\textbf{Key Insight}: The near-identical performance (61.61\% vs. 61.79\%) despite lacking batch normalization suggests:
+\begin{itemize}
+    \item Batch normalization provides minimal advantage for this particular dataset
+    \item The performance ceiling (~62\% for DL) is primarily dataset-imposed, not architecture-imposed
+    \item Simpler architectures are sufficient when data quality is the limiting factor
+\end{itemize}
+
+\subsection{Wide \& Deep: Combined Architecture}
+
+Wide \& Deep achieved 61.52\% validation accuracy with 60,890 parameters.
+
+\subsubsection{Architecture}
+\begin{itemize}
+    \item \textbf{Wide component}: Direct input → output (memorization)
+    \item \textbf{Deep component}: 256 → 128 → 64 pathway (generalization)
+    \item Concatenation of wide and deep outputs
+    \item Final layer combines both paths for classification
+\end{itemize}
+
+\subsubsection{Analysis}
+
+Wide \& Deep was designed for recommendation systems where:
+\begin{itemize}
+    \item Wide path memorizes sparse, specific feature interactions
+    \item Deep path generalizes through feature embeddings
+\end{itemize}
+
+\textbf{Why it doesn't excel here}:
+\begin{itemize}
+    \item Tabular cybersecurity data lacks the sparse, high-cardinality categorical features (like user IDs, item IDs) that Wide \& Deep was designed for
+    \item Our features are more homogeneous and dense
+    \item Direct linear connections (wide path) provide no advantage when feature correlations are already weak
+\end{itemize}
+
+\subsection{Attention Network: Multi-Head Self-Attention}
+
+Attention Network achieved 61.45\% with a massive 1,599,490 parameters—the largest model.
+
+\subsubsection{Architecture}
+\begin{itemize}
+    \item Input projection to 256 dimensions
+    \item 2 attention blocks with 4 heads each
+    \item Each block: Multi-head attention → Layer norm → FFN → Layer norm
+    \item Skip connections around attention and FFN
+    \item Total parameters: 1,599,490 (25x more than Deep MLP!)
+\end{itemize}
+
+\subsubsection{Analysis}
+
+\textbf{Critical Finding}:
+\begin{itemize}
+    \item Despite 25x more parameters, performs 0.34\% worse than Deep MLP
+    \item Attention mechanisms excel at sequential data (text, time series) where positional relationships matter
+    \item For tabular data, feature relationships are not inherently sequential or positional
+    \item Self-attention's strength—capturing long-range dependencies in sequences—is irrelevant for unordered feature vectors
+\end{itemize}
+
+\textbf{Overfitting Risk}:
+\begin{itemize}
+    \item 1.6M parameters on 80K samples = 20 samples per parameter
+    \item Severe overfitting risk mitigated by dropout and early stopping
+    \item Model complexity far exceeds data complexity
+\end{itemize}
+
+\subsection{FT-Transformer: State-of-the-Art for Tabular Data}
+
+FT-Transformer (Feature Tokenizer Transformer) achieved 61.45\% with only 38,722 parameters—the most parameter-efficient model.
+
+\subsubsection{Architecture}
+\begin{itemize}
+    \item \textbf{Feature Tokenization}: Each feature → learnable 192-dim token
+    \item \textbf{CLS Token}: Prepended for classification (BERT-style)
+    \item \textbf{3 Transformer Blocks}: 8-head attention + FFN (4x expansion)
+    \item Classification head on CLS token output
+    \item Total parameters: 38,722 (smallest model!)
+\end{itemize}
+
+\subsubsection{Analysis}
+
+\textbf{Remarkable Efficiency}:
+\begin{itemize}
+    \item Achieves 61.45\% with only 38K parameters (vs. 1.6M for Attention Net)
+    \item F1-score of 0.6133 is second-best among DL models
+    \item Feature tokenization is a clever way to handle heterogeneous tabular features
+\end{itemize}
+
+\textbf{Why FT-Transformer is Promising}:
+\begin{itemize}
+    \item Designed specifically for tabular data (unlike vanilla transformers)
+    \item Treats each feature as a token with learned embedding
+    \item CLS token aggregates information for classification
+    \item Inspired by BERT's success in NLP but adapted for tabular data
+\end{itemize}
+
+\textbf{Limitation in This Study}:
+\begin{itemize}
+    \item May require longer training (100+ epochs) to reach full potential
+    \item Hardware/time constraints limited exploration
+    \item Future work could explore larger d\_token, more blocks, extended training
+\end{itemize}
+
+\subsection{Deep Learning Summary}
+
+\begin{table}[h]
+\centering
+\caption{DL Models Ranked by Validation Accuracy and Efficiency}
+\label{tab:dl_ranking}
+\begin{tabular}{|r|l|c|c|c|}
+\hline
+\textbf{Rank} & \textbf{Model} & \textbf{Val Acc} & \textbf{Parameters} & \textbf{Param Efficiency} \\
+\hline
+1 & Deep MLP & 61.79\% & 63,714 & 9.70e-4 acc/param \\
+2 & Residual Net & 61.62\% & 418,306 & 1.47e-4 acc/param \\
+3 & Simple MLP & 61.61\% & 60,738 & 1.01e-3 acc/param \\
+4 & Wide \& Deep & 61.52\% & 60,890 & 1.01e-3 acc/param \\
+5 & Attention Net & 61.45\% & 1,599,490 & 3.84e-5 acc/param \\
+6 & FT-Transformer & 61.45\% & 38,722 & 1.59e-3 acc/param \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Key Findings}:
+\begin{enumerate}
+    \item \textbf{All DL models cluster around 61.5\%}: Only 0.34\% spread from best to worst
+    \item \textbf{Architecture matters little}: 25x parameter difference yields only 0.34\% accuracy difference
+    \item \textbf{Dataset-limited performance}: DL models hit a ceiling imposed by weak feature correlations
+    \item \textbf{FT-Transformer is most efficient}: Best accuracy-per-parameter ratio despite being smallest
+    \item \textbf{Simple MLP nearly matches complex architectures}: Suggests over-engineering is unnecessary
+\end{enumerate}
+
+\section{Machine Learning vs. Deep Learning Comparison}
+
+\subsection{Performance Gap Analysis}
+
+\begin{table}[h]
+\centering
+\caption{Best ML vs. Best DL: Head-to-Head Comparison}
+\label{tab:ml_vs_dl}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Metric} & \textbf{LightGBM (ML)} & \textbf{Deep MLP (DL)} & \textbf{Difference} \\
+\hline
+Validation Accuracy & 62.94\% & 61.79\% & +1.15\% \\
+F1-Score & 0.6286 & 0.6130 & +0.0156 \\
+Precision & 0.6299 & 0.6133 & +0.0166 \\
+Recall & 0.6294 & 0.6135 & +0.0159 \\
+Training Time & ~2 minutes & ~8 minutes & 4x faster \\
+Parameters & Tree-based & 63,714 & -- \\
+Inference Speed & Very fast & Fast & ML faster \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Why ML Outperforms DL}
+
+\begin{enumerate}
+    \item \textbf{Tabular Data Characteristics}:
+    \begin{itemize}
+        \item Features are heterogeneous (mixed types, scales, meanings)
+        \item No spatial or temporal structure to exploit
+        \item Tree-based models naturally handle mixed types
+        \item Neural networks require careful preprocessing and struggle with heterogeneity
+    \end{itemize}
+    
+    \item \textbf{Sample Size vs. Complexity}:
+    \begin{itemize}
+        \item 80,000 samples is moderate—not "big data"
+        \item Tree ensembles work well with moderate data
+        \item Deep learning often needs millions of samples to excel
+        \item Parameter efficiency: LightGBM achieves more with less
+    \end{itemize}
+    
+    \item \textbf{Feature Interactions}:
+    \begin{itemize}
+        \item Tree splits naturally capture feature interactions
+        \item Gradient boosting sequentially corrects errors
+        \item Neural networks must learn interactions through multiple layers
+        \item Weak correlations make interaction learning difficult for NNs
+    \end{itemize}
+    
+    \item \textbf{Inductive Bias}:
+    \begin{itemize}
+        \item Tree-based models have strong inductive bias for tabular data
+        \item Decision boundaries align well with feature-based rules
+        \item Neural networks have weak inductive bias—require more data to learn structure
+    \end{itemize}
+    
+    \item \textbf{Robustness}:
+    \begin{itemize}
+        \item Trees are robust to outliers and noise
+        \item Don't require feature scaling
+        \item Handle missing values natively
+        \item Less sensitive to hyperparameters
+    \end{itemize}
+\end{enumerate}
+
+\subsection{When Would DL Potentially Excel?}
+
+Deep learning might outperform ML if:
+\begin{itemize}
+    \item Dataset had 1M+ samples
+    \item Features exhibited clear hierarchical structure
+    \item Richer feature interactions existed (higher correlations)
+    \item Transfer learning from similar domains was available
+    \item Real-time feature learning from raw bytes was needed
+\end{itemize}
+
+For this dataset, none of these conditions apply.
+
+\subsection{Practical Implications}
+
+\begin{table}[h]
+\centering
+\caption{Practical Considerations: ML vs. DL for Production}
+\label{tab:practical_comparison}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Criterion} & \textbf{Machine Learning} & \textbf{Deep Learning} \\
+\hline
+Accuracy & \textbf{62.94\% (Better)} & 61.79\% \\
+Training Time & \textbf{2 min (4x Faster)} & 8 min \\
+Inference Speed & \textbf{Very Fast} & Fast \\
+Interpretability & \textbf{High (feature importance)} & Low \\
+Deployment Complexity & \textbf{Simple (joblib)} & Complex (PyTorch) \\
+Hardware Requirements & \textbf{CPU Sufficient} & GPU Preferred \\
+Memory Usage & \textbf{Low} & Moderate \\
+Hyperparameter Sensitivity & \textbf{Low} & High \\
+Maintenance Burden & \textbf{Low} & High \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Recommendation}: For this application, LightGBM is the clear choice for production deployment due to superior accuracy, faster training, simpler deployment, and better interpretability.
+
+\section{Comparison with Kaggle Leaderboard}
+
+\subsection{Performance Context}
+
+\begin{itemize}
+    \item \textbf{Our Best Model (LightGBM)}: 62.94\%
+    \item \textbf{Kaggle Top Score}: 69.6\%
+    \item \textbf{Gap}: 6.66\%
+\end{itemize}
+
+\subsection{Analysis of the Gap}
+
+\begin{enumerate}
+    \item \textbf{Feature Engineering}:
+    \begin{itemize}
+        \item Top submissions likely employed extensive domain-specific feature engineering
+        \item Interaction terms, polynomial features, domain transformations
+        \item Our approach focused on model comparison rather than maximum performance
+    \end{itemize}
+    
+    \item \textbf{Ensemble Methods}:
+    \begin{itemize}
+        \item Top scores often result from ensembles of multiple models
+        \item Stacking, blending, voting ensembles of LightGBM, XGBoost, CatBoost
+        \item Our study evaluated individual models for fair comparison
+    \end{itemize}
+    
+    \item \textbf{Hyperparameter Tuning}:
+    \begin{itemize}
+        \item Extensive grid search across thousands of configurations
+        \item Bayesian optimization for hyperparameter selection
+        \item Our tuning was limited by computational budget
+    \end{itemize}
+    
+    \item \textbf{Data Augmentation}:
+    \begin{itemize}
+        \item Advanced imputation strategies (KNN, iterative)
+        \item Synthetic sample generation (SMOTE variants)
+        \item Careful handling of rare categories
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Performance Ceiling}
+
+The weak feature correlations (max 0.118) establish a theoretical performance ceiling. The 69.6\% top score suggests:
+\begin{itemize}
+    \item Even extensive engineering yields only 6.66\% improvement over our baseline
+    \item An approximate 30\% irreducible error rate exists
+    \item Further improvements would require additional features or external data sources
+\end{itemize}
+
+\section{Summary of Findings}
+
+\subsection{Key Results}
+
+\begin{enumerate}
+    \item \textbf{Best Overall Model}: LightGBM at 62.94\% validation accuracy
+    \item \textbf{Best DL Model}: Deep MLP at 61.79\% validation accuracy
+    \item \textbf{ML vs. DL Gap}: 1.15\% in favor of ML
+    \item \textbf{DL Model Consistency}: All DL models cluster around 61.5\% (only 0.34\% spread)
+    \item \textbf{ML Model Variability}: 13.48\% spread from best (LightGBM 62.94\%) to worst (SGD 49.46\%)
+\end{enumerate}
+
+\subsection{Research Questions Answered}
+
+\begin{enumerate}
+    \item \textbf{How do ML and DL compare on tabular cybersecurity data?}
+    
+    ML outperforms DL by 1.15\%, with LightGBM achieving 62.94\% vs. Deep MLP's 61.79\%. Tree-based gradient boosting maintains superiority over neural networks for structured, tabular data with moderate sample sizes.
+    
+    \item \textbf{Which preprocessing and feature engineering strategies are most effective?}
+    
+    Mean/mode imputation, label encoding for categorical features, and standard scaling for numerical features proved effective. Feature selection and dimensionality reduction (PCA) did not improve performance, suggesting that all features contain relevant information despite weak individual correlations.
+    
+    \item \textbf{Can DL provide advantages over gradient boosting for this task?}
+    
+    No. Despite implementing six diverse architectures ranging from 38K to 1.6M parameters, including state-of-the-art transformers, all DL models plateaued around 61.5\%. The performance ceiling appears to be dataset-imposed rather than architecture-imposed.
+    
+    \item \textbf{What is the trade-off between model complexity and performance?}
+    
+    Increasing model complexity from 38K to 1.6M parameters (41x increase) yielded only 0.34\% accuracy improvement. This demonstrates sharply diminishing returns—simpler models are preferable given the minimal performance gains and increased computational costs.
+    
+    \item \textbf{How do different DL architectures compare?}
+    
+    All six architectures performed similarly (61.45\% to 61.79\%), suggesting that architecture choice matters little for this dataset. FT-Transformer showed promise as the most parameter-efficient model, while Attention Network's 1.6M parameters provided no advantage over the 63K-parameter Deep MLP.
+\end{enumerate}
+
+\subsection{Implications for Cybersecurity Applications}
+
+\begin{enumerate}
+    \item \textbf{Practitioners should prefer tree-based ensembles} (LightGBM, XGBoost, CatBoost) for tabular cybersecurity data
+    
+    \item \textbf{Deep learning is not a panacea}: DL's advantages in computer vision and NLP don't transfer to structured, tabular data with weak correlations
+    
+    \item \textbf{Model interpretability}: Tree-based models provide feature importance and decision rules, crucial for understanding threat patterns and building trust in security systems
+    
+    \item \textbf{Computational efficiency}: ML's 4x faster training and simpler deployment make it superior for production environments with limited resources
+    
+    \item \textbf{Data quality matters more than model sophistication}: The weak feature correlations impose a hard ceiling that even the most advanced architectures cannot overcome
+\end{enumerate}
+
+This chapter demonstrated through systematic experimentation that traditional machine learning, specifically gradient boosting with LightGBM, outperforms even sophisticated deep learning architectures for tabular malware prediction. The next chapter concludes the report with key takeaways, limitations, and future research directions.

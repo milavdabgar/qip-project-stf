@@ -1,79 +1,43 @@
-% conclusion.tex {Conclusion}
+% conclusion.tex
 
-\chapter{Conclusion}
+\chapter{Conclusion and Future Work}
 
-This project successfully developed a comprehensive machine learning system for malware threat prediction called the System Threat Forecaster. The system implements a complete data science pipeline encompassing data loading, preprocessing, feature engineering, model training, evaluation, and deployment-ready prediction capabilities.
+\section{Key Findings}
 
-\section{Key Contributions}
+LightGBM achieved 62.94\% accuracy, outperforming Deep MLP (61.79\%) by 1.15\%. All six DL architectures clustered within 0.34\% (61.45-61.79\%), demonstrating that complexity (38K-1.6M parameters) provides negligible benefit. ML trained 4x faster with simpler deployment and better interpretability.
 
-The major contributions of this work include:
+\textbf{Why ML Wins}: Tabular structure (no spatial/temporal patterns), moderate sample size (80K), weak correlations (max 0.118), heterogeneous types favor tree-based methods with strong inductive bias.
 
-\begin{enumerate}
-    \item \textbf{Comprehensive Model Comparison}: Systematic evaluation of seven different machine learning algorithms (Decision Tree, Random Forest, LightGBM, Naive Bayes, Logistic Regression, AdaBoost, and SGD) for malware detection, providing insights into their relative strengths and weaknesses.
-    
-    \item \textbf{Modular Pipeline Architecture}: Development of a flexible, configuration-driven pipeline that allows selective enabling/disabling of preprocessing steps, feature engineering, and model training, facilitating experimentation and customization.
-    
-    \item \textbf{Robust Preprocessing}: Implementation of comprehensive data preprocessing including missing value imputation, categorical encoding, feature scaling, feature engineering with interaction terms, and optional dimensionality reduction using PCA.
-    
-    \item \textbf{Automated Optimization}: Integration of hyperparameter tuning using RandomizedSearchCV for efficient exploration of parameter spaces and model optimization.
-    
-    \item \textbf{Production-Ready Implementation}: Creation of a maintainable codebase with model persistence, experiment logging, automated submission generation, and comprehensive visualization capabilities.
-    
-    \item \textbf{Superior Performance}: Achievement of 91.30\% accuracy using LightGBM, demonstrating competitive performance with existing literature while providing a more flexible and interpretable solution.
-\end{enumerate}
+\section{Contributions}
 
-\section{Practical Implications}
+Empirical evidence that gradient boosting outperforms sophisticated DL for tabular cybersecurity data. Clear decision criteria based on data characteristics. Reproducible framework with production deployment at \url{https://stf.milav.in}.
 
-The System Threat Forecaster has several practical implications for cybersecurity:
+\section{Practical Recommendations}
 
-\begin{itemize}
-    \item \textbf{Early Threat Detection}: Enables proactive identification of malware threats before they cause significant damage
-    \item \textbf{Scalability}: Efficient algorithms and modular design support deployment in large-scale environments
-    \item \textbf{Interpretability}: Feature importance analysis and model visualization help security analysts understand and trust predictions
-    \item \textbf{Flexibility}: Multiple model options allow organizations to choose algorithms balancing accuracy, speed, and interpretability based on their specific requirements
-    \item \textbf{Cost-Effectiveness}: Automated detection reduces manual analysis effort and enables faster incident response
-\end{itemize}
+Use tree ensembles (LightGBM/XGBoost) for tabular data with <1M samples, heterogeneous types, and weak correlations. Reserve DL for rich structured patterns with sufficient training data. Prioritize data quality over model sophistication.
 
 \section{Limitations}
 
-While the System Threat Forecaster demonstrates strong performance, several limitations should be acknowledged:
+Single dataset (weak correlations max 0.118), minimal feature engineering, individual models only (no ensembling), limited hyperparameter tuning due to compute constraints.
 
-\begin{itemize}
-    \item The system's effectiveness depends on the quality and representativeness of training data
-    \item Performance may degrade with emerging malware variants not represented in training data
-    \item Feature engineering is currently manual and could benefit from automated feature learning
-    \item The system requires periodic retraining to maintain effectiveness against evolving threats
-    \item Real-time performance optimization for large-scale deployment requires further investigation
-\end{itemize}
+\section{Future Work}
 
-\section{Future Scope}
+\textbf{Feature Engineering}: Interaction terms, polynomial features, domain transformations to approach Kaggle 69.6\% ceiling.
 
-Several directions for future work can extend and improve the System Threat Forecaster:
+\textbf{Ensembles}: Stack ML models (LightGBM + XGBoost + CatBoost), blend predictions.
 
-\begin{enumerate}
-    \item \textbf{Deep Learning Integration}: Incorporate neural network architectures such as Convolutional Neural Networks (CNNs) and Recurrent Neural Networks (RNNs) for automated feature learning and sequence modeling of system behavior.
-    
-    \item \textbf{Real-Time Deployment}: Develop real-time prediction capabilities with streaming data processing for immediate threat detection and response.
-    
-    \item \textbf{Ensemble Methods}: Combine predictions from multiple models using stacking or blending techniques to further improve accuracy.
-    
-    \item \textbf{Explainable AI}: Integrate advanced interpretability techniques such as SHAP (SHapley Additive exPlanations) and LIME (Local Interpretable Model-agnostic Explanations) to provide detailed explanations for individual predictions.
-    
-    \item \textbf{Active Learning}: Implement active learning strategies to efficiently identify and label informative samples, reducing annotation effort while improving model performance.
-    
-    \item \textbf{Multi-Class Classification}: Extend the binary classification to multi-class prediction, categorizing different types of malware threats.
-    
-    \item \textbf{Integration with Security Infrastructure}: Develop APIs and integration modules for seamless deployment within existing Security Information and Event Management (SIEM) systems.
-    
-    \item \textbf{Adversarial Robustness}: Investigate and improve model robustness against adversarial attacks designed to evade malware detection.
-    
-    \item \textbf{Transfer Learning}: Explore transfer learning approaches to leverage pre-trained models and adapt them to specific organizational contexts with limited labeled data.
-    
-    \item \textbf{Automated Feature Engineering}: Implement automated feature engineering techniques to discover optimal feature transformations without manual intervention.
-\end{enumerate}
+\textbf{Advanced DL}: TabNet, SAINT, NODE architectures; extended training (200+ epochs).
+
+\textbf{Explainability}: SHAP values, LIME analysis, feature importance visualization.
+
+\textbf{Cross-Domain}: Validate on network intrusion, phishing datasets.
+
+\textbf{Production}: Real-time API, monitoring, A/B testing, continuous learning.
 
 \section{Concluding Remarks}
 
-The System Threat Forecaster demonstrates the effectiveness of machine learning for malware threat prediction, achieving high accuracy while maintaining interpretability and flexibility. The modular architecture and comprehensive evaluation methodology provide a solid foundation for future enhancements and real-world deployment. As cyber threats continue to evolve, machine learning systems like the System Threat Forecaster will play an increasingly critical role in protecting digital infrastructure and maintaining cybersecurity resilience.
+This research conclusively demonstrates that traditional machine learning, specifically LightGBM, outperforms sophisticated deep learning architectures for tabular malware prediction by 1.15\%. The systematic evaluation of 13 diverse models reveals that when data quality imposes fundamental limitations (weak correlations, irreducible error), increasing model complexity from 38K to 1.6M parameters yields negligible improvement (0.34\%).
 
-The complete implementation of this project, including all code, experiments, and visualizations, is available as a Kaggle notebook~\cite{kaggle_stf_notebook}, which provides a reproducible and interactive environment for further exploration and experimentation. The project was developed as part of the System Threat Forecaster competition~\cite{kaggle_stf_competition} on the Kaggle platform.
+For practitioners: prioritize data quality over model sophistication. For tabular cybersecurity data with moderate sample sizes, tree-based ensembles provide superior accuracy, faster training, simpler deployment, and crucial interpretability. Deep learning's advantages in vision and NLP do not transfer to heterogeneous tabular data lacking spatial or temporal structure.
+
+The deployed web application at \url{https://stf.milav.in} demonstrates practical implementation, while the reproducible codebase and comprehensive documentation enable researchers to build upon this foundation. Future work should explore advanced feature engineering, model ensembles, and cross-domain validation to further establish the boundaries of ML and DL effectiveness for cybersecurity applications.

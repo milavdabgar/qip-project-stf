@@ -2,238 +2,47 @@
 
 \chapter{Dataset, Metadata, and Exploratory Data Analysis}
 
-\section{Dataset Source and Context}
+\section{Dataset Overview}
 
-The dataset originates from Microsoft's Malware Prediction competition hosted on Kaggle, containing real-world telemetry data from Windows machines worldwide. This dataset captures comprehensive system characteristics at the time of malware scanning, providing a realistic snapshot of computing environments in diverse organizational and personal settings.
+The dataset originates from Microsoft's Malware Prediction competition on Kaggle, containing real-world Windows system telemetry for binary classification: predicting malware presence (\texttt{HasDetections = 1}) or absence (\texttt{HasDetections = 0}).
 
-The dataset's primary objective is binary classification: predicting whether a system will exhibit malware detections (\texttt{HasDetections = 1}) or remain clean (\texttt{HasDetections = 0}). This formulation mirrors real-world cybersecurity scenarios where organizations must assess threat likelihood based on system configuration and behavioral patterns.
-
-\section{Dataset Metadata and Statistics}
-
-Table~\ref{tab:dataset_metadata} provides comprehensive metadata characterizing our experimental dataset.
+\section{Dataset Metadata}
 
 \begin{table}[h]
 \centering
-\caption{Dataset Metadata and Statistics}
+\caption{Dataset Metadata}
 \label{tab:dataset_metadata}
 \begin{tabular}{|l|r|}
 \hline
 \textbf{Property} & \textbf{Value} \\
 \hline
 Total Samples & 100,000 \\
-Training Samples & 80,000 (80\%) \\
-Validation Samples & 20,000 (20\%) \\
-Total Features & 75 \\
-Numerical Features & 47 (62.67\%) \\
-Categorical Features & 28 (37.33\%) \\
-Target Classes & 2 (Binary) \\
-Positive Class (Malware) & 50,520 (50.52\%) \\
-Negative Class (Clean) & 49,480 (49.48\%) \\
-Class Balance Ratio & 1.02:1 (nearly balanced) \\
-Missing Values & Present in multiple features (1-30\%) \\
+Train/Val Split & 80,000 / 20,000 (80/20\%) \\
+Features (Numerical/Categorical) & 75 (47/28) \\
+Target Classes & Binary (50.52\% malware, 49.48\% clean) \\
+Missing Values & 1-30\% in multiple features \\
 \hline
 \end{tabular}
 \end{table}
 
 \subsection{Feature Categories}
 
-The 75 features span multiple dimensions of system configuration:
-
-\begin{itemize}
-    \item \textbf{Hardware Configuration} (12 features): Processor type, RAM capacity, screen resolution, TPM version
-    \item \textbf{Operating System} (8 features): OS version, build number, platform, suite mask, service pack level
-    \item \textbf{Security Software} (6 features): Antivirus products, firewall settings, update status, detection counts
-    \item \textbf{System Settings} (15 features): UAC configuration, IE settings, census data, language preferences
-    \item \textbf{Installation and Update} (10 features): OS installation timestamps, update history, patch levels
-    \item \textbf{Behavioral Indicators} (24 features): Usage patterns, file access, network activity, application execution
-\end{itemize}
-
-The \textbf{target variable} \texttt{HasDetections} is binary:
-\begin{itemize}
-    \item 0: No malware detected (49.48\%)
-    \item 1: Malware detected (50.52\%)
-\end{itemize}
-
-\subsection{Data Types and Characteristics}
-
-\textbf{Numerical Features (47)}:
-\begin{itemize}
-    \item Continuous: RAM size, screen dimensions, timestamps
-    \item Discrete: Version numbers, counts, enumerated settings
-    \item Range: Highly variable (0-1M+ for some features)
-    \item Distribution: Mix of normal, skewed, and multimodal
-\end{itemize}
-
-\textbf{Categorical Features (28)}:
-\begin{itemize}
-    \item Nominal: Processor manufacturer, OS edition, antivirus vendor
-    \item Ordinal: OS platform hierarchy, security levels
-    \item Cardinality: 2 to 1,000+ unique values per feature
-    \item Encoding: String labels requiring numerical transformation
-\end{itemize}
+Features span hardware (12), OS (8), security software (6), system settings (15), installation/update (10), and behavioral indicators (24). The 47 numerical features include continuous (RAM, timestamps) and discrete (version numbers, counts) with highly variable ranges. The 28 categorical features have 2-1,000+ unique values requiring numerical encoding.
 
 \section{Exploratory Data Analysis}
 
-Exploratory Data Analysis (EDA) revealed critical insights shaping our modeling approach.
+\subsection{Key EDA Findings}
 
-\subsection{Feature-Target Correlation Analysis}
+\textbf{Weak Correlations}: Maximum feature-target correlation is only 0.118, indicating no single feature provides strong predictive power. This necessitates complex interaction modeling and establishes a performance ceiling around 63\%.
 
-Correlation analysis between features and the target variable \texttt{HasDetections} yielded surprising results:
+\textbf{Balanced Classes}: Near-perfect 50.52\% vs. 49.48\% split eliminates resampling needs and validates accuracy as primary metric.
 
-\begin{table}[h]
-\centering
-\caption{Top 10 Feature-Target Correlations}
-\label{tab:correlations}
-\begin{tabular}{|l|c|}
-\hline
-\textbf{Feature} & \textbf{Correlation with HasDetections} \\
-\hline
-Feature\_A & 0.118 \\
-Feature\_B & 0.092 \\
-Feature\_C & 0.086 \\
-Feature\_D & 0.074 \\
-Feature\_E & 0.068 \\
-Feature\_F & 0.062 \\
-Feature\_G & 0.055 \\
-Feature\_H & 0.048 \\
-Feature\_I & 0.041 \\
-Feature\_J & 0.037 \\
-\hline
-\end{tabular}
-\end{table}
+\subsection{Missing Values and Distributions}
 
-\textbf{Key Finding}: The maximum absolute correlation is only 0.118—extremely weak. This indicates:
-\begin{enumerate}
-    \item No single feature provides strong predictive power
-    \item Malware detection requires modeling complex multi-feature interactions
-    \item Linear models will struggle; ensemble and nonlinear methods are essential
-    \item Establishes a fundamental performance ceiling around 63\%
-\end{enumerate}
+Missing rates vary: 15-30\% (security software), 5-20\% (hardware), 1-10\% (settings). Imputation strategy: mean for numerical, mode for categorical.
 
-\subsection{Class Distribution Analysis}
+Numerical features show heavy-tailed, multimodal distributions requiring scaling. Categorical features have high cardinality (up to 1,000+ categories), necessitating label encoding. Feature-feature correlations are weak (max 0.42), indicating independence and justifying retention of all 75 features.
 
-The target variable exhibits near-perfect balance:
-\begin{itemize}
-    \item \textbf{Class 0 (Clean)}: 49,480 samples (49.48\%)
-    \item \textbf{Class 1 (Malware)}: 50,520 samples (50.52\%)
-    \item \textbf{Imbalance Ratio}: 1.02:1
-\end{itemize}
+\section{Modeling Implications}
 
-\textbf{Implications}:
-\begin{itemize}
-    \item No resampling (SMOTE/undersampling) required
-    \item Accuracy is a valid primary metric (not misleading)
-    \item Class weights unnecessary for most algorithms
-    \item Eliminates a common source of model bias
-\end{itemize}
-
-\subsection{Missing Value Analysis}
-
-Missing data patterns revealed systematic gaps:
-
-\begin{table}[h]
-\centering
-\caption{Features with Significant Missing Values}
-\label{tab:missing_values}
-\begin{tabular}{|l|c|c|}
-\hline
-\textbf{Feature Category} & \textbf{Missing \%} & \textbf{Count} \\
-\hline
-Security Software Features & 15-30\% & 6 features \\
-Hardware Configuration & 5-20\% & 8 features \\
-System Settings & 1-10\% & 12 features \\
-Behavioral Indicators & <5\% & 18 features \\
-\hline
-\end{tabular}
-\end{table}
-
-\textbf{Missing Data Strategy}:
-\begin{itemize}
-    \item \textbf{Numerical}: Mean imputation to preserve distribution characteristics
-    \item \textbf{Categorical}: Mode imputation to maintain dominant categories
-    \item \textbf{Rationale}: Simple methods appropriate for balanced classes and moderate missing rates
-\end{itemize}
-
-\subsection{Feature Distribution Characteristics}
-
-\textbf{Numerical Features}:
-\begin{itemize}
-    \item Heavy-tailed distributions (e.g., RAM size, disk space)
-    \item Multimodal patterns (e.g., OS version clusters)
-    \item Outliers present but informative (not errors)
-    \item Scaling essential due to vastly different ranges (1-1M+)
-\end{itemize}
-
-\textbf{Categorical Features}:
-\begin{itemize}
-    \item High cardinality (some features with 1,000+ categories)
-    \item Imbalanced category frequencies (dominant categories exist)
-    \item No ordinal relationships for most features
-    \item Label encoding preferred over one-hot to avoid dimensionality explosion
-\end{itemize}
-
-\subsection{Feature Interactions and Multicollinearity}
-
-Analysis of feature-feature correlations:
-\begin{itemize}
-    \item Maximum feature-feature correlation: 0.42 (moderate)
-    \item Most correlations < 0.3 (weak)
-    \item No severe multicollinearity issues
-    \item Feature independence suggests additive information
-    \item Justifies using all 75 features without dimensionality reduction
-\end{itemize}
-
-\section{Key EDA Insights and Modeling Implications}
-
-\subsection{Weak Individual Signals}
-
-The maximum feature-target correlation of 0.118 establishes that:
-\begin{itemize}
-    \item Malware detection is fundamentally a multi-factor problem
-    \item No simple decision rules based on single features will suffice
-    \item Models must capture complex, nonlinear feature interactions
-    \item Expected performance ceiling around 63-65\% based on signal strength
-\end{itemize}
-
-\subsection{High Dimensionality with Weak Correlations}
-
-75 features with weak individual correlations create challenges:
-\begin{itemize}
-    \item Curse of dimensionality affects distance-based methods (KNN, SVM)
-    \item Tree-based methods well-suited (recursive partitioning handles high dimensions)
-    \item Deep learning may struggle (limited samples relative to feature space)
-    \item Feature engineering unlikely to significantly improve performance
-\end{itemize}
-
-\subsection{Heterogeneous Data Types}
-
-Mix of 47 numerical and 28 categorical features:
-\begin{itemize}
-    \item Tree-based models handle mixed types natively
-    \item Neural networks require careful encoding and normalization
-    \item Preprocessing complexity favors traditional ML
-    \item Feature interactions differ by type (numerical vs. categorical)
-\end{itemize}
-
-\subsection{Balanced Classes with Missing Data}
-
-\begin{itemize}
-    \item Balanced classes simplify model training and evaluation
-    \item Missing data (1-30\%) requires robust imputation
-    \item Combined with weak correlations, suggests moderate dataset quality
-    \item Realistic representation of real-world data challenges
-\end{itemize}
-
-\section{Summary}
-
-This chapter analyzed the 100,000-sample Microsoft Malware Prediction dataset comprising 75 features (47 numerical, 28 categorical) with binary classification target. EDA revealed critical characteristics:
-
-\begin{enumerate}
-    \item \textbf{Weak Correlations}: Maximum 0.118 indicates no dominant features; complex interaction modeling required
-    \item \textbf{Perfect Balance}: 50.52\% vs. 49.48\% eliminates class imbalance concerns
-    \item \textbf{Missing Values}: 1-30\% across features necessitates imputation strategy
-    \item \textbf{High Dimensionality}: 75 features with heterogeneous types favor tree-based approaches
-    \item \textbf{Performance Ceiling}: Weak signals establish expected accuracy around 63\%
-\end{enumerate}
-
-These insights directly informed our experimental design: systematic comparison of tree-based ML (handling mixed types, missing data, weak correlations) versus neural network architectures (requiring extensive preprocessing, struggling with tabular structure). The next chapter details model selection, hyperparameter configuration, and training methodology.
+Weak correlations (max 0.118) and high dimensionality (75 features) favor tree-based methods over distance-based approaches. Heterogeneous data types (47 numerical, 28 categorical) advantage ML models with native mixed-type handling. Balanced classes simplify evaluation. These characteristics establish an expected performance ceiling around 63\% and informed our systematic ML vs. DL comparison detailed in Chapter 3.

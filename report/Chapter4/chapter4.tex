@@ -1,68 +1,133 @@
-\chapter{Results and Discussion}
+% chapter4.tex
 
-This chapter presents the experimental results obtained from training and evaluating seven different machine learning models for malware threat prediction. All experiments were conducted using Python 3.11 with scikit-learn, LightGBM, and related libraries. The dataset was split into 80\% training and 20\% validation sets with stratification to maintain class distribution.
+\chapter{Experimental Results and Discussion}
 
-\section{Model Performance Results}
+All 13 models (7 ML + 6 DL) trained on identical preprocessed data (80K training, 20K validation samples).
 
-Seven classification models were trained and evaluated: Decision Tree, Random Forest, LightGBM, Naive Bayes, Logistic Regression, AdaBoost, and Stochastic Gradient Descent (SGD). Each model was trained with default hyperparameters initially, with optional hyperparameter tuning using RandomizedSearchCV.
+\section{Machine Learning Results}
 
-The performance metrics reveal distinct characteristics of each algorithm:
-
-\subsection{LightGBM Performance}
-LightGBM emerged as the best-performing model, demonstrating excellent accuracy, precision, and recall. The gradient boosting framework's ability to handle complex feature interactions and its efficient training algorithm contributed to its superior performance. The model showed strong generalization with minimal overfitting between training and validation sets.
-
-\subsection{Random Forest Performance}
-Random Forest provided robust predictions through ensemble learning, showing good accuracy and balanced precision-recall trade-offs. Feature importance analysis revealed which system properties most strongly indicate malware presence, providing interpretable insights for cybersecurity analysts.
-
-\subsection{Decision Tree Performance}
-Decision Tree offered high interpretability but showed signs of overfitting without proper regularization. The tree visualization revealed the decision-making process, making it valuable for understanding which feature thresholds separate malware from benign systems.
-
-\subsection{Linear Models Performance}
-Logistic Regression and SGD Classifier demonstrated competitive performance with lower computational requirements. These models work well when feature-target relationships are approximately linear and provide probabilistic outputs useful for risk assessment.
-
-\subsection{Naive Bayes Performance}
-Naive Bayes, despite its independence assumption, achieved reasonable accuracy with minimal training time. It is particularly suitable for real-time applications requiring fast prediction.
-
-\subsection{AdaBoost Performance}
-AdaBoost showed improved performance over individual weak learners through adaptive boosting, though with longer training time compared to single models.
-
-\section{Discussion}
-
-Table~\ref{tab:performance_comparison} compares the performance of developed models with existing literature approaches for similar malware detection tasks.
-
-\begin{table}[ht]
-    \centering
-    \caption{Comparative Performance of System Threat Forecaster Models}
-    \begin{tabular}{|l|l|c|c|c|}
-    \hline
-    \textbf{Source} & \textbf{Model / Method} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} \\ \hline
-    \multicolumn{5}{|c|}{\textbf{Existing Literature}} \\ \hline
-    \cite{ieee2025signaltoimage} & Signal-to-Image + CNN & 97.70\% & -- & -- \\ \hline
-    \cite{banglajol2025dualtree} & Dual Tree CWT + SVM & $\approx$95.00\% & -- & -- \\ \hline
-    \cite{mdpi2025diagnosis} & Markov Transition Fields & 98.51\% & -- & 100.00\% \\ \hline
-    \multicolumn{5}{|c|}{\textbf{System Threat Forecaster Models (This Work)}} \\ \hline
-    Model 1 & Decision Tree & 85.20\% & 84.50\% & 86.10\% \\ \hline
-    Model 2 & Random Forest & 88.45\% & 87.80\% & 89.20\% \\ \hline
-    \textbf{Model 3} & \textbf{LightGBM} & \textbf{91.30\%} & \textbf{90.50\%} & \textbf{92.10\%} \\ \hline
-    Model 4 & Naive Bayes & 79.60\% & 78.90\% & 80.30\% \\ \hline
-    Model 5 & Logistic Regression & 83.70\% & 83.20\% & 84.50\% \\ \hline
-    Model 6 & AdaBoost & 86.90\% & 86.30\% & 87.60\% \\ \hline
-    Model 7 & SGD Classifier & 82.40\% & 81.80\% & 83.20\% \\ \hline
-    \end{tabular}
-    \label{tab:performance_comparison}
+\begin{table}[h]
+\centering
+\caption{ML Models: Performance Metrics}
+\label{tab:ml_results}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\textbf{Model} & \textbf{Train Acc} & \textbf{Val Acc} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\hline
+\textbf{LightGBM} & \textbf{67.15\%} & \textbf{62.94\%} & \textbf{0.6299} & \textbf{0.6294} & \textbf{0.6286} \\
+Random Forest & 92.54\% & 62.09\% & 0.6222 & 0.6209 & 0.6192 \\
+AdaBoost & 61.11\% & 61.26\% & 0.6143 & 0.6126 & 0.6104 \\
+Decision Tree & 63.52\% & 60.10\% & 0.6025 & 0.6010 & 0.5986 \\
+Logistic Reg. & 59.72\% & 60.07\% & 0.6017 & 0.6007 & 0.5988 \\
+Naive Bayes & 55.36\% & 55.06\% & 0.5792 & 0.5506 & 0.4996 \\
+SGD & 49.50\% & 49.46\% & 0.4644 & 0.4946 & 0.3283 \\
+\hline
+\end{tabular}
 \end{table}
 
-The results demonstrate that LightGBM achieves the highest performance among all tested models with 91.30\% accuracy, 90.50\% precision, and 92.10\% recall. This performance is competitive with existing literature methods \cite{ieee2025signaltoimage} that utilize signal-to-image transformation techniques, while \cite{banglajol2025dualtree} employs wavelet-based feature extraction, and \cite{mdpi2025diagnosis} leverages Markov transition probability matrices for time-series representation.
+\subsection{Key ML Findings}
 
-Our System Threat Forecaster demonstrates several advantages:
+\textbf{LightGBM (Best - 62.94\%)}: Gradient boosting with L1/L2 regularization (200 trees, lr=0.1, max\_depth=5). Minimal train-val gap (4.21\%) indicates good generalization. Balanced precision/recall. Sequential error correction, histogram-based splitting, leaf-wise growth captures interactions, handles mixed types natively.
+
+\textbf{Random Forest (62.09\%)}: Severe overfitting (92.54\% train vs. 62.09\% val = 30.45\% gap). Bootstrap sampling limits capacity vs. boosting.
+
+\textbf{AdaBoost (61.26\%)}: Minimal overfitting (61.11\% train vs. 61.26\% val). Adaptive weighting.
+
+\textbf{Linear Models (60\%)}: Decision Tree, Logistic Regression cluster ~60\%, representing ceiling for linear/simple models with weak correlations.
+
+\textbf{Naive Bayes (55.06\%)}: Independence assumption violated.
+
+\textbf{SGD (49.46\%)}: Catastrophic failure near random.
+
+\section{Deep Learning Results}
+
+Six PyTorch architectures with AdamW, early stopping (patience=15), Apple MPS GPU.
+
+\begin{table}[h]
+\centering
+\caption{DL Models: Performance Metrics}
+\label{tab:dl_results}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Model} & \textbf{Parameters} & \textbf{Val Acc} & \textbf{Val Loss} & \textbf{F1} \\
+\hline
+\textbf{Deep MLP} & \textbf{63,714} & \textbf{61.79\%} & \textbf{0.6537} & \textbf{0.6130} \\
+Residual Net & 418,306 & 61.62\% & 0.6545 & 0.6102 \\
+Simple MLP & 60,738 & 61.61\% & 0.6535 & 0.6109 \\
+Wide \& Deep & 60,890 & 61.52\% & 0.6541 & 0.6126 \\
+Attention Net & 1,599,490 & 61.45\% & 0.6551 & 0.6118 \\
+FT-Transformer & 38,722 & 61.45\% & 0.6545 & 0.6133 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Key DL Findings}
+
+\textbf{Deep MLP (Best - 61.79\%, 63K params)}: 256→128→64→32 with batch norm, ReLU, dropout(0.3). BatchNorm stabilizes training.
+
+\textbf{Residual Net (61.62\%, 418K)}: 6.6x more parameters → only 0.17\% worse. Dataset limitations, not model limitations.
+
+\textbf{Simple MLP (61.61\%, 60K)}: Nearly identical to Deep MLP without batch norm. Confirms dataset ceiling.
+
+\textbf{Attention Net (61.45\%, 1.6M)}: 25x parameters, 0.34\% worse. Attention for sequential data irrelevant for unordered tabular features.
+
+\textbf{FT-Transformer (61.45\%, 38K)}: Most parameter-efficient. Per-feature tokenization.
+
+\textbf{DL Clustering}: All 6 within 0.34\% (61.45-61.79\%)—architecture irrelevant.
+
+\section{ML vs. DL Comparison}
+
+\begin{table}[h]
+\centering
+\caption{Best ML vs. Best DL}
+\label{tab:ml_vs_dl}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Metric} & \textbf{LightGBM} & \textbf{Deep MLP} & \textbf{Difference} \\
+\hline
+Val Accuracy & 62.94\% & 61.79\% & +1.15\% \\
+F1-Score & 0.6286 & 0.6130 & +0.0156 \\
+Training Time & ~2 min & ~8 min & 4x faster \\
+Interpretability & High & Low & ML better \\
+Deployment & Simple & Complex & ML easier \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Why ML Outperforms}
+
+\begin{enumerate}
+    \item \textbf{Tabular Nature}: Heterogeneous features, no spatial/temporal structure. Trees handle mixed types; NNs struggle.
+    \item \textbf{Sample Size}: 80K moderate. Trees efficient; DL needs millions.
+    \item \textbf{Interactions}: Tree splits capture interactions; gradient boosting corrects errors; NNs struggle with weak correlations (max 0.118).
+    \item \textbf{Inductive Bias}: Trees have strong tabular bias; NNs weak bias, need more data.
+    \item \textbf{Robustness}: Trees robust to outliers, no scaling needed, handle missing natively.
+\end{enumerate}
+
+\textbf{DL Would Excel If}: 1M+ samples, hierarchical structure, richer interactions, transfer learning, raw byte analysis. None apply here.
+
+\section{Kaggle Comparison}
+
+Our best: 62.94\%. Kaggle top: 69.6\%. Gap: 6.66\%. Top submissions: extensive feature engineering, ensembles, exhaustive tuning. The 69.6\% ceiling confirms ~30\% irreducible error from weak correlations.
+
+\section{Summary}
+
+\textbf{Key Results}:
 \begin{itemize}
-    \item \textbf{Comprehensive Model Comparison}: Systematic evaluation of seven different algorithms provides insights into algorithm-problem fit
-    \item \textbf{Modular Architecture}: Configuration-based pipeline enables easy experimentation and customization
-    \item \textbf{Production Ready}: Code structure supports deployment with model persistence, logging, and automated submission generation
-    \item \textbf{Interpretability}: Feature importance analysis and confusion matrices provide actionable insights
-    \item \textbf{Efficiency}: LightGBM provides excellent accuracy with reasonable training time
+    \item Best Overall: LightGBM 62.94\%
+    \item Best DL: Deep MLP 61.79\%
+    \item ML>DL: +1.15\%
+    \item All DL within 0.34\%—architecture matters little
+    \item ML spread: 13.48\% (best to worst)
 \end{itemize}
 
-The confusion matrices revealed that the models perform well on both classes, with slightly better performance on the majority class. Feature importance analysis indicated that certain system properties such as process information, network activity, and file system characteristics were most indicative of malware presence.
+\textbf{Research Questions}:
+\begin{enumerate}
+    \item ML outperforms DL by 1.15\% for tabular cybersecurity data
+    \item Simple preprocessing sufficient (mean/mode imputation, label encoding, scaling)
+    \item DL provides no advantage (6 architectures, 38K-1.6M params, all ~61.5\%)
+    \item 41x parameter increase → 0.34\% gain (sharply diminishing returns)
+    \item Architecture choice matters little for this dataset
+\end{enumerate}
 
-Hyperparameter tuning improved model performance by 2-5\% across different models, demonstrating the importance of optimization. The cross-validation results showed consistent performance across folds, indicating good generalization capability.
+\textbf{Implications}: Prefer tree ensembles for tabular cybersecurity. DL vision/NLP advantages don't transfer. Trees provide interpretability (feature importance, rules). ML 4x faster, simpler deployment. Data quality trumps model sophistication.

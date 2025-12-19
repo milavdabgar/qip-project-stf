@@ -2,50 +2,16 @@
 
 \chapter{Introduction}
 
-In today's interconnected digital landscape, cybersecurity threats have become increasingly sophisticated and pervasive. Malware, short for malicious software, represents one of the most significant threats to computer systems, networks, and data integrity. Organizations worldwide face constant challenges in detecting and preventing malware infections, which can lead to data breaches, financial losses, operational disruptions, and reputational damage. Traditional signature-based antivirus solutions often struggle to keep pace with the rapidly evolving threat landscape, particularly against zero-day attacks and polymorphic malware.
+\section{Background}
 
-Machine learning has emerged as a powerful approach to address these challenges, offering the ability to detect patterns and anomalies that may indicate malicious activity. By analyzing system properties and behavioral characteristics, machine learning models can identify potential threats before they manifest into full-scale infections. This proactive approach is crucial in modern cybersecurity, where the cost of prevention is significantly lower than the cost of remediation.
-
-This project was developed in the context of the System Threat Forecaster competition on Kaggle~\cite{kaggle_stf_competition}, which provided a comprehensive dataset of system properties and malware infection labels for developing and evaluating predictive models.
+Malware has evolved into complex threats with organizations facing over 200,000 samples daily. Traditional signature-based detection struggles against zero-day attacks. Machine learning and deep learning enable proactive behavioral analysis. This project compares traditional ML with modern DL architectures using Kaggle competition data.
 
 \section{Problem Statement}
 
-The primary challenge addressed in this project is the development of an accurate and reliable system for predicting malware infections in computer systems based on various system properties and characteristics. Traditional rule-based detection methods often fail to identify new or modified malware variants, leading to increased vulnerability. Furthermore, the high dimensionality of system data, presence of missing values, and the need for real-time prediction capabilities add complexity to the problem.
+Developing accurate malware prediction faces challenges: high dimensionality (75 features), weak correlations (max 0.118), missing data (1-30\%), mixed types (47 numerical, 28 categorical), and performance ceiling (~63\%).
 
-Specifically, this project aims to:
-\begin{itemize}
-    \item Develop a machine learning pipeline capable of processing and analyzing system property data
-    \item Handle missing values and categorical features effectively
-    \item Compare multiple classification algorithms to identify the most suitable model
-    \item Optimize model performance through hyperparameter tuning
-    \item Provide accurate predictions of malware infection likelihood
-    \item Generate interpretable results through feature importance analysis
-\end{itemize}
+\textbf{Research Questions}: How do ML algorithms compare with DL for tabular cybersecurity data? Can deep learning provide advantages over gradient boosting? What are practical complexity-performance trade-offs?
 
-\section{Motivations and Objectives}
+\section{Objectives and Contributions}
 
-The motivation for this project stems from the critical need for automated, intelligent threat detection systems in cybersecurity. With the exponential growth in cyber threats and the increasing sophistication of attack vectors, manual analysis and traditional detection methods are no longer sufficient.
-
-The key objectives of this project are:
-\begin{enumerate}
-    \item \textbf{Data Preprocessing}: Implement comprehensive data preprocessing techniques including missing value imputation, feature encoding, and normalization
-    \item \textbf{Feature Engineering}: Develop and evaluate feature engineering strategies to enhance model performance
-    \item \textbf{Model Development}: Train and evaluate multiple machine learning models including Decision Trees, Random Forest, LightGBM, Naive Bayes, Logistic Regression, AdaBoost, and SGD
-    \item \textbf{Performance Optimization}: Perform hyperparameter tuning and model selection to achieve optimal prediction accuracy
-    \item \textbf{Model Comparison}: Conduct systematic comparison of different algorithms using standard evaluation metrics
-    \item \textbf{Deployment Ready}: Create a modular, maintainable codebase suitable for production deployment
-\end{enumerate}
-
-\section{Report Structure}
-\begin{itemize}
-\item \textbf{Chapter 1: Introduction}
-This chapter provides the necessary background and context for the study. Add contents.
-\item \textbf{Chapter 2: Literature Review}
-This chapter provides a comprehensive review of the foundational concepts and existing research. Add contents. 
-\item \textbf{Chapter 3: Proposed Methodology}
-This chapter provides a meticulous account of the steps taken to conduct this research. Add contents.
-\item \textbf{Chapter 4: Results and Discussion}
-This chapter presents the outcomes of applying the described methodology and provides an in-depth interpretation of these findings within the context of the existing literature. Add contents.
-\item \textbf{Chapter 5: Conclusion}
-This final chapter summarises contributions, clinical implications, and outlines future work. Add contents.
-\end{itemize}
+Implement robust preprocessing, train 13 models (7 ML + 6 DL), conduct systematic comparison, and deploy at \url{https://stf.milav.in}. Empirically validate that LightGBM (62.94\%) outperforms DL (61.79\%). Demonstrate that architectural complexity doesn't improve tabular performance.

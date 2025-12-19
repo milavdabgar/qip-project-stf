@@ -9,63 +9,36 @@
 \contentsline {chapter}{\textbf {List of Abbreviations}}{xvii}{chapter*.12}%
 \noindent {\bf Chapters}
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Problem Statement}{1}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Motivations and Objectives}{2}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Report Structure}{2}{section.1.3}%
-\contentsline {chapter}{\numberline {2}Literature Review}{5}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Machine Learning in Cybersecurity}{5}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Classification Algorithms}{5}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Decision Trees}{5}{subsection.2.2.1}%
-\contentsline {subsection}{\numberline {2.2.2}Random Forest}{5}{subsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.2.3}LightGBM}{6}{subsection.2.2.3}%
-\contentsline {subsection}{\numberline {2.2.4}Naive Bayes}{6}{subsection.2.2.4}%
-\contentsline {subsection}{\numberline {2.2.5}Logistic Regression}{6}{subsection.2.2.5}%
-\contentsline {subsection}{\numberline {2.2.6}AdaBoost}{6}{subsection.2.2.6}%
-\contentsline {subsection}{\numberline {2.2.7}Stochastic Gradient Descent (SGD)}{6}{subsection.2.2.7}%
-\contentsline {section}{\numberline {2.3}Data Preprocessing Techniques}{7}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Missing Value Imputation}{7}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}Feature Encoding}{7}{subsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.3.3}Feature Scaling}{7}{subsection.2.3.3}%
-\contentsline {section}{\numberline {2.4}Model Evaluation and Selection}{7}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}Cross-Validation}{7}{subsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.4.2}Hyperparameter Tuning}{7}{subsection.2.4.2}%
-\contentsline {subsection}{\numberline {2.4.3}Feature Selection}{8}{subsection.2.4.3}%
-\contentsline {section}{\numberline {2.5}Related Work in Malware Detection}{8}{section.2.5}%
-\contentsline {chapter}{\numberline {3}Proposed Methodology}{9}{chapter.3}%
-\contentsline {section}{\numberline {3.1}System Architecture}{9}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Data Loading and Exploratory Data Analysis}{9}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Data Preprocessing}{10}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Missing Value Handling}{10}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Categorical Feature Encoding}{10}{subsection.3.3.2}%
-\contentsline {subsection}{\numberline {3.3.3}Feature Scaling}{10}{subsection.3.3.3}%
-\contentsline {section}{\numberline {3.4}Feature Engineering and Selection}{10}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}Feature Engineering}{10}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Feature Selection}{11}{subsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.4.3}Dimensionality Reduction}{11}{subsection.3.4.3}%
-\contentsline {section}{\numberline {3.5}Machine Learning Models}{11}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}Decision Tree Classifier}{11}{subsection.3.5.1}%
-\contentsline {subsection}{\numberline {3.5.2}Random Forest Classifier}{11}{subsection.3.5.2}%
-\contentsline {subsection}{\numberline {3.5.3}LightGBM}{11}{subsection.3.5.3}%
-\contentsline {subsection}{\numberline {3.5.4}Naive Bayes}{12}{subsection.3.5.4}%
-\contentsline {subsection}{\numberline {3.5.5}Logistic Regression}{12}{subsection.3.5.5}%
-\contentsline {subsection}{\numberline {3.5.6}AdaBoost}{12}{subsection.3.5.6}%
-\contentsline {subsection}{\numberline {3.5.7}SGD Classifier}{12}{subsection.3.5.7}%
-\contentsline {section}{\numberline {3.6}Hyperparameter Tuning}{12}{section.3.6}%
-\contentsline {section}{\numberline {3.7}Implementation Details}{12}{section.3.7}%
-\contentsline {section}{\numberline {3.8}Model Evaluation Metrics}{13}{section.3.8}%
-\contentsline {chapter}{\numberline {4}Results and Discussion}{15}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Model Performance Results}{15}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}LightGBM Performance}{15}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Random Forest Performance}{15}{subsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.1.3}Decision Tree Performance}{15}{subsection.4.1.3}%
-\contentsline {subsection}{\numberline {4.1.4}Linear Models Performance}{16}{subsection.4.1.4}%
-\contentsline {subsection}{\numberline {4.1.5}Naive Bayes Performance}{16}{subsection.4.1.5}%
-\contentsline {subsection}{\numberline {4.1.6}AdaBoost Performance}{16}{subsection.4.1.6}%
-\contentsline {section}{\numberline {4.2}Discussion}{16}{section.4.2}%
-\contentsline {chapter}{\numberline {5}Conclusion}{19}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Key Contributions}{19}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Practical Implications}{20}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Limitations}{20}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Future Scope}{21}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Concluding Remarks}{22}{section.5.5}%
-\contentsline {chapter}{\textbf {References}}{23}{section.5.5}%
+\contentsline {section}{\numberline {1.1}Background}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Problem Statement}{1}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Objectives and Contributions}{1}{section.1.3}%
+\contentsline {chapter}{\numberline {2}Dataset, Metadata, and Exploratory Data Analysis}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Dataset Overview}{3}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Dataset Metadata}{3}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Feature Categories}{3}{subsection.2.2.1}%
+\contentsline {section}{\numberline {2.3}Exploratory Data Analysis}{3}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Key EDA Findings}{3}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Missing Values and Distributions}{4}{subsection.2.3.2}%
+\contentsline {section}{\numberline {2.4}Modeling Implications}{4}{section.2.4}%
+\contentsline {chapter}{\numberline {3}Experimental Setup and Model Selection}{5}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Data Preprocessing}{5}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Machine Learning Models}{5}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Deep Learning Models}{5}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Training Configuration}{6}{subsection.3.3.1}%
+\contentsline {chapter}{\numberline {4}Experimental Results and Discussion}{7}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Machine Learning Results}{7}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Key ML Findings}{7}{subsection.4.1.1}%
+\contentsline {section}{\numberline {4.2}Deep Learning Results}{8}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Key DL Findings}{8}{subsection.4.2.1}%
+\contentsline {section}{\numberline {4.3}ML vs. DL Comparison}{8}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Why ML Outperforms}{8}{subsection.4.3.1}%
+\contentsline {section}{\numberline {4.4}Kaggle Comparison}{9}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Summary}{9}{section.4.5}%
+\contentsline {chapter}{\numberline {5}Conclusion and Future Work}{11}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Key Findings}{11}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Contributions}{11}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Practical Recommendations}{11}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Limitations}{11}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Future Work}{11}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Concluding Remarks}{12}{section.5.6}%
+\contentsline {chapter}{\textbf {References}}{13}{section.5.6}%
