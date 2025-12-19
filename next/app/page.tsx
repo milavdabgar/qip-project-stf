@@ -22,7 +22,7 @@ export default function Home() {
                 System Threat Forecaster
               </h1>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                AI-powered malware detection using 7 Machine Learning models and 4 cutting-edge Deep Learning architectures. 
+                AI-powered malware detection using 7 Machine Learning models and 6 cutting-edge Deep Learning architectures. 
                 Predict system threats with 63% accuracy using LightGBM.
               </p>
             </div>
@@ -66,7 +66,7 @@ export default function Home() {
                 <Cpu className="w-4 h-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">4</div>
+                <div className="text-2xl font-bold">6</div>
                 <p className="text-xs text-muted-foreground">
                   Neural architectures
                 </p>
