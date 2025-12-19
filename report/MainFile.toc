@@ -9,36 +9,42 @@
 \contentsline {chapter}{\textbf {List of Abbreviations}}{xvii}{chapter*.12}%
 \noindent {\bf Chapters}
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Background}{1}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Problem Statement}{1}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Objectives and Contributions}{1}{section.1.3}%
-\contentsline {chapter}{\numberline {2}Dataset, Metadata, and Exploratory Data Analysis}{3}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Dataset Overview}{3}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Dataset Metadata}{3}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Feature Categories}{4}{subsection.2.2.1}%
-\contentsline {section}{\numberline {2.3}Exploratory Data Analysis}{4}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Key EDA Findings}{4}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}Missing Values and Distributions}{4}{subsection.2.3.2}%
-\contentsline {section}{\numberline {2.4}Modeling Implications}{4}{section.2.4}%
-\contentsline {chapter}{\numberline {3}Experimental Setup and Model Selection}{7}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Data Preprocessing}{7}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Machine Learning Models}{7}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Deep Learning Models}{7}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Training Configuration}{8}{subsection.3.3.1}%
-\contentsline {chapter}{\numberline {4}Experimental Results and Discussion}{9}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Machine Learning Results}{9}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Key ML Findings}{10}{subsection.4.1.1}%
-\contentsline {section}{\numberline {4.2}Deep Learning Results}{10}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Key DL Findings}{10}{subsection.4.2.1}%
-\contentsline {section}{\numberline {4.3}ML vs. DL Comparison}{11}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Why ML Outperforms}{11}{subsection.4.3.1}%
-\contentsline {section}{\numberline {4.4}Kaggle Comparison}{12}{section.4.4}%
-\contentsline {section}{\numberline {4.5}Summary}{12}{section.4.5}%
-\contentsline {chapter}{\numberline {5}Conclusion and Future Work}{13}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Key Findings}{13}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Contributions}{13}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Practical Recommendations}{13}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Limitations}{13}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Future Work}{13}{section.5.5}%
-\contentsline {section}{\numberline {5.6}Concluding Remarks}{14}{section.5.6}%
-\contentsline {chapter}{\textbf {References}}{17}{figure.caption.26}%
+\contentsline {section}{\numberline {1.1}Background and Motivation}{1}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}The ML vs. DL Debate for Tabular Data}{1}{subsection.1.1.1}%
+\contentsline {section}{\numberline {1.2}Problem Statement and Research Questions}{2}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Technical Challenges}{2}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Research Questions}{2}{subsection.1.2.2}%
+\contentsline {section}{\numberline {1.3}Objectives and Contributions}{3}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Primary Objectives}{3}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Key Contributions}{3}{subsection.1.3.2}%
+\contentsline {section}{\numberline {1.4}Thesis Organization}{4}{section.1.4}%
+\contentsline {chapter}{\numberline {2}Dataset, Metadata, and Exploratory Data Analysis}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Dataset Overview}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Dataset Metadata}{5}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Feature Categories}{6}{subsection.2.2.1}%
+\contentsline {section}{\numberline {2.3}Exploratory Data Analysis}{6}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Key EDA Findings}{6}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Missing Values and Distributions}{6}{subsection.2.3.2}%
+\contentsline {section}{\numberline {2.4}Modeling Implications}{6}{section.2.4}%
+\contentsline {chapter}{\numberline {3}Experimental Setup and Model Selection}{9}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Data Preprocessing}{9}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Machine Learning Models}{9}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Deep Learning Models}{9}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Training Configuration}{10}{subsection.3.3.1}%
+\contentsline {chapter}{\numberline {4}Experimental Results and Discussion}{11}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Machine Learning Results}{11}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Key ML Findings}{12}{subsection.4.1.1}%
+\contentsline {section}{\numberline {4.2}Deep Learning Results}{12}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Key DL Findings}{12}{subsection.4.2.1}%
+\contentsline {section}{\numberline {4.3}ML vs. DL Comparison}{13}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Why ML Outperforms}{13}{subsection.4.3.1}%
+\contentsline {section}{\numberline {4.4}Kaggle Comparison}{14}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Summary}{14}{section.4.5}%
+\contentsline {chapter}{\numberline {5}Conclusion and Future Work}{15}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Key Findings}{15}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Contributions}{15}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Practical Recommendations}{15}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Limitations}{15}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Future Work}{15}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Concluding Remarks}{16}{section.5.6}%
+\contentsline {chapter}{\textbf {References}}{19}{figure.caption.26}%

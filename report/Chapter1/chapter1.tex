@@ -2,16 +2,86 @@
 
 \chapter{Introduction}
 
-\section{Background}
+\section{Background and Motivation}
 
-Malware has evolved into complex threats with organizations facing over 200,000 samples daily. Traditional signature-based detection struggles against zero-day attacks. Machine learning and deep learning enable proactive behavioral analysis. This project compares traditional ML with modern DL architectures using Kaggle competition data.
+The cybersecurity landscape has undergone dramatic transformation in recent years. Modern organizations face an unprecedented volume of malware threats, with over 200,000 new malicious samples emerging daily. Traditional signature-based detection systems, which rely on pattern matching against known malware databases, have become increasingly ineffective against sophisticated threats. Zero-day attacks—exploiting previously unknown vulnerabilities—circumvent signature databases entirely, creating critical security gaps.
 
-\section{Problem Statement}
+Machine learning and deep learning offer a paradigm shift from reactive to proactive defense. By analyzing behavioral patterns rather than static signatures, these approaches can identify novel threats based on their characteristics and execution patterns. The fundamental question becomes: which approach—traditional machine learning or modern deep learning—provides superior performance for malware detection?
 
-Developing accurate malware prediction faces challenges: high dimensionality (75 features), weak correlations (max 0.118), missing data (1-30\%), mixed types (47 numerical, 28 categorical), and performance ceiling (~63\%).
+This project investigates this question through comprehensive experimentation using the Kaggle Microsoft Malware Prediction dataset, comparing 7 traditional ML algorithms against 6 modern DL architectures. The study provides empirical evidence for practitioners making technology choices in cybersecurity applications.
 
-\textbf{Research Questions}: How do ML algorithms compare with DL for tabular cybersecurity data? Can deep learning provide advantages over gradient boosting? What are practical complexity-performance trade-offs?
+\subsection{The ML vs. DL Debate for Tabular Data}
+
+While deep learning has revolutionized computer vision and natural language processing, its effectiveness on tabular cybersecurity data remains an open question. Recent research suggests that tree-based ensemble methods often outperform neural networks on structured data lacking spatial or temporal patterns. However, limited systematic comparisons exist specifically for malware prediction tasks.
+
+This work addresses this gap by implementing state-of-the-art models from both paradigms under identical conditions: same dataset, preprocessing pipeline, validation strategy, and evaluation metrics. The goal is not merely to identify the best-performing model, but to understand why certain architectures succeed or fail for this specific data type.
+
+\section{Problem Statement and Research Questions}
+
+Developing accurate malware prediction systems faces multiple interconnected challenges that constrain model performance and complicate deployment.
+
+\subsection{Technical Challenges}
+
+\begin{enumerate}
+    \item \textbf{High Dimensionality}: The dataset contains 75 features spanning hardware configurations, operating system settings, security software states, and behavioral indicators. This heterogeneous feature space requires careful preprocessing and encoding strategies.
+    
+    \item \textbf{Weak Feature-Target Correlations}: Maximum correlation with the target variable is only 0.118, indicating that no single feature provides strong predictive power. This necessitates complex interaction modeling and ensemble methods.
+    
+    \item \textbf{Missing Data}: Features exhibit 1-30\% missing values, with security software attributes particularly incomplete. Imputation strategies significantly impact downstream model performance.
+    
+    \item \textbf{Mixed Data Types}: The feature space includes 47 numerical and 28 categorical variables with varying cardinalities (2 to 1,000+ categories). Different algorithms handle this heterogeneity with varying degrees of efficiency.
+    
+    \item \textbf{Performance Ceiling}: Top Kaggle leaderboard scores reach only 69.6\%, suggesting high irreducible error from data quality limitations. This establishes realistic expectations around achievable accuracy.
+\end{enumerate}
+
+\subsection{Research Questions}
+
+This study addresses three core questions:
+
+\begin{enumerate}
+    \item \textbf{Comparative Performance}: How do traditional machine learning algorithms (decision trees, ensembles, linear models) compare against deep learning architectures (MLPs, residual networks, attention mechanisms, transformers) for tabular malware prediction?
+    
+    \item \textbf{Architectural Impact}: Does increasing neural network complexity—from simple MLPs (60K parameters) to attention networks (1.6M parameters)—provide meaningful performance improvements for structured cybersecurity data?
+    
+    \item \textbf{Practical Trade-offs}: What are the real-world implications in terms of training time, computational resources, deployment complexity, and model interpretability when choosing between ML and DL approaches?
+\end{enumerate}
 
 \section{Objectives and Contributions}
 
-Implement robust preprocessing, train 13 models (7 ML + 6 DL), conduct systematic comparison, and deploy at \url{https://stf.milav.in}. Empirically validate that LightGBM (62.94\%) outperforms DL (61.79\%). Demonstrate that architectural complexity doesn't improve tabular performance.
+\subsection{Primary Objectives}
+
+\begin{enumerate}
+    \item \textbf{Comprehensive Implementation}: Develop robust preprocessing pipelines and train 13 diverse models—7 ML algorithms (Decision Tree, Random Forest, LightGBM, Naive Bayes, Logistic Regression, AdaBoost, SGD) and 6 DL architectures (Simple MLP, Deep MLP, Residual Net, Attention Net, Wide \& Deep, FT-Transformer).
+    
+    \item \textbf{Systematic Evaluation}: Conduct fair, controlled comparison using identical train-validation splits, preprocessing steps, and evaluation metrics (accuracy, F1-score, precision, recall).
+    
+    \item \textbf{Production Deployment}: Build and deploy a full-stack web application at \url{https://stf.milav.in} demonstrating real-world malware prediction with all 13 trained models, providing interactive model comparison and live prediction capabilities.
+    
+    \item \textbf{Reproducible Research}: Document complete methodology, hyperparameters, and training procedures to enable replication and extension by other researchers.
+\end{enumerate}
+
+\subsection{Key Contributions}
+
+This research makes several important contributions to the cybersecurity and machine learning communities:
+
+\begin{enumerate}
+    \item \textbf{Empirical Validation}: Provides rigorous empirical evidence that gradient boosting (LightGBM: 62.94\%) outperforms sophisticated deep learning architectures (best: 61.79\%) for tabular malware data by 1.15\% while requiring 4x less training time.
+    
+    \item \textbf{Architecture Analysis}: Demonstrates that increasing DL complexity from 38K to 1.6M parameters yields only 0.34\% performance variation (61.45-61.79\%), confirming that dataset quality—not model sophistication—determines the performance ceiling for this problem.
+    
+    \item \textbf{Practical Guidelines}: Establishes clear decision criteria: for tabular cybersecurity data with moderate sample sizes (100K), heterogeneous features, and weak correlations, prioritize tree-based ensembles over deep learning for superior accuracy, faster training, simpler deployment, and better interpretability.
+    
+    \item \textbf{Production System}: Delivers a fully functional web application with model serving, preprocessing pipelines, and interactive visualization, bridging the gap between academic research and practical deployment.
+\end{enumerate}
+
+\section{Thesis Organization}
+
+The remainder of this document is organized as follows:
+
+\textbf{Chapter 2} describes the dataset, metadata, and exploratory data analysis including correlation analysis, missing value patterns, and feature distributions that inform modeling decisions.
+
+\textbf{Chapter 3} details the experimental setup: preprocessing pipeline, model selection rationale, hyperparameter configurations, and training procedures for all 13 models.
+
+\textbf{Chapter 4} presents comprehensive experimental results, comparing ML and DL performance with detailed analysis of why tree-based methods outperform neural networks for this task.
+
+\textbf{Chapter 5} concludes with key findings, practical recommendations, limitations, and future research directions including feature engineering, model ensembling, and cross-domain validation.
