@@ -23,12 +23,23 @@
 }
 \date{December 2025}
 
+% Enable speaker notes on second screen (for presentation mode)
+\setbeameroption{show notes on second screen=right}
+% Alternative: Use \setbeameroption{show notes} to show notes below slides
+
 \begin{document}
 
 % Title Slide
 \begin{frame}
 \titlepage
 \end{frame}
+
+\note[itemize]{
+\item \textbf{[30 sec]} Good morning/afternoon everyone. My name is Milav Dabgar from Government Polytechnic Palanpur.
+\item Today I'll present my QIP project on System Threat Forecaster - a machine learning approach to malware detection.
+\item This 15-minute presentation covers our complete journey from problem identification to production deployment.
+\item I'm grateful to my advisors Dr. Sarvaiya, Dr. Upla, Dr. Captain, and Dr. Deb for their guidance.
+}
 
 % Outline
 \begin{frame}{Outline}
@@ -40,6 +51,12 @@
 \tableofcontents[sections={4-6}]
 \end{columns}
 \end{frame}
+
+\note[itemize]{
+\item \textbf{[15 sec]} Quick overview of our agenda:
+\item We'll start with the problem context, move through our methodology and experiments, and conclude with deployment and findings.
+\item This structure reflects the complete ML lifecycle from problem to production.
+}
 
 % Section 1: Project Context
 \section{Project Context \& Learning Objectives}
@@ -77,6 +94,15 @@ Predict malware infections and compare ML vs DL performance on tabular data
 \end{columns}
 \end{frame}
 
+\note[itemize]{
+\item \textbf{[1 min 15 sec]} This project tackles the Kaggle System Threat Forecaster competition.
+\item Our goal was ambitious: implement 7 ML algorithms, 6 DL architectures, and deploy a production web application.
+\item Key challenge: The competition's top score is only 69.6\% - indicating fundamental data limitations.
+\item Notice the weak correlations - maximum only 0.118. This is crucial context for understanding our results.
+\item With 100K balanced samples and 75 features, this looks like a typical ML problem, but the weak signals make it extremely challenging.
+\item High irreducible error of 30\%+ means perfect classification is impossible with current features.
+}
+
 % Section 2: Data & Methodology
 \section{Data \& Methodology}
 
@@ -108,6 +134,15 @@ Predict malware infections and compare ML vs DL performance on tabular data
 \includegraphics[width=\textwidth,height=0.7\textheight,keepaspectratio]{figures/feature_correlation.png}
 \end{columns}
 \end{frame}
+
+\note[itemize]{
+\item \textbf{[45 sec]} Let's look at our dataset characteristics.
+\item 100,000 samples with 75 features - 47 numerical and 28 categorical.
+\item Target is binary: malware present or not. Classes are nearly balanced at 50-50.
+\item The correlation heatmap reveals the core challenge - maximum correlation is just 0.118.
+\item This weak correlation explains why even top Kaggle performers can't exceed 70\% accuracy.
+\item We used stratified 80-20 split to maintain class balance in validation.
+}
 
 \subsection{Methodology}
 \begin{frame}{Experimental Methodology \& Pipeline}
@@ -153,6 +188,16 @@ Random seed: 42 | Version control: Git | Config management
 \end{columns}
 \end{frame}
 
+\note[itemize]{
+\item \textbf{[1 min]} Our methodology follows ML best practices.
+\item Preprocessing: Mean imputation for numerical features, mode for categorical. LabelEncoder for categories, StandardScaler for numerical.
+\item We evaluated models using accuracy, F1 score, precision, and recall. F1 was our primary metric due to balanced classes.
+\item Implemented 7 ML algorithms from scikit-learn and 6 DL architectures in PyTorch from scratch.
+\item Used Apple M4's MPS acceleration for GPU training.
+\item All experiments reproducible with seed 42 and version control.
+\item Our goal: rigorous ML vs DL comparison on tabular data.
+}
+
 % Section 3: Model Experimentation
 \section{Model Experimentation \& Learning}
 
@@ -191,6 +236,17 @@ Random seed: 42 | Version control: Git | Config management
 \end{columns}
 \end{frame}
 
+\note[itemize]{
+\item \textbf{[1 min 15 sec]} Now the results - this is where theory met reality.
+\item LightGBM emerged as clear winner at 62.94\% accuracy with F1 of 0.6286.
+\item Notice the pattern: gradient boosting methods dominate. LightGBM, Random Forest, and AdaBoost are top 3.
+\item Decision trees, logistic regression around 60\% - respectable but not exceptional.
+\item SGD classifier at 49\% reminds us that not all algorithms suit all problems.
+\item Key insight: 62.94\% vs Kaggle's top 69.6\% - only 6.7\% gap despite our simpler approach.
+\item This validates that the dataset quality, not model complexity, is the limiting factor.
+\item Hyperparameters matter: learning rate 0.1, max depth 5, and regularization were crucial for preventing overfitting.
+}
+
 \begin{frame}{ML Model Performance Comparison}
 \begin{center}
 \includegraphics[width=0.85\textwidth]{figures/model_comparison.png}
@@ -201,6 +257,13 @@ Random seed: 42 | Version control: Git | Config management
 \textbf{Best ML:} LightGBM 62.94\% (F1: 0.6286) | \textbf{Best DL:} Deep MLP 61.79\% (F1: 0.6130) | \textbf{Kaggle Top:} 69.6\%
 \end{block}
 \end{frame}
+
+\note[itemize]{
+\item \textbf{[30 sec]} This chart visualizes the performance hierarchy clearly.
+\item LightGBM and Deep MLP lead the pack. Notice how close DL gets to ML - just 1.15\% difference.
+\item All models cluster between 50-63\%, with outliers like SGD struggling.
+\item The performance ceiling around 63\% appears consistent across approaches - strong evidence of dataset limitations.
+}
 
 \begin{frame}{Best ML Model: LightGBM Performance}
 \begin{columns}[T]
@@ -230,6 +293,15 @@ Random seed: 42 | Version control: Git | Config management
 \end{itemize}
 \end{columns}
 \end{frame}
+
+\note[itemize]{
+\item \textbf{[45 sec]} Diving deeper into LightGBM - our champion model.
+\item Confusion matrix shows balanced performance: 9,700 true positives, 9,900 true negatives.
+\item False positives: 2,100, False negatives: 2,300 - relatively symmetric errors.
+\item Precision and recall both at 0.63 - indicates balanced model, not biased toward either class.
+\item Trained on 80,000 samples, validated on 20,000 with stratification.
+\item This performance makes it production-ready for first-line screening, though human oversight remains essential.
+}
 
 \subsection{Deep Learning}
 \begin{frame}{Deep Learning: 6 Architectures Explored}
@@ -282,6 +354,18 @@ Confirmed research: Tree ensembles beat neural nets on structured data
 \end{columns}
 \end{frame}
 
+\note[itemize]{
+\item \textbf{[1 min 30 sec]} Now the exciting part - deep learning experiments.
+\item Implemented 6 architectures from scratch in PyTorch: Simple MLP, Deep MLP, Residual Networks, Wide \& Deep, Attention Networks, and FT-Transformer.
+\item Deep MLP won at 61.79\% with just 63K parameters - proof that bigger isn't always better.
+\item Remarkable finding: ALL DL models converged around 61.5\%. From 38K to 1.6M parameters - same result!
+\item This proves the dataset ceiling, not architecture, limits performance.
+\item FT-Transformer was particularly interesting - BERT-style attention with only 38K parameters matched complex architectures.
+\item Best hyperparameters: batch size 512, dropout 0.3, learning rate 0.001 with scheduling, early stopping crucial.
+\item Critical conclusion: ML beats DL by 1.15\% on this tabular data - confirming research that tree ensembles dominate structured data.
+\item This validates choosing LightGBM for production deployment.
+}
+
 \begin{frame}{Best DL Model: Deep MLP Performance}
 \begin{columns}[T]
 \column{0.5\textwidth}
@@ -323,6 +407,18 @@ Confirmed research: Tree ensembles beat neural nets on structured data
 \end{itemize}
 \end{columns}
 \end{frame}
+
+\note[itemize]{
+\item \textbf{[45 sec]} Deep MLP details - our best deep learning model.
+\item Architecture: 4 hidden layers with decreasing neurons - 256, 128, 64, 32.
+\item 63,714 parameters total - efficient design.
+\item BatchNorm after each layer for stable training, dropout 0.3 for regularization.
+\item Adam optimizer with 0.001 learning rate - standard but effective.
+\item Achieved 61.79\% accuracy, F1 of 0.613, best validation loss 0.6623.
+\item Training took only 8 minutes on Apple M4 MPS.
+\item Key insight: Architecture depth helped, but couldn't overcome dataset limitations.
+\item Still 1.15\% below LightGBM - reinforces that tree ensembles are superior for tabular data.
+}
 
 % Section 4: Implementation & Deployment
 \section{Implementation \& Deployment}
@@ -371,6 +467,19 @@ Confirmed research: Tree ensembles beat neural nets on structured data
 \end{block}
 \end{columns}
 \end{frame}
+
+\note[itemize]{
+\item \textbf{[1 min]} Beyond research - we built a production system.
+\item Technology stack: scikit-learn and LightGBM for ML, PyTorch 2.9.1 for DL with Apple MPS acceleration.
+\item Frontend: Next.js 14 with React for modern, responsive UI.
+\item Deployed at stf.milav.in - fully functional web application.
+\item Features include: Model dashboard showing all 13 models with complete specifications.
+\item Live prediction API - REST endpoints for real-time inference.
+\item Interactive comparison charts for visualizing model performance.
+\item Complete documentation and source code on GitHub.
+\item This demonstrates end-to-end ML engineering: from research to production deployment.
+\item Visit the site to explore models, test predictions, and view the complete implementation.
+}
 
 % Section 5: Conclusion
 \section{Conclusion}
@@ -428,6 +537,19 @@ Confirmed research: Tree ensembles beat neural nets on structured data
 \end{columns}
 \end{frame}
 
+\note[itemize]{
+\item \textbf{[1 min 15 sec]} Summarizing our key findings.
+\item LightGBM achieved 62.94\% accuracy with F1 of 0.6286 - our best performer.
+\item Deep MLP reached 61.79\% - best among DL architectures.
+\item Gap to Kaggle top score: 6.7\% - this gap represents better feature engineering, not fundamentally different approaches.
+\item Technical insight: ML outperforms DL for tabular data - validates extensive research in this area.
+\item Weak correlations fundamentally limit all models - this is a dataset quality issue, not a modeling issue.
+\item Practical deployment: 62.94\% accuracy is production-ready for first-line screening with human oversight.
+\item Our web application at stf.milav.in demonstrates complete implementation.
+\item Contributions: 13 models evaluated, FT-Transformer implemented, full-stack deployment, reproducible pipeline.
+\item Note on FT-Transformer: showed promise with longer training but hardware and time constraints limited full exploration.
+}
+
 \subsection{Challenges \& Limitations}
 \begin{frame}{Challenges, Limitations \& Future Work}
 \begin{columns}[T]
@@ -474,6 +596,21 @@ Confirmed research: Tree ensembles beat neural nets on structured data
 \end{columns}
 \end{frame}
 
+\note[itemize]{
+\item \textbf{[1 min]} Being honest about limitations and future directions.
+\item Key limitation: Dataset quality with high irreducible error and weak features.
+\item Performance ceiling around 63\% - the 6.7\% gap to top Kaggle score comes from better feature engineering.
+\item Deployment consideration: 37\% error rate means human oversight is essential.
+\item Good news: DL integration complete - we've explored modern architectures.
+\item Short-term enhancements planned: Explainable AI using SHAP for interpretability.
+\item Hybrid ML-DL ensembles could push performance higher.
+\item Cost-sensitive learning for imbalanced scenarios.
+\item Long-term vision: Real-time deployment for live threat detection.
+\item Multi-class detection for identifying specific malware types.
+\item Transfer learning from larger security datasets.
+\item Edge deployment for resource-constrained environments.
+}
+
 \begin{frame}{Resources}
 \begin{block}{Project Resources}
 \textbf{Kaggle Competition \& Data:}\\
@@ -490,6 +627,14 @@ Confirmed research: Tree ensembles beat neural nets on structured data
 \url{https://stf.milav.in}
 \end{block}
 \end{frame}
+
+\note[itemize]{
+\item \textbf{[15 sec]} All resources are publicly available.
+\item Kaggle competition page for data and leaderboard.
+\item GitHub repository with complete source code.
+\item Live web application at stf.milav.in for hands-on exploration.
+\item Feel free to explore, fork, and build upon this work.
+}
 
 % Thank You Slide
 \begin{frame}
@@ -508,5 +653,12 @@ Department of Electronics and Communication Engineering
 
 \end{center}
 \end{frame}
+
+\note[itemize]{
+\item \textbf{[30 sec]} Thank you for your attention.
+\item To summarize: We implemented 13 models, deployed a production web app, and confirmed that ML beats DL for tabular data.
+\item I'm happy to answer any questions about the methodology, results, or deployment.
+\item Questions to anticipate: Why not neural nets? Dataset limitations. Future work? Explainable AI. Production readiness? Yes, with human oversight.
+}
 
 \end{document}
