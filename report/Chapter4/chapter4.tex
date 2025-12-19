@@ -25,9 +25,23 @@ SGD & 49.50\% & 49.46\% & 0.4644 & 0.4946 & 0.3283 \\
 \end{tabular}
 \end{table}
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{../beamer/figures/model_comparison.png}
+\caption{Comprehensive Model Comparison: LightGBM achieves highest validation accuracy (62.94\%), with all DL models clustering tightly between 61.45-61.79\%.}
+\label{fig:model_comparison}
+\end{figure}
+
 \subsection{Key ML Findings}
 
 \textbf{LightGBM (Best - 62.94\%)}: Gradient boosting with L1/L2 regularization (200 trees, lr=0.1, max\_depth=5). Minimal train-val gap (4.21\%) indicates good generalization. Balanced precision/recall. Sequential error correction, histogram-based splitting, leaf-wise growth captures interactions, handles mixed types natively.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\textwidth]{../beamer/figures/confusion_matrix_lightgbm.png}
+\caption{LightGBM Confusion Matrix: Balanced performance across both classes with 62.94\% overall accuracy.}
+\label{fig:confusion_matrix}
+\end{figure}
 
 \textbf{Random Forest (62.09\%)}: Severe overfitting (92.54\% train vs. 62.09\% val = 30.45\% gap). Bootstrap sampling limits capacity vs. boosting.
 

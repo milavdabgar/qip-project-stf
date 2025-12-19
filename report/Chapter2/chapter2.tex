@@ -25,6 +25,13 @@ Missing Values & 1-30\% in multiple features \\
 \end{tabular}
 \end{table}
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\textwidth]{../beamer/figures/target_distribution.png}
+\caption{Target Class Distribution: Near-perfect 50.52\% malware vs. 49.48\% clean split eliminates need for resampling strategies.}
+\label{fig:target_distribution}
+\end{figure}
+
 \subsection{Feature Categories}
 
 Features span hardware (12), OS (8), security software (6), system settings (15), installation/update (10), and behavioral indicators (24). The 47 numerical features include continuous (RAM, timestamps) and discrete (version numbers, counts) with highly variable ranges. The 28 categorical features have 2-1,000+ unique values requiring numerical encoding.
@@ -37,9 +44,23 @@ Features span hardware (12), OS (8), security software (6), system settings (15)
 
 \textbf{Balanced Classes}: Near-perfect 50.52\% vs. 49.48\% split eliminates resampling needs and validates accuracy as primary metric.
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{../beamer/figures/correlation_heatmap.png}
+\caption{Feature Correlation Heatmap: Maximum correlation with target (HasDetections) is only 0.118, demonstrating weak linear relationships and necessitating ensemble methods.}
+\label{fig:correlation_heatmap}
+\end{figure}
+
 \subsection{Missing Values and Distributions}
 
 Missing rates vary: 15-30\% (security software), 5-20\% (hardware), 1-10\% (settings). Imputation strategy: mean for numerical, mode for categorical.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{../beamer/figures/missing_values.png}
+\caption{Missing Values Analysis: Up to 30\% missing data in security software features, requiring careful imputation strategies.}
+\label{fig:missing_values}
+\end{figure}
 
 Numerical features show heavy-tailed, multimodal distributions requiring scaling. Categorical features have high cardinality (up to 1,000+ categories), necessitating label encoding. Feature-feature correlations are weak (max 0.42), indicating independence and justifying retention of all 75 features.
 

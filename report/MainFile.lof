@@ -1,5 +1,13 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Target Class Distribution: Near-perfect 50.52\% malware vs. 49.48\% clean split eliminates need for resampling strategies.}}{3}{figure.caption.16}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Feature Correlation Heatmap: Maximum correlation with target (HasDetections) is only 0.118, demonstrating weak linear relationships and necessitating ensemble methods.}}{5}{figure.caption.17}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Missing Values Analysis: Up to 30\% missing data in security software features, requiring careful imputation strategies.}}{5}{figure.caption.18}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Comprehensive Model Comparison: LightGBM achieves highest validation accuracy (62.94\%), with all DL models clustering tightly between 61.45-61.79\%.}}{9}{figure.caption.20}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces LightGBM Confusion Matrix: Balanced performance across both classes with 62.94\% overall accuracy.}}{10}{figure.caption.21}%
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Deployed Web Application: Homepage showcasing System Threat Forecaster with 7 ML and 6 DL models for real-time malware prediction.}}{15}{figure.caption.24}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Model Performance Dashboard: Interactive comparison of all 13 models with detailed metrics and hyperparameters.}}{15}{figure.caption.25}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Prediction Interface: User-friendly form accepting 75 features for real-time threat prediction using all trained models.}}{16}{figure.caption.26}%
