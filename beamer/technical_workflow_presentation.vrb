@@ -1,0 +1,19 @@
+\frametitle{Web App Integration Code}
+\small
+    \begin{lstlisting}
+import joblib, torch
+
+preprocessors = joblib.load('saved_models/preprocessors.pkl')
+checkpoint = torch.load('saved_models/dl_models.pth')
+model = checkpoint['best_model']
+model.eval()
+
+def predict(input_features):
+    X = preprocessors['scaler'].transform([input_features])
+
+    with torch.no_grad():
+        output = model(torch.FloatTensor(X))
+        pred = output.argmax(dim=1).item()
+
+    return "Malware" if pred == 1 else "Clean"
+    \end{lstlisting}
